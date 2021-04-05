@@ -13,11 +13,12 @@ import FormLabel from '@material-ui/core/FormLabel';
 import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
 import { makeStyles } from '@material-ui/core/styles';
+
 import './CreateRoomModal.css';
 
 
 
-export default function CreateRoomModal() {
+export default function CreateRoomModal({socket}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -122,12 +123,14 @@ export default function CreateRoomModal() {
   }
 
 
-  function test(){
-    console.log("Room Name:",room_name)
-    console.log("Room Type:",type)
-    console.log("Password:",password)
-    console.log("Max Players",max_players)
-    console.log("Rounds",rounds)
+  function handleSubmit(){
+    const room={
+      "roomName":room_name,
+      "roomType":type,
+      "passowrd":password,
+      "maxPlayers":max_players,
+      "rounds":rounds}
+    socket.emit('create_room',room)
     
   }
 
@@ -196,7 +199,7 @@ export default function CreateRoomModal() {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          <Button onClick={test} color="primary">
+          <Button onClick={handleSubmit} color="primary">
             Create
           </Button>
         </DialogActions>
