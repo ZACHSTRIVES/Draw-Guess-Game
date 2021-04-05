@@ -5,6 +5,8 @@ import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
+import Public from './publicroom';
+
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -31,6 +33,23 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Lobby() {
   const classes = useStyles();
+  const rooms = [
+    { 'id': 0,
+      'name': 'RoomName1',
+      'number': 'Room1',
+      'player': '2/6',
+     },
+     { 'id': 1,
+        'name': 'RoomName2',
+        'number': 'Room2',
+        'player': '5/6',
+     },
+     { 'id': 2,
+       'name': 'RoomName3',
+       'number': 'Room3',
+       'player': '4/6',
+      }
+  ];
   return (
     <div>
       <Paper component="form" className={classes.root}>
@@ -47,6 +66,7 @@ export default function Lobby() {
       <Button variant="contained">Create Room</Button>
       <Button variant="contained">Quick Play</Button>
       <br/>
+      <Public rooms={rooms}></Public>
     </div>      
     );
   }

@@ -1,7 +1,10 @@
 import React from 'react';
 import styles from './room.css';
 
+
+
 export default function Public({rooms}) {
+    console.log(rooms)
     return (
         <ul>
             {rooms.map((room, index) => 
