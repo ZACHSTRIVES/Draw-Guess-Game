@@ -1,0 +1,14 @@
+.topColumn {
+    width: 46%;
+    display: inline-block;
+  border-radius: 8px;
+  border: 2px solid #18786C;
+  padding: 5px;
+}
+
+.subColumn {
+  border-radius: 8px;
+  border: 2px solid #18786C;
+  padding: 5px;
+  border-top: none;
+}
