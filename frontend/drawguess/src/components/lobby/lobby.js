@@ -66,7 +66,9 @@ export default function Lobby() {
       <Button variant="contained">Create Room</Button>
       <Button variant="contained">Quick Play</Button>
       <br/>
-      <Public rooms={rooms}></Public>
+      <div>
+        <Public rooms={rooms}></Public>
+      </div>    
     </div>      
     );
   }
