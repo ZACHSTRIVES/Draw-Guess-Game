@@ -6,6 +6,7 @@ import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import Public from './publicroom';
+import CreateRoom from '../CreateRoom/CreateRoomModal';
 
 
 const useStyles = makeStyles((theme) => ({
@@ -31,7 +32,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function Lobby() {
+export default function Lobby({socket}) {
   const classes = useStyles();
   const rooms = [
     { 'id': 0,
@@ -63,8 +64,7 @@ export default function Lobby() {
         </IconButton>
       </Paper>
       <br/>
-      <Button variant="contained">Create Room</Button>
-      <Button variant="contained">Quick Play</Button>
+      <CreateRoom socket={socket}></CreateRoom>
       <br/>
       <div>
         <Public rooms={rooms}></Public>

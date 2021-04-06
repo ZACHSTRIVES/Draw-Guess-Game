@@ -1,13 +1,14 @@
-module.exports = function(app, db) {
-    const collection = 
-    app.post('/create_room', (req, res) => {
-      const room = { room_num: req.body.room_num, room_name: req.body.room_name };
-      db.collection('rooms').insert(room, (err, result) => {
-        if (err) { 
-          res.send({ 'error': 'An error has occurred' }); 
-        } else {
-          res.send(result.ops[0]);
-        }
-      });
+module.exports = function(app,db,socket) {
+  socket.on('create_room', function(room){
+    console.log("Create Room:",room)
+    db.collection('rooms').insertOne(room, (err, result) => {
+      if (err) { 
+        console.log({ 'error': 'An error has occurred' }); 
+      } else {
+        console.log(result.ops[0]);
+      }
     });
+     })
+     
+
   };
