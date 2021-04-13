@@ -1,13 +1,10 @@
-import "./App.css";
-import Canvas from "./components/canvas";
+import './App.css';
+import Game from './components/gamepage/gamePage';
 
 function App() {
   return (
     <div className="App">
-      <div className="room">        
-        <Canvas />        
-        <div className="sidebar"></div>
-      </div>
+      <Game/>
     </div>
   );
 }

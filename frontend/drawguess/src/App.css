@@ -16,38 +16,103 @@ body,
   height: 100%;
 }
 
-.room {
-  width: 100%;
-  height: 100%;
-  display: flex;
-}
+ul {   
+  list-style-type: none;   
+  margin: 0;   
+  padding: 0;   
+}   
+            
+li {   
+  font: 200 20px/1.5 Helvetica, Verdana, sans-serif;   
+  border-bottom: 1px solid #ccc;   
+}   
 
-.canvas {
-  background: rgb(146, 118, 223);
-  flex: 1;
-}
-
-.sidebar {
-  background: rgb(218, 150, 88);
-  flex: 1;
-}
-
-@media (orientation: landscape) {
-  .room {
-    flex-direction: row;
+@media(orientation: portrait) {
+  .container {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: auto;
+    grid-template-rows: 5% 40% 20% 35%;
   }
-
+  
+  .title {
+    background: rgb(150, 160, 219);
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 1;
+    grid-row-end: 2;
+  }
+  
   .canvas {
-    flex: 3;
+    background: rgb(179, 111, 34);
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+  
+  .message {
+    background: rgb(100, 189, 174);
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 4;
+    grid-row-end: 5;
+  }
+  
+  .round {
+    background: rgb(145, 219, 59);
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 3;
+    grid-row-end: 4;
   }
 
-  .chat {
-    max-width: 20em;
-  }
 }
 
+@media(orientation: landscape) {    
+  .container {
+    display: grid;
+    height: 100vh;
+    grid-template-columns: 70% 30%;
+    grid-template-rows: 10% 40% 50%;
+  }
+
+  .title {
+    background: rgb(150, 160, 219);
+    grid-column-start: 1;
+    grid-column-end: 3;
+    grid-row-start: 1;
+    grid-row-end: 2;
+  }
+  
+  .canvas {
+    background: rgb(179, 111, 34);
+    grid-column-start: 1;
+    grid-column-end: 2;
+    grid-row-start: 2;
+    grid-row-end: 4;
+  }
+  
+  .message {
+    background: rgb(100, 189, 174);
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 3;
+    grid-row-end: 4;
+  }
+  
+  .round {
+    background: rgb(145, 219, 59);
+    grid-column-start: 2;
+    grid-column-end: 3;
+    grid-row-start: 2;
+    grid-row-end: 3;
+  }
+}
+  
+/* 
 @media (orientation: portrait) {
   .room {
     flex-direction: column;
   }
-}
+} */

@@ -3,6 +3,7 @@ import './canvas.css';
 import CanvasDraw from "react-canvas-draw";
 import { DeleteForever, LineWeight, Palette, Undo, } from '@material-ui/icons';
 import { Slider } from '@material-ui/core';
+import { TwitterPicker } from 'react-color';
 import React from 'react';
 
 function debounce(fn, ms) {
@@ -17,6 +18,7 @@ function debounce(fn, ms) {
 }
 
 function Canvas() {
+  const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
   const DEFAULT_BRUSH_SIZE = 10;
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -24,6 +26,7 @@ function Canvas() {
   const [size, setSize] = useState(0);
   const [drawing, setDrawing] = useState("");
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
+  const [brushColor, setBrushColor] = useState("#000");
 
   const deboundCanvasChange = debounce(function handleCanvasChange() {
     const canvas = canvasRef.current;
@@ -56,6 +59,9 @@ function Canvas() {
     } else {
       setShowOption("none");
     }
+
+    const sizeBtn = document.querySelector('.size-btn');
+    sizeBtn.classList.toggle('btn-active');
   }
 
   const handleStrokeColorToggle = () => {
@@ -64,15 +70,37 @@ function Canvas() {
     } else {
       setShowOption("none");
     }
+
+    const colorBtn = document.querySelector('.color-btn');
+    colorBtn.classList.toggle('btn-active');
   }
 
   const handleSliderChange = (event, newValue) => {
     setBrushSize(newValue);
-    console.log("brush size: ", brushSize);
   }
 
-  const handleSliderChangeCommitted = () => {
+  const handleSliderChangeCommitted = (event, newValue) => {
+    setBrushSize(newValue);
     setShowOption("none");
+
+    const sizeBtn = document.querySelector('.size-btn');
+    sizeBtn.classList.remove('btn-active')
+  }
+
+  const handleColorChangeComplete = (color, event) => {
+    setBrushColor(color.hex);
+    setShowOption("none");
+
+    const colorBtn = document.querySelector('.color-btn');
+    colorBtn.classList.remove('btn-active');
+  }
+
+  const handlePickColor = (color) => {
+    setBrushColor(color);
+    setShowOption("none");
+
+    const colorBtn = document.querySelector('.color-btn');
+    colorBtn.classList.remove('btn-active');
   }
 
   useEffect(() => {
@@ -104,10 +132,11 @@ function Canvas() {
   });
 
   return (
-    <div className="canvas flex-center-all" ref={containerRef} >
+    <div className="canvas-container flex-center-all" ref={containerRef} >
       <div className="canvas-header"></div>
       <CanvasDraw
         lazyRadius={0}
+        brushColor={brushColor}
         brushRadius={brushSize}
         canvasWidth={size}
         canvasHeight={size}
@@ -115,39 +144,49 @@ function Canvas() {
         onChange={deboundCanvasChange}
       />
       <div className="tools-overlay flex-center-all">
-        <div className="tools-container flex bottom-offset">
-          {
-            (showOption === "size") &&
-            <div className="size-options">
-              <Slider
-                value={brushSize}
-                aria-labelledby="discrete-slider"
-                valueLabelDisplay="on"
-                marks
-                step={1}
-                min={1}
-                max={20}
-                onChange={handleSliderChange}
-                onChangeCommitted={handleSliderChangeCommitted}
-              />
-            </div>
-          }
-          {
-            (showOption === "color") &&
-            <div className="color-options">
-              <h2>Color Picker</h2>
-            </div>
-          }
-        </div>
+        {
+          (showOption !== "none") &&
+          <div className="tools-container flex bottom-offset">
+            {
+              (showOption === "size") &&
+              <div className="size-options">
+                <Slider
+                  value={brushSize}
+                  aria-labelledby="discrete-slider"
+                  valueLabelDisplay="on"
+                  marks
+                  step={1}
+                  min={1}
+                  max={20}
+                  onChange={handleSliderChange}
+                  onChangeCommitted={handleSliderChangeCommitted}
+                />
+              </div>
+            }
+            {
+              (showOption === "color") &&
+              <div className="color-options">
+                <TwitterPicker colors={colors} onChangeComplete={handleColorChangeComplete} />
+                {/* {console.log("showoption: ", showOption)}
+              {
+                colors.map((color, index) => (                  
+                  <div key={index} className="tool-btn" style={{color: color}}></div>
+                ))
+              } */}
+              </div>
+            }
+          </div>
+        }
+
         <div className="tools-container flex bottom">
           <div className="tool flex-center-all" onClick={handleStrokeColorToggle}>
-            <div className="tool-btn flex-center-all">
-              <Palette />
+            <div className="tool-btn flex-center-all color-btn">
+              <Palette style={{ color: brushColor }}/>
             </div>
             <span>Color</span>
           </div>
           <div className="tool flex-center-all" onClick={handleStrokeSizeToggle}>
-            <div className="tool-btn flex-center-all">
+            <div className="tool-btn flex-center-all size-btn">
               <LineWeight />
             </div>
             <span>Size</span>
