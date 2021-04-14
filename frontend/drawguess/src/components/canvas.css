@@ -4,6 +4,25 @@
   position: relative;
 }
 
+.canvas-header {
+  background: rgba(194, 252, 247, 0.7);
+  position: absolute;
+  top: 0;
+  width: 100%;
+}
+
+.canvas-timer {
+  background: rgba(194, 252, 247, 0.7);
+  height: 2em;
+  width: 2em;
+  border-radius: 50%;
+  position: absolute;
+  right: 0;
+  font-size: 1.5em;
+  font-weight: bold;
+  color: white;
+}
+
 .tools-overlay {
   position: absolute;
   top: 45px;

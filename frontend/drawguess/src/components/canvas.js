@@ -5,6 +5,7 @@ import { DeleteForever, LineWeight, Palette, Undo, } from '@material-ui/icons';
 import { Slider } from '@material-ui/core';
 import { TwitterPicker } from 'react-color';
 import React from 'react';
+import Timer from './timer';
 
 function debounce(fn, ms) {
   let timer
@@ -19,6 +20,7 @@ function debounce(fn, ms) {
 
 function Canvas() {
   const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
+  const words = ['pig', 'rabbit', 'dog', 'starfish', 'bridge', 'library', 'park', 'tower'];
   const DEFAULT_BRUSH_SIZE = 10;
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -27,6 +29,7 @@ function Canvas() {
   const [drawing, setDrawing] = useState("");
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
+  const [word, setWord] = useState("");
 
   const deboundCanvasChange = debounce(function handleCanvasChange() {
     const canvas = canvasRef.current;
@@ -95,33 +98,31 @@ function Canvas() {
     colorBtn.classList.remove('btn-active');
   }
 
-  const handlePickColor = (color) => {
-    setBrushColor(color);
-    setShowOption("none");
-
-    const colorBtn = document.querySelector('.color-btn');
-    colorBtn.classList.remove('btn-active');
+  const setRandomWord = () => {
+    const index = Math.floor(Math.random() * words.length);
+    const word = words[index];
+    setWord(word);
   }
 
-  useEffect(() => {
-    const debouncedHandleResize = debounce(function handleResize() {
-      if (!canvasRef.current) return;
+  const debouncedHandleResize = debounce(function handleResize() {
+    if (!canvasRef.current) return;
 
-      const containerWidth = containerRef.current.offsetWidth;
-      const containerHeight = containerRef.current.offsetHeight;
-      const length = containerHeight < containerWidth ? containerHeight : containerWidth;
-      console.log("width: ", containerWidth, "height: ", containerHeight);
-      setSize(length);
+    const containerWidth = containerRef.current.offsetWidth;
+    const containerHeight = containerRef.current.offsetHeight;
+    const length = containerHeight < containerWidth ? containerHeight : containerWidth;
+    console.log("width: ", containerWidth, "height: ", containerHeight);
+    setSize(length);
 
-      const canvas = canvasRef.current;
-      let draw = () => {
-        if (drawing !== "") {
-          canvas.loadSaveData(drawing, true);
-        }
+    const canvas = canvasRef.current;
+    let draw = () => {
+      if (drawing !== "") {
+        canvas.loadSaveData(drawing, true);
       }
-      draw();
-    }, 100);
+    }
+    draw();
+  }, 100);
 
+  useEffect(() => {
     debouncedHandleResize();
 
     window.addEventListener('resize', debouncedHandleResize)
@@ -129,11 +130,19 @@ function Canvas() {
     return () => {
       window.removeEventListener('resize', debouncedHandleResize)
     }
-  });
+  }); 
+
+  useEffect(() => {
+    setRandomWord();
+  }, []);
 
   return (
     <div className="canvas-container flex-center-all" ref={containerRef} >
-      <div className="canvas-header"></div>
+      <div className="canvas-header">
+        <span>You're drawing: {word}</span>
+        <Timer gameOn={true}/>
+        {/* <div className="canvas-timer flex-center-all"></div> */}
+      </div>
       <CanvasDraw
         lazyRadius={0}
         brushColor={brushColor}
@@ -167,12 +176,6 @@ function Canvas() {
               (showOption === "color") &&
               <div className="color-options">
                 <TwitterPicker colors={colors} onChangeComplete={handleColorChangeComplete} />
-                {/* {console.log("showoption: ", showOption)}
-              {
-                colors.map((color, index) => (                  
-                  <div key={index} className="tool-btn" style={{color: color}}></div>
-                ))
-              } */}
               </div>
             }
           </div>
