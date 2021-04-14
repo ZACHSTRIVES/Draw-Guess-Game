@@ -3,6 +3,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
+import Chat from './chat';
 
 export default function GameRoom() {
   const dense = false;
@@ -59,6 +60,7 @@ export default function GameRoom() {
       </div>
       <div className="message border">
         <h5 className="title">MESSAGE</h5>
+        <Chat/>
       </div>
     </div>
   );

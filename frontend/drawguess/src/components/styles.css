@@ -8,7 +8,7 @@
   but flexbox dont allow overflow scroll out of the box
   */
   .box {
-    height: 38vh;
+    height: 36vh;
     margin-bottom: 10px;
     overflow-y: auto;
   }
