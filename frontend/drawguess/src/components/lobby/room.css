@@ -1,0 +1,28 @@
+.topColumn {
+    width: 46%;
+    display: inline-block;
+  border-radius: 8px;
+  border: 2px solid #18786C;
+  padding: 5px;
+}
+
+.subColumn {
+  border-radius: 8px;
+  border: 2px solid #18786C;
+  padding: 5px;
+  border-top: none;
+}
+.margin_top_card{
+  margin-top: 10px;
+}
+
+.room_title{
+  color: white;
+  font-weight: 200;
+}
+
+.online_info{
+  font-weight: 200;
+  color:200;
+  margin-bottom: 20px;
+}
