@@ -43,7 +43,7 @@ export default function PublicRoomCard({room}) {
         <Typography className={classes.pos} color="textSecondary">
             {/* <GroupIcon className={classes.icon}/> */}
             <GroupIcon style={{verticalAlign: 'middle'}}/>
-            0/{room.maxPlayers}
+            {room.currentPlayers}/{room.maxPlayers}
         </Typography>
         </CardContent>
     </Card>

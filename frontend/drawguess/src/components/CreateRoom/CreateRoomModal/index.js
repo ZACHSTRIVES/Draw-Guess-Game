@@ -15,6 +15,7 @@ import Slider from '@material-ui/core/Slider';
 import { makeStyles } from '@material-ui/core/styles';
 
 import './CreateRoomModal.css';
+import { NavLink } from 'react-router-dom';
 
 
 
@@ -200,9 +201,11 @@ export default function CreateRoomModal({socket,handleCreateRoom}) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
+          
           <Button onClick={handleSubmit} color="primary">
             Create
           </Button>
+          
         </DialogActions>
       </Dialog>
     </div>

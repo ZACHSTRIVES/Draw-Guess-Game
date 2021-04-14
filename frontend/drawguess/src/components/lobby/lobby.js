@@ -8,6 +8,10 @@ import Button from '@material-ui/core/Button';
 import RoomList from './roomList';
 import axios from 'axios'
 import CreateRoom from '../CreateRoom/CreateRoomModal';
+import {
+  Redirect, useHistory
+} from "react-router-dom";
+
 
 const config = {
   headers: {
@@ -43,40 +47,54 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Lobby({socket}) {
+export default function Lobby({ socket, route }) {
+  const history = useHistory();
+  console.log(route)
+
   const classes = useStyles();
-  const [rooms,setRooms]=React.useState([])
-  const [current_users,setCurrentUsers]=React.useState(0)
-  
- React.useEffect(()=>{
-  socket.on('create_room', (data)=>{   //Listen for "Create Room"
-    setRooms(data)
- })}, []);
+  const [rooms, setRooms] = React.useState([])
+  const [current_users, setCurrentUsers] = React.useState(0)
 
- React.useEffect(()=>{
-  socket.on('user_on_conection', (data)=>{   //Listen for "User Connection"
-    setRooms(data.rooms)
-    setCurrentUsers(data.current_users)
+  React.useEffect(() => {
+    socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
+      setRooms(data)
+    })
+  }, []);
+
+  React.useEffect(() => {
+    socket.on('user_on_conection', (data) => {   //Listen for "User Connection"
+      setRooms(data.rooms)
+      setCurrentUsers(data.current_users)
+
+    })
+  }, []);
+
+  React.useEffect(() => {
+    socket.on('disconnected', (data) => {   //Listen for "Disconnected"
+      setCurrentUsers(data)
+
+    })
+  }, []);
+
+  React.useEffect(() => {
+    socket.on('room_created', (data) => {   //Listen for "Disconnected"
+     socket.emit('joinRoom',data.roomID)
+    //  history.push("/room/5");
+    })
     
- })}, []);
+  }, []);
 
- React.useEffect(()=>{
-  socket.on('disconnected', (data)=>{   //Listen for "Disconnected Create Room"
-    setCurrentUsers(data)
-    
- })}, []);
+  function handleCreateRoom(room) {
+    socket.emit('create_room', room);
 
- function handleCreateRoom(room){
-  socket.emit('create_room',room)
-  
-}
+  }
 
 
- 
+
   return (
     <div>
       <div className="online_info">Current Online：{current_users}</div>
-  
+
       <Paper component="form" className={classes.root}>
         <InputBase
           className={classes.input}
@@ -87,12 +105,12 @@ export default function Lobby({socket}) {
           <SearchIcon />
         </IconButton>
       </Paper>
-      <br/>
+      <br />
       <CreateRoom socket={socket} handleCreateRoom={handleCreateRoom}></CreateRoom>
-      <br/>
+      <br />
       <div>
         <RoomList rooms={rooms}></RoomList>
-      </div>    
-    </div>      
-    );
-  }
+      </div>
+    </div>
+  );
+}
