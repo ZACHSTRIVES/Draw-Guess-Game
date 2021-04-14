@@ -22,24 +22,24 @@ export default class ChatWindow extends Component {
           <div className="inner">
             {Array.isArray(messagesList) &&
               messagesList.map((message, index) => {
-                if (message.type === "msg") {
+                if (message.type === "in") {
                   return (
                     <p key={index} className="message">
-                      {message.user}:{message.text}
+                      {message.user} has enter the room
                     </p>
                   )
                 }
                 else if (message.type === "ans") {
                   return (
-                    <p key={index} className="message">
-                      You got right answer!
+                    <p key={index} className="answer">
+                      {message.user} got right answer!
                     </p>
                   )
                 }
                 else {
                   return (
                     <p key={index} className="message">
-                      {message.user} has enter the room
+                      {message.user} : {message.text}
                     </p>
                   )
                 }
