@@ -1,4 +1,4 @@
-const rooms = require('./rooms.js');
+// const rooms = require('./rooms.js');
 const create_room = require("./create_room.js")
 
 module.exports = function(app, db,socket) {

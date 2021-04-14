@@ -18,7 +18,7 @@ import './CreateRoomModal.css';
 
 
 
-export default function CreateRoomModal({socket}) {
+export default function CreateRoomModal({socket,handleCreateRoom}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -130,7 +130,8 @@ export default function CreateRoomModal({socket}) {
       "passowrd":password,
       "maxPlayers":max_players,
       "rounds":rounds}
-    socket.emit('create_room',room)
+    handleCreateRoom(room)
+
     
   }
 

@@ -14,7 +14,8 @@
 }
 
 .App-header {
-  background-color: #282c34;
+  background-image:url(https://media.giphy.com/media/l1BgRuUbcL5wgQLtu/giphy.gif);
+  background-size: 100% 100%;
   min-height: 100vh;
   display: flex;
   flex-direction: column;
@@ -35,4 +36,8 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+.logo{
+  width:300px
 }
