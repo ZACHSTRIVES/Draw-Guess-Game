@@ -4,6 +4,8 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from '../canvas';
+import Chatbox from '../chat';
+
 
 
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +39,19 @@ const useStyles = makeStyles((theme) => ({
     const classes = useStyles();
     const [dense, setDense] = React.useState(false);
     const [secondary, setSecondary] = React.useState(false);
+
+    const question = [
+      { 'id': 0,
+        'name': 'BMW',
+       },
+       { 'id': 1,
+          'name': 'VW',
+       },
+       { 'id': 2,
+         'name': 'BYD',
+        }
+  ];
+
     const rooms = [
         { 'id': 0,
           'name': 'RoomName1',
@@ -75,6 +90,7 @@ const useStyles = makeStyles((theme) => ({
       <div className={classes.root, "container"}>
         <div className="title">
           <h5 className={classes.title}>TITLE</h5>
+          
         </div>
         <div className="canvas">
           <Canvas/>
@@ -104,7 +120,7 @@ const useStyles = makeStyles((theme) => ({
         </div>
         <div className="message">
           <h5 className={classes.title}>MESSAGE</h5>
-          
+          <Chatbox/>
         </div>
       </div>
     );
