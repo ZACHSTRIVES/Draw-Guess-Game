@@ -2,7 +2,7 @@ import logo from './static/logo.gif';
 import './App.css';
 import Lobby from './components/lobby/lobby';
 import Public from './components/lobby/roomList';
-import Game from './components/gamepage/gamePage';
+import Game from './components/gameRoom';
 import io from 'socket.io-client'
 import axios from 'axios'
 import React from 'react';
