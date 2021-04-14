@@ -1,6 +1,6 @@
 import React from 'react';
-import PublicRoomCard from './publicRoom'
-import PrivateRoomCard from './privateRoom'
+import PublicRoomCard from './publicRoom';
+import PrivateRoomCard from './privateRoom';
 
 
 
