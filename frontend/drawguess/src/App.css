@@ -6,7 +6,6 @@
 
 .App {
   text-align: center;
-  background-color: bisque;
 }
 
 html,
@@ -25,7 +24,11 @@ ul {
 li {   
   font: 200 20px/1.5 Helvetica, Verdana, sans-serif;   
   border-bottom: 1px solid #ccc;   
-}   
+} 
+
+.border {
+  border: 1px solid #57737A;
+}
 
 @media(orientation: portrait) {
   .container {
@@ -36,7 +39,6 @@ li {
   }
   
   .title {
-    background: rgb(150, 160, 219);
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 1;
@@ -44,7 +46,6 @@ li {
   }
   
   .canvas {
-    background: rgb(179, 111, 34);
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 2;
@@ -52,7 +53,6 @@ li {
   }
   
   .message {
-    background: rgb(100, 189, 174);
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 4;
@@ -60,7 +60,6 @@ li {
   }
   
   .round {
-    background: rgb(145, 219, 59);
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 3;
@@ -78,7 +77,6 @@ li {
   }
 
   .title {
-    background: rgb(150, 160, 219);
     grid-column-start: 1;
     grid-column-end: 3;
     grid-row-start: 1;
@@ -86,7 +84,6 @@ li {
   }
   
   .canvas {
-    background: rgb(179, 111, 34);
     grid-column-start: 1;
     grid-column-end: 2;
     grid-row-start: 2;
@@ -94,7 +91,6 @@ li {
   }
   
   .message {
-    background: rgb(100, 189, 174);
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 3;
@@ -102,17 +98,9 @@ li {
   }
   
   .round {
-    background: rgb(145, 219, 59);
     grid-column-start: 2;
     grid-column-end: 3;
     grid-row-start: 2;
     grid-row-end: 3;
   }
 }
-  
-/* 
-@media (orientation: portrait) {
-  .room {
-    flex-direction: column;
-  }
-} */

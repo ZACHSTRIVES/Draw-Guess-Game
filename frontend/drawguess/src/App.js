@@ -1,5 +1,5 @@
 import './App.css';
-import Game from './components/gamepage/gamePage';
+import Game from './components/gameRoom';
 
 function App() {
   return (
