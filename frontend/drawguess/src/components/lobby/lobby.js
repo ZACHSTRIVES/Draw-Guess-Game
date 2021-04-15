@@ -47,13 +47,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Lobby({ socket, route }) {
+export default function Lobby({ socket,userName,initData}) {
   const history = useHistory();
-  console.log(route)
 
   const classes = useStyles();
-  const [rooms, setRooms] = React.useState([])
-  const [current_users, setCurrentUsers] = React.useState(0)
+  const [rooms, setRooms] = React.useState(initData.rooms)
+  const [current_users, setCurrentUsers] = React.useState(initData.current_users)
 
   React.useEffect(() => {
     socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
@@ -77,7 +76,7 @@ export default function Lobby({ socket, route }) {
   }, []);
 
   React.useEffect(() => {
-    socket.on('room_created', (data) => {   //Listen for "Disconnected"
+    socket.on('room_created', (data) => { 
      socket.emit('joinRoom',data.roomID)
     //  history.push("/room/5");
     })
@@ -94,6 +93,7 @@ export default function Lobby({ socket, route }) {
   return (
     <div>
       <div className="online_info">Current Online：{current_users}</div>
+      <div className="online_info">Hello, {userName}</div>
 
       <Paper component="form" className={classes.root}>
         <InputBase
