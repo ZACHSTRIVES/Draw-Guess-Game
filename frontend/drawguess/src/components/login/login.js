@@ -6,6 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import Link from '@material-ui/core/Link';
 import './login.css'
 import Container from '@material-ui/core/Container';
+import Alert from '@material-ui/lab/Alert';
 import {
   Redirect, useHistory
 } from "react-router-dom";
@@ -22,6 +23,7 @@ const useStyles = makeStyles((theme) => ({
       margin: theme.spacing(1),
       width: 'x25ch',
     },
+    
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
@@ -50,12 +52,14 @@ const useStyles = makeStyles((theme) => ({
 export default function Login({ socket, handleLogin }) {
   const classes = useStyles();
   const [username, handleUsernameChange] = React.useState('')
+  const [showWarning,handleShowWarning]= React.useState(false)
+  
   const history = useHistory();
 
 
   React.useEffect(() => {
-    socket.on('loginSuccess', (data) => {   
-      handleLogin(data.username,data.initdata)
+    socket.on('loginSuccess', (data) => {
+      handleLogin(data.username, data.initdata)
       history.push('/')
 
 
@@ -63,9 +67,8 @@ export default function Login({ socket, handleLogin }) {
   }, []);
 
   React.useEffect(() => {
-    socket.on('loginFail', (data) => {   
-      
-
+    socket.on('loginFail', (data) => {
+      handleShowWarning(true)
     })
   }, []);
 
@@ -79,8 +82,10 @@ export default function Login({ socket, handleLogin }) {
   return (
 
     <Container component="main" maxWidth="xs" className="loginCard">
-
-      <TextField
+      {showWarning? <Alert severity="error" className="margin_top">You enter the same nickname as the other player!</Alert>
+   :<a></a>}
+     
+        <TextField
 
         margin="normal"
         required
@@ -93,17 +98,19 @@ export default function Login({ socket, handleLogin }) {
         autoFocus
         onChange={e => handleUsernameChange(e.target.value)} />
 
-      <Button
-        type="submit"
-        fullWidth
-        variant="contained"
-        color="primary"
-        className={classes.submit}
-        onClick={login}
-      >
-        PLAY!
-          </Button>
+        
 
+        <Button
+          type="submit"
+          fullWidth
+          variant="contained"
+          color="primary"
+          className={classes.submit}
+          onClick={login}
+        >
+          PLAY!
+          </Button>
+  
     </Container>
   );
 
