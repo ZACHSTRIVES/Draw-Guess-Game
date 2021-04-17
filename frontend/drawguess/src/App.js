@@ -2,7 +2,7 @@ import logo from './static/logo.png';
 import './App.css';
 import Lobby from './components/lobby/lobby';
 import Login from './components/login/login.js'
-import Game from './components/gameRoom';
+import Game from './components/game';
 import io from 'socket.io-client'
 import axios from 'axios'
 import React from 'react';
@@ -28,10 +28,10 @@ const socket = io('ws://localhost:8000')
 
 function App() {
   const [userName, setUserName] = React.useState(null)
-  const [initData,setInitData] = React.useState(null)
+  const [initData, setInitData] = React.useState(null)
 
-  function handleLogin(username,initData) {
-    console.log(username,initData)
+  function handleLogin(username, initData) {
+    console.log(username, initData)
     setUserName(username);
     setInitData(initData)
   }
@@ -63,12 +63,17 @@ function App() {
             </div>
           </Route>
 
-          <Route path='/room'>
-            <div className="App">
-              <Game />
-            </div>
+          <Route path='/room/'>
+            {userName === null ? <Redirect to="/login" /> :
+              <div className="App">
+                <Game socket={socket} userName={userName} />
+              </div>
+            }
           </Route>
         </div>
+
+
+
 
       </Switch>
     </Router>

@@ -18,6 +18,7 @@ const port = 8000;
 
 var all_room_info=[]
 var current_users = 0
+var all_users=[]
 
 // app.use(bodyParser.urlencoded({ extended: true }));
 io.on('connection', function (socket) {
@@ -27,7 +28,8 @@ io.on('connection', function (socket) {
   socket.emit('user_on_conection', init_data)
   socket.broadcast.emit('user_on_conection', init_data);
   console.log("User Connected, Current Online: ", current_users)
-  require('./routes')(app, socket, all_room_info,init_data);
+  require('./routes')(app, socket, all_room_info,init_data,all_users);
+
 
   socket.on('disconnect', function () {
     current_users--;

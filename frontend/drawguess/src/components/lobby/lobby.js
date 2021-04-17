@@ -76,19 +76,28 @@ export default function Lobby({ socket,userName,initData}) {
   }, []);
 
   React.useEffect(() => {
-    socket.on('room_created', (data) => { 
-     socket.emit('joinRoom',data.roomID)
-    //  history.push("/room/5");
+    socket.on('joinRoomSuccess', (data) => {  
+      var path = {
+        pathname:'/room',
+        query:data,
+      }
+      history.push(path);
+      console.log("Listen join room lobby.js:85")
     })
-    
   }, []);
 
   function handleCreateRoom(room) {
-    socket.emit('create_room', room);
+    const data={room:room,userName:userName}
+    socket.emit('create_room', data);
+  
 
   }
 
-
+  function handleJoinRoom(roomID){
+    const temp={roomID:roomID,userName:userName}
+    socket.emit('joinRoom',temp)
+    console.log("handle JoinRoom  lobby.js:98")
+  }
 
   return (
     <div>
@@ -109,7 +118,7 @@ export default function Lobby({ socket,userName,initData}) {
       <CreateRoom socket={socket} handleCreateRoom={handleCreateRoom}></CreateRoom>
       <br />
       <div>
-        <RoomList rooms={rooms}></RoomList>
+        <RoomList rooms={rooms} joinRoom={handleJoinRoom}></RoomList>
       </div>
     </div>
   );

@@ -4,33 +4,35 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
+import {
+  Redirect,useLocation
 
-export default function GameRoom() {
+} from "react-router-dom";
+
+// socket.emit("UserJoin",data)
+
+
+export default function GameRoom({ socket, userName,init_room }) {
+  let location = useLocation();
+  const [roomInfo, setRoomInfo] = React.useState(init_room)
+
+  React.useEffect(() => {
+    socket.on('newUserJoinRoom', (data) => { 
+      console.log(data)
+     setRoomInfo(data.roomInfo)
+    
+    })
+    
+  }, []);
+
   const dense = false;
   const secondary = false;
 
-  const players = [
-    {
-      'id': 0,
-      'playerName': 'Alan',
-      'score': 10,
-    },
-    {
-      'id': 1,
-      'playerName': 'Eden',
-      'score': 20,
-    },
-    {
-      'id': 2,
-      'playerName': 'Ted',
-      'score': 15,
-    }
-  ];
 
   return (
     <div className="root container">
       <div className="title border">
-        <h5 className="title">TITLE</h5>
+        <h5 className="title">{roomInfo.roomName}</h5>
       </div>
       <div className="canvas border">
         <Canvas />
@@ -38,13 +40,13 @@ export default function GameRoom() {
       <div className="round border">
         <h5 className="title">ROUND</h5>
         <ul>
-          {players.map((player, index) =>
+          {roomInfo.scoreBoard.map((player, index) =>
             <li key={index} alignItems="flex-start">
               <div className="player">
                 <List dense={dense}>
                   <ListItem>
                     <ListItemText
-                      primary={player.playerName}
+                      primary={player.userName}
                       secondary={secondary ? 'Secondary text' : null}
                     />
                     <ListItemText
@@ -60,7 +62,7 @@ export default function GameRoom() {
       </div>
       <div className="message border">
         <h5 className="title">MESSAGE</h5>
-        <Chat/>
+        <Chat />
       </div>
     </div>
   );
