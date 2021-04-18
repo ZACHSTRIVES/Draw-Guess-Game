@@ -47,13 +47,12 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Lobby({ socket, route }) {
+export default function Lobby({ socket,userName,initData}) {
   const history = useHistory();
-  console.log(route)
 
   const classes = useStyles();
-  const [rooms, setRooms] = React.useState([])
-  const [current_users, setCurrentUsers] = React.useState(0)
+  const [rooms, setRooms] = React.useState(initData.rooms)
+  const [current_users, setCurrentUsers] = React.useState(initData.current_users)
 
   React.useEffect(() => {
     socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
@@ -77,23 +76,33 @@ export default function Lobby({ socket, route }) {
   }, []);
 
   React.useEffect(() => {
-    socket.on('room_created', (data) => {   //Listen for "Disconnected"
-     socket.emit('joinRoom',data.roomID)
-    //  history.push("/room/5");
+    socket.on('joinRoomSuccess', (data) => {  
+      var path = {
+        pathname:'/room',
+        query:data,
+      }
+      history.push(path);
+      console.log("Listen join room lobby.js:85")
     })
-    
   }, []);
 
   function handleCreateRoom(room) {
-    socket.emit('create_room', room);
+    const data={room:room,userName:userName}
+    socket.emit('create_room', data);
+  
 
   }
 
-
+  function handleJoinRoom(roomID){
+    const temp={roomID:roomID,userName:userName}
+    socket.emit('joinRoom',temp)
+    console.log("handle JoinRoom  lobby.js:98")
+  }
 
   return (
     <div>
       <div className="online_info">Current Online：{current_users}</div>
+      <div className="online_info">Hello, {userName}</div>
 
       <Paper component="form" className={classes.root}>
         <InputBase
@@ -109,7 +118,7 @@ export default function Lobby({ socket, route }) {
       <CreateRoom socket={socket} handleCreateRoom={handleCreateRoom}></CreateRoom>
       <br />
       <div>
-        <RoomList rooms={rooms}></RoomList>
+        <RoomList rooms={rooms} joinRoom={handleJoinRoom}></RoomList>
       </div>
     </div>
   );
