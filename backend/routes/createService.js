@@ -28,7 +28,8 @@ module.exports = {
       data.room.scoreBoard.push(userScoreBoard)
       socket.emit('updateRoomInfo', all_room_info)
       socket.broadcast.emit('updateRoomInfo', all_room_info)
-      socket.join(data.roomID)
+      
+      socket.join(data.room.roomID)
       if(user){
         user.socket.emit('joinRoomSuccess', data.room)
       }
