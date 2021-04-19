@@ -9,28 +9,31 @@ export default class App extends Component {
     super(props);
     this.state = {
         messages: [
-            {   id: 0,
-                user: "john",
-                type: 'msg',
-                text: "First stored message",
-            },
-            {   id: 1,
-                user: "json",
-                type: 'msg',
-                text: "hahaha",
-            },
-            {   id: 2,
-                user: "kido",
-                type: 'ans',
-                text: "vodka",
-            },
-            {   id: 3,
-                user: "batto",
-                type: 'in',
-            },
+            // {   id: 0,
+            //     user: "john",
+            //     type: 'msg',
+            //     text: "First stored message",
+            // },
+            // {   id: 1,
+            //     user: "json",
+            //     type: 'msg',
+            //     text: "hahaha",
+            // },
+            // {   id: 2,
+            //     user: "kido",
+            //     type: 'ans',
+            //     text: "vodka",
+            // },
+            // {   id: 3,
+            //     user: "batto",
+            //     type: 'in',
+            // },
           ]
     };
+
+  
   }
+
 
   // if new message was submitted from child component // process
   submitted = getNewMessage => {
