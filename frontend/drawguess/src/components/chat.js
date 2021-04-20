@@ -27,16 +27,14 @@ export default function Chat({ socket,userName,room}) {
         <div className="App">
             <ChatWindow messagesList={room.messages} />
 
-            <div className="chat-composer">
-
+            <div className="form-horizontal">
                 <input
-                    className="form-control"
-                    placeholder="Type & hit enter"
+                    id="box"
+                    placeholder="Type enter"
                     onChange={e => handleCompose(e.target.value)}
                     value={newMsg}
                 />
-                <button onClick={handleNewMessage}> submit</button>
-
+                <button onClick={handleNewMessage} class="btn btn-outline-secondary"> submit</button>
             </div>
         </div>
     );

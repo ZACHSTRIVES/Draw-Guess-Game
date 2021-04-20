@@ -46,4 +46,20 @@
     background: rgb(123, 235, 147);
     width: 100%;
   }
-  
+  .submit{
+    display: inline-block;
+  }
+  #box{
+    width: 60%;
+  }
+
+  btn, .btn-large, .btn-small {
+    text-decoration: none;
+    color: #fff;
+    background-color: #06312d;
+    text-align: center;
+    letter-spacing: .5px;
+    -webkit-transition: background-color .2s ease-out;
+    transition: background-color .2s ease-out;
+    cursor: pointer;
+}
