@@ -52,10 +52,10 @@ export default function Lobby({ socket,userName,initData}) {
 
   const classes = useStyles();
   const [rooms, setRooms] = React.useState(initData.rooms)
-  const [current_users, setCurrentUsers] = React.useState(initData.current_users)
 
   React.useEffect(() => {
     socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
+      console.log("Listen for 'Create Room'")
       setRooms(data)
     })
   }, []);
@@ -63,14 +63,6 @@ export default function Lobby({ socket,userName,initData}) {
   React.useEffect(() => {
     socket.on('user_on_conection', (data) => {   //Listen for "User Connection"
       setRooms(data.rooms)
-      setCurrentUsers(data.current_users)
-
-    })
-  }, []);
-
-  React.useEffect(() => {
-    socket.on('disconnected', (data) => {   //Listen for "Disconnected"
-      setCurrentUsers(data)
 
     })
   }, []);
@@ -101,7 +93,6 @@ export default function Lobby({ socket,userName,initData}) {
 
   return (
     <div>
-      <div className="online_info">Current Online：{current_users}</div>
       <div className="online_info">Hello, {userName}</div>
 
       <Paper component="form" className={classes.root}>

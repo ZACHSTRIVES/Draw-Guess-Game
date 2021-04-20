@@ -24,6 +24,13 @@ export default function GameRoom({ socket, userName,init_room }) {
     })
     
   }, []);
+  React.useEffect(() => {
+    socket.on('updatCurrentRoomInfo', (data) => { 
+     setRoomInfo(data)
+    
+    })
+    
+  }, []);
 
   const dense = false;
   const secondary = false;
