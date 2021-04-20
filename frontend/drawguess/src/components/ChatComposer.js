@@ -1,50 +1,27 @@
-import React, { Component } from "react";
+import React, { useState } from 'react';
 
-// we are using class componen coz we need temp state here
-export default class ChatComposer extends Component {
-  // temp state to only store new single message
-  state = {
-    new: ""
+
+export default function ChatComposer({sub}) {
+  const[newMsg, setNewMsg] = useState("");
+
+  function handleSubmit() {
+    sub(newMsg)
   };
 
-  // if form was submitted, notify parent component
-  handleSubmit = event => {
-    event.preventDefault();
-    // send event value to parent component via calling props
-    this.props.submitted(this.state.new);
-    // remove single message stored in this component state
-    // and empty input coz form was submitted
-    this.setState({
-      new: ""
-    });
+  function handleCompose(value) {
+    setNewMsg(value)
   };
 
-  // on input check if its not empty and store single message
-  // in this component state
-  handleCompose = event => {
-    let typedValue = event.target.value;
-    if (typedValue !== "" && typedValue !== " ") {
-      // store new single message temporarily
-      this.setState({
-        new: event.target.value
-      });
-    }
-  };
-
-  render() {
     return (
-      // dont use event => handle event below
-      // binding won't work here
       <div className="chat-composer">
-        <form onSubmit={this.handleSubmit}>
+        <form onSubmit={handleSubmit}>
           <input
             className="form-control"
             placeholder="Type & hit enter"
-            onChange={this.handleCompose}
-            value={this.state.new}
+            onChange={e=>handleCompose(e.target.value)}
+            value={newMsg}
           />
         </form>
       </div>
-    );
-  }
+    )
 }

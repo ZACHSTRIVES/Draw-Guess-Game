@@ -62,7 +62,8 @@ export default function GameRoom({ socket, userName,init_room }) {
       </div>
       <div className="message border">
         <h5 className="title">MESSAGE</h5>
-        <Chat socket={socket} />
+        {/* <Chat socket={socket} /> */}
+        <Chat socket={socket} userName={userName}/>
       </div>
     </div>
   );
