@@ -64,11 +64,11 @@ function App() {
           </Route>
 
           <Route path='/room/'>
-            {/* {userName === null ? <Redirect to="/login" /> : */}
+            {userName === null ? <Redirect to="/login" /> :
               <div className="App">
                 <Game socket={socket} userName={userName} />
               </div>
-            {/* } */}
+            }
           </Route>
         </div>
 

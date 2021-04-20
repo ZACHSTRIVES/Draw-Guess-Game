@@ -19,6 +19,7 @@ module.exports = {
       data.room.roomID = tempID;
       data.room.currentPlayers = 0;
       data.room.scoreBoard = [];
+      data.room.messages=[];
 
       console.log("Create Room:", data.room)
       

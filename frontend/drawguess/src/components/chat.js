@@ -1,58 +1,44 @@
 import React, { useState } from 'react';
 import ReactDOM from "react-dom";
 import ChatWindow from "./ChatWindow.js";
-import ChatComposer from "./ChatComposer.js";
+
 import "./styles.css";
 
-export default function Chat({userName}) {
-  const[messages, setMessage] = useState([
-    {   id: 0,
-        user: "john",
-        type: 'msg',
-        text: "First stored message",
-    },
-    {   id: 1,
-        user: "json",
-        type: 'msg',
-        text: "hahaha",
-    },
-    {   id: 2,
-        user: "kido",
-        type: 'ans',
-        text: "vodka",
-    },
-    {   id: 3,
-        user: "batto",
-        type: 'in',
-    },]);
-   
-    function handleNewMessage(msg){
-      var new_msg={user:userName,type:'msg',text:msg}
-      let updatedMessages = [...messages, new_msg];
-      // update state
-      setMessage(updatedMessages)
+export default function Chat({ socket,userName,room}) {
+    // const [messages, setMessage] = useState(room.messages);
+    const [newMsg, setNewMsg] = useState("");
+
+    function handleCompose(value) {
+        setNewMsg(value)
+    };
+
+    function handleNewMessage() {
+        if (newMsg != "") {
+            const new_msg = { user: userName, type: 'msg', text: newMsg };
+            // setMessage(updatedMessages)
+            socket.emit("new_msg",new_msg)
+            setNewMsg("")
+
+        }
 
     }
 
-
     return (
-      <div className="App">
-        {/* send stored messages as props to chat window */}
-        <ChatWindow messagesList={messages} />
-        {/* send submitted props to chat composer */}
-        <ChatComposer sub={handleNewMessage}/>
-      </div>
+        <div className="App">
+            <ChatWindow messagesList={room.messages} />
+
+            <div className="chat-composer">
+
+                <input
+                    className="form-control"
+                    placeholder="Type & hit enter"
+                    onChange={e => handleCompose(e.target.value)}
+                    value={newMsg}
+                />
+                <button onClick={handleNewMessage}> submit</button>
+
+            </div>
+        </div>
     );
-      
-  }
 
-
-
-  
-
-    
-// }
-
-// const rootElement = document.getElementById("root");
-// ReactDOM.render(<App />, rootElement);
-
+}

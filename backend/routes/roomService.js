@@ -1,5 +1,5 @@
 module.exports = {
-    joinRoom: function (app, socket, all_room_info,io) {
+    joinRoom: function (app,socket,all_room_info,all_users,io) {
         socket.on('joinRoom', function (data) {
             var current_room = null;
             var current_index = null;
@@ -17,6 +17,7 @@ module.exports = {
                     current_room.currentPlayers += 1;
                     var userScoreBoard = { userName: data.userName, score: 0 };
                     socket.PLAYER_INFO = { userName: data.userName,roomID:data.roomID }
+                    current_room.messages.push({ user: data.userName, type: 'in' })
                     current_room.scoreBoard.push(userScoreBoard)
                     console.log(current_room)
                     all_room_info[current_index] = current_room;
@@ -24,8 +25,10 @@ module.exports = {
                     socket.broadcast.emit('updateRoomInfo', all_room_info)
                     socket.join(data.roomID)
                     socket.emit('joinRoomSuccess', current_room)
-                    var temp_data = { userName: data.userName, roomInfo: current_room }
-                    socket.to(data.roomID).emit("newUserJoinRoom", temp_data)
+                    // var temp_data = { userName: data.userName, roomInfo: current_room }
+                    // socket.to(data.roomID).emit("newUserJoinRoom", temp_data)
+                    io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo",current_room)
+
 
 
                 }
@@ -63,7 +66,7 @@ module.exports = {
                                 current_room.scoreBoard.splice(i,1)
                             }
                         }
-                        io.to(current_room.roomID).emit("updatCurrentRoomInfo",current_room)
+                        io.to(current_room.roomID).emit("updateCurrentRoomInfo",current_room)
                         all_room_info[current_index]=current_room
                     }
                 }
@@ -73,6 +76,25 @@ module.exports = {
             }
         })
     },
+    simpleChat: function (app, socket, all_room_info, all_user,io){
+        socket.on('new_msg',function(data){
+            var current_room = null;
+            var current_index = null;
+            for (i = 0; i < all_room_info.length; i++) {
+                if (all_room_info[i].roomID === socket.PLAYER_INFO.roomID) {
+                    current_room = all_room_info[i]
+                    current_index = i
+                }
+            }
+            current_room.messages.push(data)
+            all_room_info[current_index]=current_room
+            console.log(current_room)
+
+            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo",current_room)
+
+        })
+
+    }
 
 
 }

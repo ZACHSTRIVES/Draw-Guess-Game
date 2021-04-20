@@ -25,7 +25,7 @@ export default function GameRoom({ socket, userName,init_room }) {
     
   }, []);
   React.useEffect(() => {
-    socket.on('updatCurrentRoomInfo', (data) => { 
+    socket.on('updateCurrentRoomInfo', (data) => { 
      setRoomInfo(data)
     
     })
@@ -69,8 +69,7 @@ export default function GameRoom({ socket, userName,init_room }) {
       </div>
       <div className="message border">
         <h5 className="title">MESSAGE</h5>
-        {/* <Chat socket={socket} /> */}
-        <Chat socket={socket} userName={userName}/>
+        <Chat socket={socket} userName={userName} room={roomInfo}/>
       </div>
     </div>
   );
