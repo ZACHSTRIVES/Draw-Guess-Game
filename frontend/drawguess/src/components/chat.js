@@ -23,6 +23,12 @@ export default function Chat({ socket,userName,room}) {
 
     }
 
+    function onKeyup(e){
+        if(e.keyCode === 13) {
+            handleNewMessage()
+        }
+    }
+
     return (
         <div className="App">
             <ChatWindow messagesList={room.messages} />
@@ -33,6 +39,7 @@ export default function Chat({ socket,userName,room}) {
                     placeholder="Type enter"
                     onChange={e => handleCompose(e.target.value)}
                     value={newMsg}
+                    onKeyUp={onKeyup}
                 />
                 <button onClick={handleNewMessage} class="btn btn-outline-secondary"> submit</button>
             </div>

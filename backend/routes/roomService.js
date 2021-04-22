@@ -53,6 +53,7 @@ module.exports = {
                     }
                 }
                 console.log(socket.PLAYER_INFO.userName,"leaves the room ",socket.PLAYER_INFO.roomID)
+                current_room.messages.push({ user: socket.PLAYER_INFO.userName, type: 'out' })
 
                 if(current_room){
                     current_room.currentPlayers--;

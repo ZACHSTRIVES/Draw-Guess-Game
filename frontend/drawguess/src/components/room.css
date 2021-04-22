@@ -1,0 +1,12 @@
+.left{
+    float: 'left';
+}
+.right{
+    float: 'right';
+}
+
+.flex-between {
+    display: flex;
+    justify-content: space-between;
+    margin: 5px 15px 5px 15px;
+}

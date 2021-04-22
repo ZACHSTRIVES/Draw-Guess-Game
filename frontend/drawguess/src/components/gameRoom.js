@@ -1,9 +1,7 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
+import './room.css';
 import {
   Redirect,useLocation
 
@@ -13,9 +11,7 @@ import {
 
 
 export default function GameRoom({ socket, userName,init_room }) {
-  let location = useLocation();
   const [roomInfo, setRoomInfo] = React.useState(init_room)
-
   React.useEffect(() => {
     socket.on('newUserJoinRoom', (data) => { 
       console.log(data)
@@ -32,10 +28,6 @@ export default function GameRoom({ socket, userName,init_room }) {
     
   }, []);
 
-  const dense = false;
-  const secondary = false;
-
-
   return (
     <div className="root container">
       <div className="title border">
@@ -48,27 +40,13 @@ export default function GameRoom({ socket, userName,init_room }) {
         <h5 className="title">ROUND</h5>
         <ul>
           {roomInfo.scoreBoard.map((player, index) =>
-            <li key={index} alignItems="flex-start">
-              <div className="player">
-                <List dense={dense}>
-                  <ListItem>
-                    <ListItemText
-                      primary={player.userName}
-                      secondary={secondary ? 'Secondary text' : null}
-                    />
-                    <ListItemText
-                      edge="end"
-                      primary={player.score}
-                      secondary={secondary ? 'Secondary text' : null}
-                    />
-                  </ListItem>
-                </List>
-              </div>
+            <li className="flex-between" key={index}>
+              <div>{player.userName}</div><div>{player.score}</div> 
             </li>)}
         </ul>
       </div>
       <div className="message border">
-        <h5 className="title">MESSAGE</h5>
+        <h5 className="title">CHATBOX</h5>
         <Chat socket={socket} userName={userName} room={roomInfo}/>
       </div>
     </div>

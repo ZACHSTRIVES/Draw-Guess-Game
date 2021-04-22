@@ -22,6 +22,13 @@ export default function ChatWindow({messagesList}) {
                     </p>
                   )
                 }
+                else if (message.type === "out") {
+                  return (
+                    <p key={index} className="message">
+                      {message.user} has left room
+                    </p>
+                  )
+                }
                 else if (message.type === "ans") {
                   return (
                     <p key={index} className="answer">
