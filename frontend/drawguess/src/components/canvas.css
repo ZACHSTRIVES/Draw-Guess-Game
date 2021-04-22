@@ -86,8 +86,16 @@
   display: flex;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .flex-center-all {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mask {
+  background: rgba(0, 0, 0, 0.562);
 }

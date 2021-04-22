@@ -65,7 +65,7 @@ function App() {
 
           <Route path='/room/'>
             {userName === null ? <Redirect to="/login" /> :
-              <div className="App">
+              <div className="App game-room">
                 <Game socket={socket} userName={userName} />
               </div>
             }

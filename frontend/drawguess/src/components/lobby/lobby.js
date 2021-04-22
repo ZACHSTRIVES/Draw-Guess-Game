@@ -7,7 +7,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import RoomList from './roomList';
 import axios from 'axios'
-import CreateRoom from '../CreateRoom/CreateRoomModal';
+import CreateRoom from '../CreateRoom/CreateRoomModal/CreateRoomModal';
 import {
   Redirect, useHistory
 } from "react-router-dom";

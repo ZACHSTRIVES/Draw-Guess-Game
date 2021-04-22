@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
+import './gameRoom.css';
 import {
   Redirect,useLocation
 
@@ -37,14 +38,14 @@ export default function GameRoom({ socket, userName,init_room }) {
 
 
   return (
-    <div className="root container">
-      <div className="title border">
+    <div className="room container rounded-rect">
+      <div className="title rounded-rect border">
         <h5 className="title">{roomInfo.roomName}</h5>
       </div>
-      <div className="canvas border">
+      <div className="canvas rounded-rect border">
         <Canvas />
       </div>
-      <div className="round border">
+      <div className="round rounded-rect border">
         <h5 className="title">ROUND</h5>
         <ul>
           {roomInfo.scoreBoard.map((player, index) =>
@@ -67,7 +68,7 @@ export default function GameRoom({ socket, userName,init_room }) {
             </li>)}
         </ul>
       </div>
-      <div className="message border">
+      <div className="message rounded-rect border">
         <h5 className="title">MESSAGE</h5>
         <Chat socket={socket} userName={userName} room={roomInfo}/>
       </div>
