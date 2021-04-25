@@ -2,9 +2,9 @@ import React from 'react';
 import Timer from './timer'
 
 export default function TestRoom({ socket }) {
-    const userName = "USER1"
+    const userName = "USER2"
     const testroom = {
-        maxRound: 1, socoreBoard: [
+        maxRound: 2, socoreBoard: [
             {
                 userName: "USER1",
                 score: 0,
@@ -23,6 +23,7 @@ export default function TestRoom({ socket }) {
 
 
 
+   
     React.useEffect(() => {
         socket.on('gameUpdate', (data) => {
             setRoomInfo(data)
@@ -45,7 +46,8 @@ export default function TestRoom({ socket }) {
            
         })
     }, []);
-    React.useEffect(() => {
+
+   React.useEffect(() => {
         socket.on('drawing', (data) => {
             setRoomInfo(data)
             console.log("drawing",data)
