@@ -7,6 +7,7 @@ import { TwitterPicker } from 'react-color';
 import React from 'react';
 import Timer from './timer';
 import WordSelectionMask from './wordSelectionMask';
+import StartGameMask from './startGameMask';
 
 function debounce(fn, ms) {
   let timer
@@ -32,6 +33,7 @@ function Canvas() {
   const [brushColor, setBrushColor] = useState("#000");
   const [word, setWord] = useState("");
   const [wordChoices, setWordChoices] = useState(null);
+  const [startGame, setStartGame] = useState(false);
   const [pause, setPause] = useState(true);
 
   const deboundCanvasChange = debounce(function handleCanvasChange() {
@@ -101,11 +103,25 @@ function Canvas() {
     colorBtn.classList.remove('btn-active');
   }
 
-  // const setRandomWord = () => {
-  //   const index = Math.floor(Math.random() * words.length);
-  //   const word = words[index];
-  //   setWord(word);
-  // }
+  const handleSelectWord = (word) => {
+    console.log("handle select word for word: ", word);
+    setWord(word);
+    setPause(false);
+  }
+
+  const handleGamePause = () => {
+    console.log("handle game pause");
+    setPause(true);
+    setWord("");
+
+    var results = words.slice(0, 3);
+    setWordChoices(results);
+  }
+
+  const handleStartGame = () => {
+    console.log("starting game btn pressed");
+    setStartGame(true);
+  }
 
   const debouncedHandleResize = debounce(function handleResize() {
     if (!canvasRef.current) return;
@@ -142,26 +158,13 @@ function Canvas() {
     // setWordChoices(results);
   });
 
-  const handleSelectWord = (word) => {
-    console.log("handle select word for word: ", word);
-    setWord(word);
-    setPause(false);
-  }
-
-  const handleGamePause = () => {
-    console.log("handle game pause");
-    setPause(true);
-    setWord("");
-
-    var results = words.slice(0, 3);
-    setWordChoices(results);
-  }
-
   return (
     <div className="canvas-container flex-center-all" ref={containerRef} >
-      { (pause) && <WordSelectionMask words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>}
+      { (!startGame) ? <StartGameMask isHost={true} onStartGame={handleStartGame}></StartGameMask> :
+       (pause) && <WordSelectionMask words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>}
       <div className="canvas-header glass-rect">
         {console.log("Pause: ", pause)}
+        {console.log("start game: ", startGame)}
         <span>You're drawing: {word}</span>
         <Timer gameOn={!pause} onPause={handleGamePause} />
         {/* <div className="canvas-timer flex-center-all"></div> */}
