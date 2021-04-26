@@ -5,10 +5,11 @@
 }
 
 .canvas-header {
-  background: rgba(194, 252, 247, 0.7);
+  /* background: rgba(194, 252, 247, 0.7); */
   position: absolute;
   top: 0;
   width: 100%;
+  border-radius: 15px 15px 0 0;
 }
 
 .canvas-timer {
@@ -86,8 +87,16 @@
   display: flex;
 }
 
+.flex-column {
+  flex-direction: column;
+}
+
 .flex-center-all {
   display: flex;
   align-items: center;
   justify-content: center;
+}
+
+.mask {
+  background: rgba(0, 0, 0, 0.562);
 }

@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
-export default function Timer({gameOn}) {
+export default function Timer({gameOn, onPause}) {
 
-  const [counter, setCounter] = useState(60);
+  const [counter, setCounter] = useState(20);
 
   useEffect(() => {
     if (gameOn) {
@@ -10,7 +10,8 @@ export default function Timer({gameOn}) {
         if (counter > 0) {
           setCounter(counter - 1);
         } else {
-          setCounter(60);
+          setCounter(20);
+          onPause();
         }
       }, 1000);
   
@@ -18,7 +19,7 @@ export default function Timer({gameOn}) {
         clearTimeout(startTimer);
       }
     }    
-  }, [gameOn, counter]);
+  }, [gameOn, counter, onPause]);
 
   return(
     <div className="canvas-timer flex-center-all">{counter}</div>

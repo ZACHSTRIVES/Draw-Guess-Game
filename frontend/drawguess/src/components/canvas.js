@@ -6,6 +6,7 @@ import { Slider } from '@material-ui/core';
 import { TwitterPicker } from 'react-color';
 import React from 'react';
 import Timer from './timer';
+import WordSelectionMask from './wordSelectionMask';
 
 function debounce(fn, ms) {
   let timer
@@ -30,6 +31,8 @@ function Canvas() {
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
   const [word, setWord] = useState("");
+  const [wordChoices, setWordChoices] = useState(null);
+  const [pause, setPause] = useState(true);
 
   const deboundCanvasChange = debounce(function handleCanvasChange() {
     const canvas = canvasRef.current;
@@ -98,11 +101,11 @@ function Canvas() {
     colorBtn.classList.remove('btn-active');
   }
 
-  const setRandomWord = () => {
-    const index = Math.floor(Math.random() * words.length);
-    const word = words[index];
-    setWord(word);
-  }
+  // const setRandomWord = () => {
+  //   const index = Math.floor(Math.random() * words.length);
+  //   const word = words[index];
+  //   setWord(word);
+  // }
 
   const debouncedHandleResize = debounce(function handleResize() {
     if (!canvasRef.current) return;
@@ -130,17 +133,37 @@ function Canvas() {
     return () => {
       window.removeEventListener('resize', debouncedHandleResize)
     }
-  }); 
+  });
 
   useEffect(() => {
-    setRandomWord();
-  }, []);
+    // setRandomWord();
+
+    // var results = words.slice(0, 3);
+    // setWordChoices(results);
+  });
+
+  const handleSelectWord = (word) => {
+    console.log("handle select word for word: ", word);
+    setWord(word);
+    setPause(false);
+  }
+
+  const handleGamePause = () => {
+    console.log("handle game pause");
+    setPause(true);
+    setWord("");
+
+    var results = words.slice(0, 3);
+    setWordChoices(results);
+  }
 
   return (
     <div className="canvas-container flex-center-all" ref={containerRef} >
-      <div className="canvas-header">
+      { (pause) && <WordSelectionMask words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>}
+      <div className="canvas-header glass-rect">
+        {console.log("Pause: ", pause)}
         <span>You're drawing: {word}</span>
-        <Timer gameOn={true}/>
+        <Timer gameOn={!pause} onPause={handleGamePause} />
         {/* <div className="canvas-timer flex-center-all"></div> */}
       </div>
       <CanvasDraw
@@ -184,7 +207,7 @@ function Canvas() {
         <div className="tools-container flex bottom">
           <div className="tool flex-center-all" onClick={handleStrokeColorToggle}>
             <div className="tool-btn flex-center-all color-btn">
-              <Palette style={{ color: brushColor }}/>
+              <Palette style={{ color: brushColor }} />
             </div>
             <span>Color</span>
           </div>
