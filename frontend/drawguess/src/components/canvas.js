@@ -158,81 +158,80 @@ function Canvas() {
   }
 
   return (
-    
-      <div className="canvas-container flex-center-all" ref={containerRef} >
-        { (pause) && <WordSelectionMask words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask> }
-        <div className="canvas-header">
-          {console.log("Pause: ", pause)}
-          <span>You're drawing: {word}</span>
-          <Timer gameOn={!pause} onPause={handleGamePause} />
-          {/* <div className="canvas-timer flex-center-all"></div> */}
-        </div>
-        <CanvasDraw
-          lazyRadius={0}
-          brushColor={brushColor}
-          brushRadius={brushSize}
-          canvasWidth={size}
-          canvasHeight={size}
-          ref={canvasRef}
-          onChange={deboundCanvasChange}
-        />
-        <div className="tools-overlay flex-center-all">
-          {
-            (showOption !== "none") &&
-            <div className="tools-container flex bottom-offset">
-              {
-                (showOption === "size") &&
-                <div className="size-options">
-                  <Slider
-                    value={brushSize}
-                    aria-labelledby="discrete-slider"
-                    valueLabelDisplay="on"
-                    marks
-                    step={1}
-                    min={1}
-                    max={20}
-                    onChange={handleSliderChange}
-                    onChangeCommitted={handleSliderChangeCommitted}
-                  />
-                </div>
-              }
-              {
-                (showOption === "color") &&
-                <div className="color-options">
-                  <TwitterPicker colors={colors} onChangeComplete={handleColorChangeComplete} />
-                </div>
-              }
-            </div>
-          }
+    <div className="canvas-container flex-center-all" ref={containerRef} >
+      { (pause) && <WordSelectionMask words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>}
+      <div className="canvas-header glass-rect">
+        {console.log("Pause: ", pause)}
+        <span>You're drawing: {word}</span>
+        <Timer gameOn={!pause} onPause={handleGamePause} />
+        {/* <div className="canvas-timer flex-center-all"></div> */}
+      </div>
+      <CanvasDraw
+        lazyRadius={0}
+        brushColor={brushColor}
+        brushRadius={brushSize}
+        canvasWidth={size}
+        canvasHeight={size}
+        ref={canvasRef}
+        onChange={deboundCanvasChange}
+      />
+      <div className="tools-overlay flex-center-all">
+        {
+          (showOption !== "none") &&
+          <div className="tools-container flex bottom-offset">
+            {
+              (showOption === "size") &&
+              <div className="size-options">
+                <Slider
+                  value={brushSize}
+                  aria-labelledby="discrete-slider"
+                  valueLabelDisplay="on"
+                  marks
+                  step={1}
+                  min={1}
+                  max={20}
+                  onChange={handleSliderChange}
+                  onChangeCommitted={handleSliderChangeCommitted}
+                />
+              </div>
+            }
+            {
+              (showOption === "color") &&
+              <div className="color-options">
+                <TwitterPicker colors={colors} onChangeComplete={handleColorChangeComplete} />
+              </div>
+            }
+          </div>
+        }
 
-          <div className="tools-container flex bottom">
-            <div className="tool flex-center-all" onClick={handleStrokeColorToggle}>
-              <div className="tool-btn flex-center-all color-btn">
-                <Palette style={{ color: brushColor }} />
-              </div>
-              <span>Color</span>
+        <div className="tools-container flex bottom">
+          <div className="tool flex-center-all" onClick={handleStrokeColorToggle}>
+            <div className="tool-btn flex-center-all color-btn">
+              <Palette style={{ color: brushColor }} />
             </div>
-            <div className="tool flex-center-all" onClick={handleStrokeSizeToggle}>
-              <div className="tool-btn flex-center-all size-btn">
-                <LineWeight />
-              </div>
-              <span>Size</span>
+            <span>Color</span>
+          </div>
+          <div className="tool flex-center-all" onClick={handleStrokeSizeToggle}>
+            <div className="tool-btn flex-center-all size-btn">
+              <LineWeight />
             </div>
-            <div className="tool flex-center-all" onClick={handleUndo}>
-              <div className="tool-btn flex-center-all">
-                <Undo />
-              </div>
-              <span>Undo</span>
+            <span>Size</span>
+          </div>
+          <div className="tool flex-center-all" onClick={handleUndo}>
+            <div className="tool-btn flex-center-all">
+              <Undo />
             </div>
-            <div className="tool flex-center-all" onClick={handleClear}>
-              <div className="tool-btn flex-center-all">
-                <DeleteForever />
-              </div>
-              <span>Clear</span>
+            <span>Undo</span>
+          </div>
+          <div className="tool flex-center-all" onClick={handleClear}>
+            <div className="tool-btn flex-center-all">
+              <DeleteForever />
             </div>
+            <span>Clear</span>
           </div>
         </div>
       </div>
+    </div>
   );
 }
 

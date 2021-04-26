@@ -1,30 +1,24 @@
-.game-room {
-  background: linear-gradient(to top right, #85bdbf, 15%, #c2fcf7);
+.game-room {  
+  background: linear-gradient(to right, rgba(147,214,242,1) 0%, rgba(235,177,228,1) 64%, rgba(255,162,175,0.9) 100%);  
 }
 
-.container {
-  /* background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5)); */
-}
-
-.title {
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
-}
-
-.canvas {
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
-}
-
-.message {
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
-
-}
-
-.round {
-  background: linear-gradient(to bottom right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0.5));
+.room-bg {
+  background: linear-gradient(to top, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 80%);  
 }
 
 .rounded-rect {
   border-radius: 15px;
+}
+
+.glass-rect {
+  background: rgba( 255, 255, 255, 0.30 );
+  backdrop-filter: blur( 5.0px );
+  -webkit-backdrop-filter: blur( 5.0px );
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.margin-sm {
+  margin: 0.5em;
 }
 
 @media(orientation: portrait) {
