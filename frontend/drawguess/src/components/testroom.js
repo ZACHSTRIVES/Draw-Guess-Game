@@ -19,6 +19,7 @@ export default function TestRoom({ socket }) {
         game: { status: "ChoosingWord", round: 1, drawer: null, drawerindex: null },
     }
     const [roomInfo, setRoomInfo] = React.useState(testroom)
+
     const [word, setWord] = React.useState(null)
 
 
@@ -26,25 +27,16 @@ export default function TestRoom({ socket }) {
     React.useEffect(() => {
         socket.on('gameUpdate', (data) => {
             setRoomInfo(data)
-            console.log(data)
-
         })
     }, []);
 
     React.useEffect(() => {
         socket.on('choosingWord', (data) => {
             setRoomInfo(data)
-            console.log(data)
-            // if(testroom.game.drawer==userName){
-            //     setTimeout(()=>{
-            //         if(word===null){
-            //             console.log("换drawer")
-            //         }
-            //     },5000)
-            // }
            
         })
     }, []);
+    
     React.useEffect(() => {
         socket.on('drawing', (data) => {
             setRoomInfo(data)
@@ -65,10 +57,11 @@ export default function TestRoom({ socket }) {
 
 
 
+
+
     function handleStart() {
         socket.emit('beginGame')
-        console.log("ss")
-        // setTimeout(socket.emit('chooseWord') ,3000)
+        
     }
     
     function handleSet(word) {

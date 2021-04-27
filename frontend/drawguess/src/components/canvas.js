@@ -20,7 +20,7 @@ function debounce(fn, ms) {
   };
 }
 
-function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) {
+function Canvas({ roomInfo, userName, socket }) {
   const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
   const words = ['pig', 'rabbit', 'dog', 'starfish', 'bridge', 'library', 'park', 'tower'];
   const DEFAULT_BRUSH_SIZE = 10;
@@ -31,20 +31,64 @@ function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) 
   const [drawing, setDrawing] = useState("");
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
+  const [lock, setLock] = useState(false)
   const [word, setWord] = useState("");
   const [wordChoices, setWordChoices] = useState(null);
   const [startGame, setStartGame] = useState(false);
-  const [pause, setPause] = useState(true);
   const [headerMsg, setHeaderMsg] = useState("");
+  const [drawingMode, setDrawingMode] = useState("none");
 
   const deboundCanvasChange = debounce(function handleCanvasChange() {
     const canvas = canvasRef.current;
     const drawings = canvas.getSaveData();
+    console.log(drawingMode)
 
     if (drawings !== "") {
-      setDrawing(drawings);
+      // setDrawing(drawings);
+      if (roomInfo.game.drawer === userName) {
+        if (drawingMode === "done") {
+          const data = { roomID: roomInfo.roomID, canvas: drawings }
+          socket.emit('draw', data)
+          setDrawingMode("none")
+          console.log("JS51")
+        }
+
+      }
+
     }
   }, 50);
+
+  React.useEffect(() => {
+    socket.on('onDraw', (data) => {
+      const canvas = canvasRef.current;
+      if (!canvas) return;
+      canvas.loadSaveData(data.game.canvas, true)
+
+    })
+
+   
+  }, []);
+
+  React.useEffect(() => {
+    const canvasContainer = document.querySelector(".canvas-container");
+    if (!canvasContainer) return;
+    canvasContainer.addEventListener("mouseup", stopDrawing);
+  }, []);
+
+  const stopDrawing = () => {
+    console.log("canvas stop drawing");
+    if (drawingMode === "none") {
+      setDrawingMode("done");
+      console.log("drawing mode: ", drawingMode);
+    }
+  }
+
+  // const handleCanvasChange = () => {
+  //   const canvas = canvasRef.current;
+  //   if (!canvas) return;
+  //   const data={roomID:roomInfo.roomID,canvas:canvas.getSaveData()}
+  //   socket.emit('draw',data)
+  // }
 
   const handleClear = () => {
     const canvas = canvasRef.current;
@@ -96,35 +140,34 @@ function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) 
     sizeBtn.classList.remove('btn-active')
   }
 
-  const handleColorChangeComplete = (color, event) => {
+  const handleColorChangeComplete = (color, event, setColor) => {
     setBrushColor(color.hex);
     setShowOption("none");
 
     const colorBtn = document.querySelector('.color-btn');
     colorBtn.classList.remove('btn-active');
+
+    setColor(color.hex);
   }
 
   const handleSelectWord = (word) => {
-    console.log("handle select word for word: ", word);
-    setWord(word);
-    setPause(false);
-    onChangeGameStatus("drawing");
+    const data = { word: word, roomID: roomInfo.roomID }
+    console.log(data)
+    socket.emit('setWord', data)
+
+
   }
 
   const handleGamePause = () => {
     console.log("handle game pause");
-    setPause(true);
     setWord("");
-
     var results = words.slice(0, 3);
     setWordChoices(results);
-    onChangeGameStatus("ChoosingWord");
   }
 
   const handleStartGame = () => {
-    console.log("starting game btn pressed");
-    setStartGame(true);
-    onChangeGlobalStatus("playing");
+    const temp = { roomID: roomInfo.roomID, userName: userName }
+    socket.emit('beginGame', temp)
   }
 
   const maskWord = (word) => {
@@ -172,16 +215,25 @@ function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) 
       {(() => {
         console.log("Global status: ", roomInfo.globalStatus);
         // const isDrawer = roomInfo.game.drawer === userName;
-        const isDrawer = true;
+        const isDrawer = roomInfo.game.drawer === userName
+        const isHost = roomInfo.host === userName
+
+
         if (roomInfo.globalStatus === "waiting") {
-          return (<StartGameMask isHost={isDrawer} onStartGame={handleStartGame}></StartGameMask>);
+          return (<StartGameMask isHost={isHost} onStartGame={handleStartGame}></StartGameMask>);
+
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
             return (<WordSelectionMask isDrawer={isDrawer} words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>);
           }
           else if (roomInfo.game.status === "drawing") {
-            // isDrawer ? setHeaderMsg(`You're drawing: ${word}`) : setHeaderMsg(`The drawing is: ${maskWord(word)}`);
+            return (<div className="canvas-header glass-rect">
+
+              <span>{isDrawer ? `You're drawing: ${roomInfo.game.word}` : `The drawing is: ${maskWord(roomInfo.game.word)}`}</span>
+              <Timer gameOn={roomInfo.game.status === 'drawing'} onPause={handleGamePause} />
+            </div>)
+
           }
           else {
             //finish round return scoreboard
@@ -191,11 +243,7 @@ function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) 
           //finish game
         }
       })()}
-      <div className="canvas-header glass-rect">
-        <span>{false ? `You're drawing: ${word}` : `The drawing is: ${maskWord(word)}`}</span>
-        <Timer gameOn={!pause} onPause={handleGamePause} />
-        {/* <div className="canvas-timer flex-center-all"></div> */}
-      </div>
+
       <CanvasDraw
         lazyRadius={0}
         brushColor={brushColor}
@@ -205,6 +253,8 @@ function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) 
         ref={canvasRef}
         onChange={deboundCanvasChange}
       />
+
+
       <div className="tools-overlay flex-center-all">
         {
           (showOption !== "none") &&
@@ -261,6 +311,7 @@ function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) 
           </div>
         </div>
       </div>
+
     </div>
   );
 }

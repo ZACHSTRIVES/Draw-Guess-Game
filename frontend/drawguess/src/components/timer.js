@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 
 export default function Timer({gameOn, onPause}) {
 
-  const [counter, setCounter] = useState(20);
+  const [counter, setCounter] = useState(60);
 
   useEffect(() => {
     if (gameOn) {
@@ -10,7 +10,7 @@ export default function Timer({gameOn, onPause}) {
         if (counter > 0) {
           setCounter(counter - 1);
         } else {
-          setCounter(20);
+          setCounter(60);
           onPause();
         }
       }, 1000);

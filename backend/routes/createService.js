@@ -20,13 +20,16 @@ module.exports = {
       data.room.currentPlayers = 0;
       data.room.scoreBoard = [];
       data.room.messages=[];
-
-      console.log("Create Room:", data.room)
-      
-      socket.emit('updateRoomInfo', all_room_info)
+      data.room.game={ status: "waiting", round: 0, drawer: null, drawerindex: null, currentRound: 1, word: null, canvas:null };
+      data.room.globalStatus="waiting",
+      data.room.host=data.userName
       data.room.currentPlayers += 1;
       var userScoreBoard = { userName: data.userName, score: 0 };
       data.room.scoreBoard.push(userScoreBoard)
+      console.log("Create Room:", data.room)
+      
+      socket.emit('updateRoomInfo', all_room_info)
+      
       all_room_info.push(data.room)
       socket.emit('updateRoomInfo', all_room_info)
       socket.broadcast.emit('updateRoomInfo', all_room_info)

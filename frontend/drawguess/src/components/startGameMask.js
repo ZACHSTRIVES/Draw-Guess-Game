@@ -7,8 +7,8 @@ export default function StartGameMask({ isHost, onStartGame }) {
       <div className="pop-up-container flex-center-all flex-column rounded-rect glass-rect">
         {isHost
           ? <div className="flex-center-all flex-column start-game-txt">
-              <p>Start game?</p>
-              <Button variant="outlined" className="option-btn" onClick={() => onStartGame()}>Ready</Button>
+              <p>Are you ready?</p>
+              <Button variant="outlined" className="option-btn" onClick={() => onStartGame()}>Start</Button>
             </div>
           : <p>Waiting for host to start game</p>
         }
