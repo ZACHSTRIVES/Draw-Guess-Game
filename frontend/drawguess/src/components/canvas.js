@@ -7,6 +7,7 @@ import { TwitterPicker } from 'react-color';
 import React from 'react';
 import Timer from './timer';
 import WordSelectionMask from './wordSelectionMask';
+import StartGameMask from './startGameMask';
 
 function debounce(fn, ms) {
   let timer
@@ -19,7 +20,7 @@ function debounce(fn, ms) {
   };
 }
 
-function Canvas() {
+function Canvas({roomInfo, userName, onChangeGlobalStatus, onChangeGameStatus}) {
   const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
   const words = ['pig', 'rabbit', 'dog', 'starfish', 'bridge', 'library', 'park', 'tower'];
   const DEFAULT_BRUSH_SIZE = 10;
@@ -32,7 +33,9 @@ function Canvas() {
   const [brushColor, setBrushColor] = useState("#000");
   const [word, setWord] = useState("");
   const [wordChoices, setWordChoices] = useState(null);
+  const [startGame, setStartGame] = useState(false);
   const [pause, setPause] = useState(true);
+  const [headerMsg, setHeaderMsg] = useState("");
 
   const deboundCanvasChange = debounce(function handleCanvasChange() {
     const canvas = canvasRef.current;
@@ -101,11 +104,32 @@ function Canvas() {
     colorBtn.classList.remove('btn-active');
   }
 
-  // const setRandomWord = () => {
-  //   const index = Math.floor(Math.random() * words.length);
-  //   const word = words[index];
-  //   setWord(word);
-  // }
+  const handleSelectWord = (word) => {
+    console.log("handle select word for word: ", word);
+    setWord(word);
+    setPause(false);
+    onChangeGameStatus("drawing");
+  }
+
+  const handleGamePause = () => {
+    console.log("handle game pause");
+    setPause(true);
+    setWord("");
+
+    var results = words.slice(0, 3);
+    setWordChoices(results);
+    onChangeGameStatus("ChoosingWord");
+  }
+
+  const handleStartGame = () => {
+    console.log("starting game btn pressed");
+    setStartGame(true);
+    onChangeGlobalStatus("playing");
+  }
+
+  const maskWord = (word) => {
+    return word.replace(/\S/gi, '_ ');
+  }
 
   const debouncedHandleResize = debounce(function handleResize() {
     if (!canvasRef.current) return;
@@ -142,27 +166,33 @@ function Canvas() {
     // setWordChoices(results);
   });
 
-  const handleSelectWord = (word) => {
-    console.log("handle select word for word: ", word);
-    setWord(word);
-    setPause(false);
-  }
-
-  const handleGamePause = () => {
-    console.log("handle game pause");
-    setPause(true);
-    setWord("");
-
-    var results = words.slice(0, 3);
-    setWordChoices(results);
-  }
-
   return (
     <div className="canvas-container flex-center-all" ref={containerRef} >
-      { (pause) && <WordSelectionMask words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>}
+      {console.log("room info in canvas: ", roomInfo)}
+      {(() => {
+        console.log("Global status: ", roomInfo.globalStatus);
+        // const isDrawer = roomInfo.game.drawer === userName;
+        const isDrawer = true;
+        if (roomInfo.globalStatus === "waiting") {
+          return (<StartGameMask isHost={isDrawer} onStartGame={handleStartGame}></StartGameMask>);
+        }
+        else if (roomInfo.globalStatus === "playing") {
+          if (roomInfo.game.status === "ChoosingWord") {
+            return (<WordSelectionMask isDrawer={isDrawer} words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>);
+          }
+          else if (roomInfo.game.status === "drawing") {
+            // isDrawer ? setHeaderMsg(`You're drawing: ${word}`) : setHeaderMsg(`The drawing is: ${maskWord(word)}`);
+          }
+          else {
+            //finish round return scoreboard
+          }
+        }
+        else {
+          //finish game
+        }
+      })()}
       <div className="canvas-header glass-rect">
-        {console.log("Pause: ", pause)}
-        <span>You're drawing: {word}</span>
+        <span>{false ? `You're drawing: ${word}` : `The drawing is: ${maskWord(word)}`}</span>
         <Timer gameOn={!pause} onPause={handleGamePause} />
         {/* <div className="canvas-timer flex-center-all"></div> */}
       </div>
@@ -178,7 +208,7 @@ function Canvas() {
       <div className="tools-overlay flex-center-all">
         {
           (showOption !== "none") &&
-          <div className="tools-container flex bottom-offset">
+          <div className="tools-container flex bottom-offset glass-rect-bright rounded-rect">
             {
               (showOption === "size") &&
               <div className="size-options">
@@ -204,7 +234,7 @@ function Canvas() {
           </div>
         }
 
-        <div className="tools-container flex bottom">
+        <div className="tools-container flex bottom glass-rect-bright rounded-rect">
           <div className="tool flex-center-all" onClick={handleStrokeColorToggle}>
             <div className="tool-btn flex-center-all color-btn">
               <Palette style={{ color: brushColor }} />

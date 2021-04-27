@@ -17,6 +17,13 @@
   border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
+.glass-rect-bright {
+  background: rgba( 255, 255, 255, 0.80 );
+  backdrop-filter: blur( 5.0px );
+  -webkit-backdrop-filter: blur( 5.0px );
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
 .margin-sm {
   margin: 0.5em;
 }
@@ -94,7 +101,36 @@
     grid-row-start: 2;
     grid-row-end: 3;
   }
+
   .logo{
     width:10%
   }
+}
+
+.mask-container {
+  width: 100%;
+  height: 100%;
+  z-index: 9999;
+  position: absolute;
+}
+
+.pop-up-container {
+  width: 70%;
+  min-width: 50%;
+  height: 50%;
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur( 5.0px );
+  -webkit-backdrop-filter: blur( 5.0px );
+  border: 1px solid rgba( 255, 255, 255, 0.18 );
+}
+
+.options-btn-group {
+  display: flex;
+  width: 100%;
+  margin: 2em;
+  justify-content: space-around;
+}
+
+.start-game-txt > p {
+  margin: 1em;
 }

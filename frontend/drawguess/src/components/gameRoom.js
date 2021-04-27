@@ -15,27 +15,59 @@ import {
 
 export default function GameRoom({ socket, userName, init_room }) {
   let location = useLocation();
-  const [roomInfo, setRoomInfo] = React.useState(init_room)
+  const testroom = {
+    maxRound: 1, scoreBoard: [
+      {
+        userName: "USER1",
+        score: 0,
+      },
+      {
+        userName: "USER2",
+        score: 0,
+      },
+    ],
+    cuurent_user: 2,
+    globalStatus: "waiting",
+    game: { status: "ChoosingWord", round: 1, drawer: null, drawerindex: null },
+  }
 
-  React.useEffect(() => {
-    socket.on('newUserJoinRoom', (data) => {
-      console.log(data)
-      setRoomInfo(data.roomInfo)
+  const [roomInfo, setRoomInfo] = React.useState(testroom)
 
-    })
+  // React.useEffect(() => {
+  //   socket.on('newUserJoinRoom', (data) => {
+  //     console.log(data)
+  //     setRoomInfo(data.roomInfo)
 
-  }, []);
-  React.useEffect(() => {
-    socket.on('updateCurrentRoomInfo', (data) => {
-      setRoomInfo(data)
+  //   })
 
-    })
+  // }, []);
+  // React.useEffect(() => {
+  //   socket.on('updateCurrentRoomInfo', (data) => {
+  //     setRoomInfo(data)
 
-  }, []);
+  //   })
+
+  // }, []);
 
   const dense = false;
   const secondary = false;
 
+  const handleChangeGlobalStatus = (status) => {
+    setRoomInfo({
+      ...roomInfo,
+      globalStatus: status
+    })
+  }
+
+  const handleChangeGameStatus = (status) => {
+    setRoomInfo({
+      ...roomInfo,
+      game: {
+        ...roomInfo.game,
+        status: status
+      }
+    })
+  }
 
   return (
     <div className="room-bg">
@@ -44,7 +76,7 @@ export default function GameRoom({ socket, userName, init_room }) {
           <h5 className="title">{roomInfo.roomName}</h5>
         </div>
         <div className="canvas rounded-rect border glass-rect margin-sm">
-          <Canvas />
+          <Canvas roomInfo={roomInfo} userName={userName} onChangeGlobalStatus={handleChangeGlobalStatus} onChangeGameStatus={handleChangeGameStatus}/>
         </div>
         <div className="round rounded-rect border glass-rect margin-sm">
           <h5 className="title">ROUND</h5>
