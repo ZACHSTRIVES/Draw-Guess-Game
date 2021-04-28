@@ -81,7 +81,7 @@ module.exports = {
         })
     },
 
-    timer: function (socket, io) {
+    timer: function (socket, io,all_room_info) {
         let globalTimer;
         let seconds = 60;
         socket.on('startTimer', (roomID) => {
@@ -95,9 +95,18 @@ module.exports = {
                 }
             }, 1000)
         }),
-            socket.on('finishedTimer', (roomID) => {
+            socket.on('finishedTimer', (data) => {
+                var temp_data = get_current_room_by_id(all_room_info, data.roomID)
+                const current_room = temp_data.current_room;
+                const current_index = temp_data.current_index;
                 clearInterval(globalTimer);
+                if(current_room){
+                    all_room_info[current_index]=data;
+                    io.to(data.roomID).emit("updateCurrentRoomInfo", data);
+                    io.sockets.emit("updateRoomInfo", all_room_info);
+                }
                 seconds = 60;
+                
             })
     },
 
@@ -134,13 +143,13 @@ module.exports = {
                         const lowerAns = current_room.game.word.toLowerCase()
                         if (lowercaseMsg === lowerAns) {
                             current_room.game.num_of_right++;
-                            current_room.scoreBoard[user_index].right = false;
+                            current_room.scoreBoard[user_index].right = true;
                             const score = Math.max(60 - (current_room.game.num_of_right * 10), 10);
                             current_room.scoreBoard[user_index].score += score;
                             const new_msg = { user: socket.PLAYER_INFO.userName, type: 'ans' };
                             current_room.messages.push(new_msg);
                             all_room_info[current_index] = current_room;
-                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.to(socket.PLAYER_INFO.roomID).emit("userGotRightAns", current_room);
                             io.sockets.emit("updateRoomInfo", all_room_info);
 
                         } else {
@@ -164,7 +173,7 @@ module.exports = {
 
         })
 
-    }
+    },
 
 
 

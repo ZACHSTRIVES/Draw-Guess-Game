@@ -22,36 +22,53 @@ export default function GameRoom({ socket, userName, init_room }) {
   React.useEffect(() => {
     socket.on('newUserJoinRoom', (data) => {
       console.log(data)
-      setRoomInfo(data.roomInfo)
+      setRoomInfo(data.roomInfo);
 
     })
 
   }, []);
-  
+
   React.useEffect(() => {
     socket.on('updateCurrentRoomInfo', (data) => {
-      setRoomInfo(data)
+      setRoomInfo(data);
 
     })
   }, []);
 
   React.useEffect(() => {
     socket.on('choosingWord', (data) => {
-      setRoomInfo(data)
+      setRoomInfo(data);
 
     })
   }, []);
 
   React.useEffect(() => {
     socket.on('drawing', (data) => {
-      setRoomInfo(data)
-      if(data.game.drawer===userName){
-        socket.emit("startTimer",roomInfo.roomID)
+      setRoomInfo(data);
+      if (data.game.drawer === userName) {
+        socket.emit("startTimer", roomInfo.roomID);
       }
 
     })
   }, []);
-  
+
+  React.useEffect(() => {
+    socket.on('userGotRightAns', (data) => {
+      setRoomInfo(data);
+      if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {
+        const drawerScore = Math.min(10 * data.game.num_of_right, 40)
+        for (var i = 0; i < data.scoreBoard.length; i++) {
+          if (data.scoreBoard[i].userName == userName) {
+            data.scoreBoard[i].score+=drawerScore
+          }
+        }
+        socket.emit('finishedTimer',data)
+
+      }
+
+    })
+  }, []);
+
 
 
 
