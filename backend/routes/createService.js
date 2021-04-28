@@ -13,18 +13,16 @@ module.exports = {
             
         }
     }
-
-
       all_room_ID.push(tempID)
       data.room.roomID = tempID;
       data.room.currentPlayers = 0;
       data.room.scoreBoard = [];
       data.room.messages=[];
-      data.room.game={ status: "waiting", round: 0, drawer: null, drawerindex: null, currentRound: 1, word: null, canvas:null };
-      data.room.globalStatus="waiting",
+      data.room.game={ status: "waiting", round: 0, drawer: null, drawerindex: null, currentRound: 1, word: null, canvas:null,num_of_right:0};
+      data.room.globalStatus="waiting"
       data.room.host=data.userName
       data.room.currentPlayers += 1;
-      var userScoreBoard = { userName: data.userName, score: 0 };
+      var userScoreBoard = { userName: data.userName, score: 0 ,right:false};
       data.room.scoreBoard.push(userScoreBoard)
       console.log("Create Room:", data.room)
       

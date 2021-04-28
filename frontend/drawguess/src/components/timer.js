@@ -1,27 +1,16 @@
-import { useEffect, useState } from "react";
+import React from 'react';
 
-export default function Timer({gameOn, onPause}) {
+export default function Timer({ socket }) {
 
-  const [counter, setCounter] = useState(60);
+  const [count, setCount] = React.useState(60);
 
-  useEffect(() => {
-    if (gameOn) {
-      let startTimer = setTimeout(() => {
-        if (counter > 0) {
-          setCounter(counter - 1);
-        } else {
-          setCounter(60);
-          onPause();
-        }
-      }, 1000);
-  
-      return () => {
-        clearTimeout(startTimer);
-      }
-    }    
-  }, [gameOn, counter, onPause]);
+  React.useEffect(() => {
+    socket.on('timer', (data) => {
+      setCount(data)
+    })
+  }, []);
 
-  return(
-    <div className="canvas-timer flex-center-all">{counter}</div>
+  return (
+    <div className="canvas-timer flex-center-all">{count}</div>
   );
 }

@@ -14,9 +14,7 @@ export default function Chat({ socket,userName,room}) {
 
     function handleNewMessage() {
         if (newMsg != "") {
-            const new_msg = { user: userName, type: 'msg', text: newMsg };
-            // setMessage(updatedMessages)
-            socket.emit("new_msg",new_msg)
+            socket.emit("new_msg",newMsg)
             setNewMsg("")
 
         }

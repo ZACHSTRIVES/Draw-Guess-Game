@@ -15,7 +15,7 @@ module.exports = {
                     console.log("房间已满！！！")
                 } else {
                     current_room.currentPlayers += 1;
-                    var userScoreBoard = { userName: data.userName, score: 0 };
+                    var userScoreBoard = { userName: data.userName, score: 0, right:false};
                     socket.PLAYER_INFO = { userName: data.userName,roomID:data.roomID }
                     current_room.messages.push({ user: data.userName, type: 'in' })
                     current_room.scoreBoard.push(userScoreBoard)
@@ -28,9 +28,6 @@ module.exports = {
                     // var temp_data = { userName: data.userName, roomInfo: current_room }
                     // socket.to(data.roomID).emit("newUserJoinRoom", temp_data)
                     io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo",current_room)
-
-
-
                 }
 
             } else {
@@ -76,26 +73,5 @@ module.exports = {
             }
         })
     },
-    simpleChat: function (app, socket, all_room_info, all_user,io){
-        socket.on('new_msg',function(data){
-            var current_room = null;
-            var current_index = null;
-            for (i = 0; i < all_room_info.length; i++) {
-                if (all_room_info[i].roomID === socket.PLAYER_INFO.roomID) {
-                    current_room = all_room_info[i]
-                    current_index = i
-                }
-            }
-            current_room.messages.push(data)
-            all_room_info[current_index]=current_room
-            console.log(current_room)
-
-            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo",current_room)
-
-        })
-
-    }
-
-
 }
 

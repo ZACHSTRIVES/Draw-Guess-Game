@@ -38,7 +38,27 @@ function Canvas({ roomInfo, userName, socket }) {
   const [headerMsg, setHeaderMsg] = useState("");
   const [drawingMode, setDrawingMode] = useState("none");
 
-  const deboundCanvasChange = debounce(function handleCanvasChange() {
+  // const deboundCanvasChange = debounce(function handleCanvasChange() {
+  //   const canvas = canvasRef.current;
+  //   const drawings = canvas.getSaveData();
+  //   console.log(drawingMode)
+
+  //   if (drawings !== "") {
+  //     // setDrawing(drawings);
+  //     if (roomInfo.game.drawer === userName) {
+  //       if (drawingMode === "done") {
+  //         const data = { roomID: roomInfo.roomID, canvas: drawings }
+  //         socket.emit('draw', data)
+  //         setDrawingMode("none")
+  //         console.log("JS51")
+  //       }
+
+  //     }
+
+  //   }
+  // }, 50);
+
+  const deboundCanvasChange = function handleCanvasChange() {
     const canvas = canvasRef.current;
     const drawings = canvas.getSaveData();
     console.log(drawingMode)
@@ -56,7 +76,7 @@ function Canvas({ roomInfo, userName, socket }) {
       }
 
     }
-  }, 50);
+  }
 
   React.useEffect(() => {
     socket.on('onDraw', (data) => {
@@ -66,7 +86,7 @@ function Canvas({ roomInfo, userName, socket }) {
 
     })
 
-   
+
   }, []);
 
   React.useEffect(() => {
@@ -140,14 +160,12 @@ function Canvas({ roomInfo, userName, socket }) {
     sizeBtn.classList.remove('btn-active')
   }
 
-  const handleColorChangeComplete = (color, event, setColor) => {
+  const handleColorChangeComplete = (color, event) => {
     setBrushColor(color.hex);
     setShowOption("none");
 
     const colorBtn = document.querySelector('.color-btn');
     colorBtn.classList.remove('btn-active');
-
-    setColor(color.hex);
   }
 
   const handleSelectWord = (word) => {
@@ -200,7 +218,10 @@ function Canvas({ roomInfo, userName, socket }) {
     return () => {
       window.removeEventListener('resize', debouncedHandleResize)
     }
-  });
+  },[]);
+
+
+
 
   useEffect(() => {
     // setRandomWord();
@@ -231,7 +252,7 @@ function Canvas({ roomInfo, userName, socket }) {
             return (<div className="canvas-header glass-rect">
 
               <span>{isDrawer ? `You're drawing: ${roomInfo.game.word}` : `The drawing is: ${maskWord(roomInfo.game.word)}`}</span>
-              <Timer gameOn={roomInfo.game.status === 'drawing'} onPause={handleGamePause} />
+              <Timer socket={socket} />
             </div>)
 
           }
@@ -243,74 +264,100 @@ function Canvas({ roomInfo, userName, socket }) {
           //finish game
         }
       })()}
+      {(() => {
+        const isDrawer = roomInfo.game.drawer === userName
+        if (roomInfo.globalStatus === "playing" && isDrawer) {
+          return (
+            <div>
+              <CanvasDraw
+                lazyRadius={0}
+                brushColor={brushColor}
+                brushRadius={brushSize}
+                canvasWidth={size}
+                canvasHeight={size}
+                ref={canvasRef}
+                disabled={false}
+                onChange={deboundCanvasChange}
+              />
+              <div className="tools-overlay flex-center-all">
+                {
+                  (showOption !== "none") &&
+                  <div className="tools-container flex bottom-offset glass-rect-bright rounded-rect">
+                    {
+                      (showOption === "size") &&
+                      <div className="size-options">
+                        <Slider
+                          value={brushSize}
+                          aria-labelledby="discrete-slider"
+                          valueLabelDisplay="on"
+                          marks
+                          step={1}
+                          min={1}
+                          max={20}
+                          onChange={handleSliderChange}
+                          onChangeCommitted={handleSliderChangeCommitted}
 
-      <CanvasDraw
-        lazyRadius={0}
-        brushColor={brushColor}
-        brushRadius={brushSize}
-        canvasWidth={size}
-        canvasHeight={size}
-        ref={canvasRef}
-        onChange={deboundCanvasChange}
-      />
+                        />
+                      </div>
+                    }
+                    {
+                      (showOption === "color") &&
+                      <div className="color-options">
+                        <TwitterPicker colors={colors} onChangeComplete={handleColorChangeComplete} />
+                      </div>
+                    }
+                  </div>
+                }
 
-
-      <div className="tools-overlay flex-center-all">
-        {
-          (showOption !== "none") &&
-          <div className="tools-container flex bottom-offset glass-rect-bright rounded-rect">
-            {
-              (showOption === "size") &&
-              <div className="size-options">
-                <Slider
-                  value={brushSize}
-                  aria-labelledby="discrete-slider"
-                  valueLabelDisplay="on"
-                  marks
-                  step={1}
-                  min={1}
-                  max={20}
-                  onChange={handleSliderChange}
-                  onChangeCommitted={handleSliderChangeCommitted}
-                />
+                <div className="tools-container flex bottom glass-rect-bright rounded-rect">
+                  <div className="tool flex-center-all" onClick={handleStrokeColorToggle}>
+                    <div className="tool-btn flex-center-all color-btn">
+                      <Palette style={{ color: brushColor }} />
+                    </div>
+                    <span>Color</span>
+                  </div>
+                  <div className="tool flex-center-all" onClick={handleStrokeSizeToggle}>
+                    <div className="tool-btn flex-center-all size-btn">
+                      <LineWeight />
+                    </div>
+                    <span>Size</span>
+                  </div>
+                  <div className="tool flex-center-all" onClick={handleUndo}>
+                    <div className="tool-btn flex-center-all">
+                      <Undo />
+                    </div>
+                    <span>Undo</span>
+                  </div>
+                  <div className="tool flex-center-all" onClick={handleClear}>
+                    <div className="tool-btn flex-center-all">
+                      <DeleteForever />
+                    </div>
+                    <span>Clear</span>
+                  </div>
+                </div>
               </div>
-            }
-            {
-              (showOption === "color") &&
-              <div className="color-options">
-                <TwitterPicker colors={colors} onChangeComplete={handleColorChangeComplete} />
-              </div>
-            }
-          </div>
+            </div>
+          )
+
+        } else {
+          return (
+            <CanvasDraw
+              lazyRadius={0}
+              brushColor={brushColor}
+              brushRadius={brushSize}
+              canvasWidth={size}
+              canvasHeight={size}
+              ref={canvasRef}
+              disabled={true}
+              onChange={deboundCanvasChange}
+              hideInterface={true}
+            />)
+
         }
 
-        <div className="tools-container flex bottom glass-rect-bright rounded-rect">
-          <div className="tool flex-center-all" onClick={handleStrokeColorToggle}>
-            <div className="tool-btn flex-center-all color-btn">
-              <Palette style={{ color: brushColor }} />
-            </div>
-            <span>Color</span>
-          </div>
-          <div className="tool flex-center-all" onClick={handleStrokeSizeToggle}>
-            <div className="tool-btn flex-center-all size-btn">
-              <LineWeight />
-            </div>
-            <span>Size</span>
-          </div>
-          <div className="tool flex-center-all" onClick={handleUndo}>
-            <div className="tool-btn flex-center-all">
-              <Undo />
-            </div>
-            <span>Undo</span>
-          </div>
-          <div className="tool flex-center-all" onClick={handleClear}>
-            <div className="tool-btn flex-center-all">
-              <DeleteForever />
-            </div>
-            <span>Clear</span>
-          </div>
-        </div>
-      </div>
+
+      })()}
+
 
     </div>
   );

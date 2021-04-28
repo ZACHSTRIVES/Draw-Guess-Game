@@ -27,22 +27,27 @@ export default function GameRoom({ socket, userName, init_room }) {
     })
 
   }, []);
+  
   React.useEffect(() => {
     socket.on('updateCurrentRoomInfo', (data) => {
       setRoomInfo(data)
 
     })
-
   }, []);
+
   React.useEffect(() => {
     socket.on('choosingWord', (data) => {
       setRoomInfo(data)
 
     })
   }, []);
+
   React.useEffect(() => {
     socket.on('drawing', (data) => {
       setRoomInfo(data)
+      if(data.game.drawer===userName){
+        socket.emit("startTimer",roomInfo.roomID)
+      }
 
     })
   }, []);

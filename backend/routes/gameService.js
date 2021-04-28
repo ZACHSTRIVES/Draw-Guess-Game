@@ -1,20 +1,5 @@
 const roomService = require("./roomService");
 
-// const testroom = {
-//     socoreBoard: [
-//         {
-//             userName: "USER1",
-//             score: 0,
-//         },
-//         {
-//             userName: "USER2",
-//             score: 0,
-//         },
-//     ],
-//     current_user: 2,
-//     maxRound: 2,
-//     game: { status: "waiting", round: 0, drawer: null, drawerindex: null, currentRound: 1, word: null },
-// }
 
 function get_current_room_by_id(all_room_info, roomID) {
     var current_room = null;
@@ -80,12 +65,11 @@ module.exports = {
 
     draw: function (socket, io, all_room_info) {
         socket.on('draw', (data) => {
-            console.log("ondraw")
             var temp_data = get_current_room_by_id(all_room_info, data.roomID)
             const current_room = temp_data.current_room;
             const current_index = temp_data.current_index;
             if (current_room) {
-                current_room.game.canvas=data.canvas
+                current_room.game.canvas = data.canvas
                 io.sockets.to(data.roomID).emit("onDraw", current_room)
                 all_room_info[current_index] = current_room
                 io.sockets.emit("updateRoomInfo", all_room_info)
@@ -94,11 +78,98 @@ module.exports = {
                 console.log("[ERROR]:Room Undefined")
             }
 
+        })
+    },
 
+    timer: function (socket, io) {
+        let globalTimer;
+        let seconds = 60;
+        socket.on('startTimer', (roomID) => {
+            globalTimer = setInterval(() => {
+                seconds--;
+                io.sockets.to(roomID).emit('timer', seconds);
+
+                if (seconds <= 0) {
+                    clearInterval(globalTimer);
+                    seconds = 60;
+                }
+            }, 1000)
+        }),
+            socket.on('finishedTimer', (roomID) => {
+                clearInterval(globalTimer);
+                seconds = 60;
+            })
+    },
+
+    chatAnswer: function (app, socket, all_room_info, all_user, io) {
+        socket.on('new_msg', function (data) {
+            var temp_data = get_current_room_by_id(all_room_info, socket.PLAYER_INFO.roomID);
+            const current_room = temp_data.current_room;
+            const current_index = temp_data.current_index;
+            if (current_room) {
+                if (current_room.game.status == "drawing") {
+                    var user_index;
+                    for (i = 0; i < current_room.scoreBoard.length; i++) {
+                        if (current_room.scoreBoard[i].userName === socket.PLAYER_INFO.userName) {
+                            user_index = i;
+                        }
+                    }
+
+
+                    if ((current_room.game.drawer === socket.PLAYER_INFO.userName) || current_room.scoreBoard[user_index].right) {
+                        const lowercaseMsg = data.toLowerCase();
+                        const lowerAns = current_room.game.word.toLowerCase();
+                        let msg = { user: socket.PLAYER_INFO.userName, type: 'msg', text: null };
+                        if (lowercaseMsg.indexOf(lowerAns) != -1) {
+                            msg.text = lowerAns.replace(/\S/gi, '*');
+                        } else {
+                            msg.text = data;
+                        }
+                        current_room.messages.push(msg);
+                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                        io.sockets.emit("updateRoomInfo", all_room_info);
+
+                    } else if (!current_room.scoreBoard[user_index].right) {
+                        const lowercaseMsg = data.toLowerCase()
+                        const lowerAns = current_room.game.word.toLowerCase()
+                        if (lowercaseMsg === lowerAns) {
+                            current_room.game.num_of_right++;
+                            current_room.scoreBoard[user_index].right = false;
+                            const score = Math.max(60 - (current_room.game.num_of_right * 10), 10);
+                            current_room.scoreBoard[user_index].score += score;
+                            const new_msg = { user: socket.PLAYER_INFO.userName, type: 'ans' };
+                            current_room.messages.push(new_msg);
+                            all_room_info[current_index] = current_room;
+                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+
+                        } else {
+                            const new_msg = { user: socket.PLAYER_INFO.userName, type: 'msg', text: data };
+                            current_room.messages.push(new_msg);
+                            all_room_info[current_index] = current_room;
+                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+                        }
+                    }
+
+                } else {
+                    const new_msg = { user: socket.PLAYER_INFO.userName, type: 'msg', text: data };
+                    current_room.messages.push(new_msg);
+                    all_room_info[current_index] = current_room;
+                    io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                    io.sockets.emit("updateRoomInfo", all_room_info);
+
+                }
+            }
 
         })
 
     }
+
+
+
+
+
 
     // finnishDrawing: function (socket, io, all_room_info) {
     //     socket.on("finnishedDrawing", (word) => {
