@@ -1,0 +1,63 @@
+.medal {
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.5em;
+}
+
+.rank-icon {
+  width: 3.5em;
+  height: 3.5em;
+  background: rgba( 255, 255, 255, 0.30 );
+  border-radius: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-icon-none {
+  width: 3.5em;
+  height: 3.5em;
+  /* background: rgba( 255, 255, 255, 0.30 ); */
+  /* border-radius: 1em; */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-icon-sm {
+  width: 2.5em;
+  height: 2.5em;
+  background: rgba( 255, 255, 255, 0.30 );
+  border-radius: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.rank-icon > img {
+  height: 100%;
+}
+
+.leader-board-container {
+  padding: 2em;
+  min-height: 70%;
+  overflow-y: scroll;
+}
+
+.leader-board-name {
+  align-self: center;
+  padding-left: 1em;
+}
+
+.player {
+  justify-content: space-between;
+  align-items: center;
+  margin: 0.1em 0.5em;
+}
+
+.slide-top-enter {
+	-webkit-animation: slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+	        animation: slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
+          animation-iteration-count: infinite;
+}
+
