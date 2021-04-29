@@ -243,6 +243,30 @@ function Canvas({ roomInfo, userName, socket }) {
 
         if (roomInfo.globalStatus === "waiting") {
           return (<StartGameMask isHost={isHost} onStartGame={handleStartGame}></StartGameMask>);
+          // return (<LeaderBoardMask players={
+          //     [{
+          //       userName: "Alex",
+          //       score: 100
+          //     }, {
+          //       userName: "Momo",
+          //       score: 65
+          //     }, {
+          //       userName: "Tom",
+          //       score: 20
+          //     }, {
+          //       userName: "Jojo",
+          //       score: 45
+          //     }, {
+          //       userName: "Jessie",
+          //       score: 20
+          //     }, {
+          //       userName: "David",
+          //       score: 70
+          //     }, {
+          //       userName: "John",
+          //       score: 50
+          //     }]
+          //   }></LeaderBoardMask>);
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
