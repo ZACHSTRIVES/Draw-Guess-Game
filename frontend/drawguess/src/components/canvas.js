@@ -8,6 +8,7 @@ import React from 'react';
 import Timer from './timer';
 import WordSelectionMask from './wordSelectionMask';
 import StartGameMask from './startGameMask';
+import LeaderBoardMask from './leaderBoardMask';
 
 function debounce(fn, ms) {
   let timer
@@ -218,7 +219,7 @@ function Canvas({ roomInfo, userName, socket }) {
     return () => {
       window.removeEventListener('resize', debouncedHandleResize)
     }
-  },[]);
+  }, []);
 
 
 
@@ -242,7 +243,6 @@ function Canvas({ roomInfo, userName, socket }) {
 
         if (roomInfo.globalStatus === "waiting") {
           return (<StartGameMask isHost={isHost} onStartGame={handleStartGame}></StartGameMask>);
-
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
@@ -257,7 +257,31 @@ function Canvas({ roomInfo, userName, socket }) {
 
           }
           else {
-            //finish round return scoreboard
+            // return(<LeaderBoardMask players={roomInfo.scoreBoard}></LeaderBoardMask>);
+            // return (<LeaderBoardMask players={
+            //   [{
+            //     userName: "Sam",
+            //     score: 50
+            //   }, {
+            //     userName: "Alex",
+            //     score: 100
+            //   }, {
+            //     userName: "Momo",
+            //     score: 65
+            //   }, {
+            //     userName: "Tom",
+            //     score: 20
+            //   }, {
+            //     userName: "Jojo",
+            //     score: 45
+            //   }, {
+            //     userName: "Jessie",
+            //     score: 20
+            //   }, {
+            //     userName: "David",
+            //     score: 70
+            //   }]
+            // }></LeaderBoardMask>);
           }
         }
         else {
