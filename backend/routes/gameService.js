@@ -13,10 +13,6 @@ function get_current_room_by_id(all_room_info, roomID) {
     return { current_room: current_room, current_index: current_index }
 }
 
-
-
-const testTime = { timeChangeDrawer: 13000, timeShowResult: 3000 }
-
 module.exports = {
     beginGame: function (socket, io, all_room_info) {
         socket.on('beginGame', (data) => {
@@ -81,7 +77,7 @@ module.exports = {
         })
     },
 
-    timer: function (socket, io,all_room_info) {
+    timer: function (socket, io, all_room_info) {
         let globalTimer;
         let seconds = 60;
         socket.on('startTimer', (roomID) => {
@@ -100,13 +96,13 @@ module.exports = {
                 const current_room = temp_data.current_room;
                 const current_index = temp_data.current_index;
                 clearInterval(globalTimer);
-                if(current_room){
-                    all_room_info[current_index]=data;
+                if (current_room) {
+                    all_room_info[current_index] = data;
                     io.to(data.roomID).emit("updateCurrentRoomInfo", data);
                     io.sockets.emit("updateRoomInfo", all_room_info);
                 }
                 seconds = 60;
-                
+
             })
     },
 
@@ -175,88 +171,93 @@ module.exports = {
 
     },
 
+    changeDrawerMethod: function (socket, io, all_room_info) {
+
+        socket.on("finishedDrawing", (word) => {
+            var temp_data = get_current_room_by_id(all_room_info, socket.PLAYER_INFO.roomID);
+            const current_room = temp_data.current_room;
+            const current_index = temp_data.current_index;
+
+            if (current_room) {
+                current_room.game.status = "finished"
+                all_room_info[current_index] = current_room
+                io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                io.sockets.emit("updateRoomInfo", all_room_info);
+                changeDrawer(current_room.roomID, all_room_info)
+
+            }
+        })
+
+        function changeDrawer(roomID, all_room_info) {
+            var temp_data = get_current_room_by_id(all_room_info, roomID);
+            const current_room = temp_data.current_room;
+            const current_index = temp_data.current_index;
+            var drawerIndex = null;   //Find the index of drawer
+            if (current_room) {
+                for (i = 0; i < current_room.scoreBoard.length; i++) {
+                    if (current_room.scoreBoard[i].userName == current_room.game.drawer) {
+                        drawerIndex = i;
+                    }
+                }
+            }
+
+            if (drawerIndex != null) {
+                if (drawerIndex !== current_room.scoreBoard.length - 1) { //If the player is not the last player
+                    //TODO：在这里发送答案 设置Round Type为：Finished
+                    console.log("第", drawerIndex, "位drawer完成绘画");
+                    drawerIndex++;
+                    current_room.game.drawer = current_room.scoreBoard[drawerIndex].userName;
+                    current_room.game.status = "ChoosingWord"
+                    console.log("第", drawerIndex, "位drawer开始绘画");
+                    all_room_info[current_index] = current_room
+            
+
+                    setTimeout(function () {
+                        socket.emit("choosingWord", current_room)
+                        socket.broadcast.emit("choosingWord", current_room)
+                    }, 5000)
 
 
 
+                } else {
 
+                    if (current_room.game.currentRound !== current_room.maxRound) { //If it's not the last round
+                        console.log("第", drawerIndex, "位drawer完成绘画")
+                        console.log("第", current_room.game.currentRound, "轮结束")
+                        current_room.game.currentRound++;
+                        console.log("第", current_room.game.currentRound, "轮开始")
+                        drawerIndex = 0;
+                        current_room.game.drawer = current_room.scoreBoard[drawerIndex].userName;
+                        current_room.game.status = "ChoosingWord"
+                        console.log("第", drawerIndex, "位drawer开始绘画");
+                        setTimeout(function () {
+                            socket.emit("choosingWord", current_room)
+                            socket.broadcast.emit("choosingWord", current_room)
 
-    // finnishDrawing: function (socket, io, all_room_info) {
-    //     socket.on("finnishedDrawing", (word) => {
-    //         testroom.game.status = "finnished"
-    //         socket.emit("gameUpdate", testroom)
-    //         socket.broadcast.emit("gameUpdate", testroom)
-    //         changeDrawer()
-    //     })
-
-    //     function changeDrawer() {
-    //         var drawerIndex = null;   //Find the index of drawer
-    //         for (i = 0; i < testroom.socoreBoard.length; i++) {
-    //             if (testroom.socoreBoard[i].userName == testroom.game.drawer) {
-    //                 drawerIndex = i;
-    //             }
-    //         }
-
-    //         if (drawerIndex != null) {
-    //             if (drawerIndex !== testroom.socoreBoard.length - 1) { //If the player is not the last player
-    //                 //TODO：在这里发送答案 设置Round Type为：Finished
-    //                 console.log("第", drawerIndex, "位drawer完成绘画");
-    //                 drawerIndex++;
-    //                 testroom.game.drawer = testroom.socoreBoard[drawerIndex].userName;
-    //                 testroom.game.status = "ChoosingWord"
-    //                 console.log("第", drawerIndex, "位drawer开始绘画");
-    //                 setTimeout(function () {
-    //                     socket.emit("choosingWord", testroom)
-    //                     socket.broadcast.emit("choosingWord", testroom)
-
-    //                 }, 3000)
+                        }, 3000)
 
 
 
-    //             } else {
+                    } else {
+                        // console.log("第", drawerIndex, "位drawer完成绘画")
+                        // console.log("第", testroom.game.currentRound, "轮结束")
+                        // testroom.globalStatus = "finnished";
+                        // testroom.game.status = "ChoosingWord";
+                        // console.log("现在是最终结果展示时间...")
+                        // console.log("游戏结束")
+                        // setTimeout(function () {
+                        //     socket.emit("gameUpdate", testroom)
+                        //     socket.broadcast.emit("gameUpdate", testroom)
 
-    //                 if (testroom.game.currentRound !== testroom.maxRound) { //If it's not the last round
-    //                     console.log("第", drawerIndex, "位drawer完成绘画")
-    //                     console.log("第", testroom.game.currentRound, "轮结束")
-    //                     testroom.game.currentRound++;
-    //                     console.log("第", testroom.game.currentRound, "轮开始")
-    //                     drawerIndex = 0;
-    //                     testroom.game.drawer = testroom.socoreBoard[drawerIndex].userName;
-    //                     testroom.game.status = "ChoosingWord"
-    //                     console.log("第", drawerIndex, "位drawer开始绘画");
-    //                     setTimeout(function () {
-    //                         socket.emit("choosingWord", testroom)
-    //                         socket.broadcast.emit("choosingWord", testroom)
+                        // }, 3000)
 
-    //                     }, 3000)
+                    }
+                }
+            } else {
+                //TODO: Drawer已经退出房间的情况
+                console.log("Drawer已经退出房间的情况")
+            }
+        }
 
-
-
-    //                 } else {
-    //                     console.log("第", drawerIndex, "位drawer完成绘画")
-    //                     console.log("第", testroom.game.currentRound, "轮结束")
-    //                     testroom.globalStatus = "finnished";
-    //                     testroom.game.status = "ChoosingWord";
-    //                     console.log("现在是最终结果展示时间...")
-    //                     console.log("游戏结束")
-    //                     setTimeout(function () {
-    //                         socket.emit("gameUpdate", testroom)
-    //                         socket.broadcast.emit("gameUpdate", testroom)
-
-    //                     }, 3000)
-
-    //                 }
-    //             }
-    //         } else {
-    //             //TODO: Drawer已经退出房间的情况
-    //             console.log("Drawer已经退出房间的情况")
-    //         }
-    //     }
-
-    // },
-
-
-
-
-
-
+    }
 }
