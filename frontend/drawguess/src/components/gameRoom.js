@@ -55,15 +55,8 @@ export default function GameRoom({ socket, userName, init_room }) {
   React.useEffect(() => {
     socket.on('userGotRightAns', (data) => {
       setRoomInfo(data);
-      if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {
-        const drawerScore = Math.min(10 * data.game.num_of_right, 40)
-        for (var i = 0; i < data.scoreBoard.length; i++) {
-          if (data.scoreBoard[i].userName == userName) {
-            data.scoreBoard[i].score+=drawerScore
-          }
-        }
+      if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {  
         socket.emit('finishedTimer',data)
-
       }
 
     })
@@ -86,7 +79,7 @@ export default function GameRoom({ socket, userName, init_room }) {
           <Canvas roomInfo={roomInfo} userName={userName} socket={socket} />
         </div>
         <div className="round rounded-rect border glass-rect margin-sm">
-          <h5 className="title">ROUND</h5>
+          <h5 className="title">ROUND {roomInfo.game.currentRound} / {roomInfo.rounds}</h5>
           <ul>
             {roomInfo.scoreBoard.map((player, index) =>
               <li key={index} alignItems="flex-start">

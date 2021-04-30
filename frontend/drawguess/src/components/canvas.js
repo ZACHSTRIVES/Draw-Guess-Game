@@ -257,31 +257,7 @@ function Canvas({ roomInfo, userName, socket }) {
 
           }
           else {
-            // return(<LeaderBoardMask players={roomInfo.scoreBoard}></LeaderBoardMask>);
-            // return (<LeaderBoardMask players={
-            //   [{
-            //     userName: "Sam",
-            //     score: 50
-            //   }, {
-            //     userName: "Alex",
-            //     score: 100
-            //   }, {
-            //     userName: "Momo",
-            //     score: 65
-            //   }, {
-            //     userName: "Tom",
-            //     score: 20
-            //   }, {
-            //     userName: "Jojo",
-            //     score: 45
-            //   }, {
-            //     userName: "Jessie",
-            //     score: 20
-            //   }, {
-            //     userName: "David",
-            //     score: 70
-            //   }]
-            // }></LeaderBoardMask>);
+            return(<LeaderBoardMask players={roomInfo.scoreBoard}></LeaderBoardMask>);
           }
         }
         else {
