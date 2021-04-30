@@ -13,7 +13,7 @@ export default function LeaderBoardMask({ players }) {
     const playersToSort = players;
     playersToSort.sort((a, b) => b.score - a.score);
     setSortedPlayers(playersToSort);
-  }, [])
+  }, [sortedPlayers])
 
   function getTopThreePlayers() {
     console.log("Players before top three: ", sortedPlayers);
@@ -24,40 +24,41 @@ export default function LeaderBoardMask({ players }) {
         {
           (topThree.length >= 1) &&
           <div key={1} className="medal gold-medal flex slide-top">
-            <div className="medal-name flex">
-              <div className="rank-icon">
-                <img src={goldMedal} alt="gold medal" />
-              </div>
+              <div className="medal-name flex">
+                <div className="rank-icon">
+                  <img src={goldMedal} alt="gold medal" />
+                </div>
 
-              <div className="leader-board-name">{topThree[0].userName}</div>
-            </div>
-            <div className="score">{topThree[0].score}</div>
+                <div className="leader-board-name">{topThree[0].userName}</div>
+              </div>
+              <div className="score">{topThree[0].score}</div>
+
           </div>
         }
         {
           (topThree.length >= 2) &&
           <div key={2} className="medal silver-medal flex slide-top">
-            <div className="medal-name flex">
-              <div className="rank-icon">
-                <img src={silverMedal} alt="silver medal" />
-              </div>
+              <div className="medal-name flex">
+                <div className="rank-icon">
+                  <img src={silverMedal} alt="silver medal" />
+                </div>
 
-              <div className="leader-board-name">{topThree[1].userName}</div>
-            </div>
-            <div className="score">{topThree[1].score}</div>
+                <div className="leader-board-name">{topThree[1].userName}</div>
+              </div>
+              <div className="score">{topThree[1].score}</div>
           </div>
         }
         {
           (topThree.length >= 3) &&
           <div key={3} className="medal bronze-medal flex slide-top">
-            <div className="medal-name flex">
-              <div className="rank-icon">
-                <img src={bronzeMedal} alt="bronze medal" />
-              </div>
+              <div className="medal-name flex">
+                <div className="rank-icon">
+                  <img src={bronzeMedal} alt="bronze medal" />
+                </div>
 
-              <div className="leader-board-name">{topThree[2].userName}</div>
-            </div>
-            <div className="score">{topThree[2].score}</div>
+                <div className="leader-board-name">{topThree[2].userName}</div>
+              </div>
+              <div className="score">{topThree[2].score}</div>
           </div>
         }
       </div>

@@ -41,7 +41,7 @@
 .leader-board-container {
   padding: 2em;
   min-height: 70%;
-  overflow-y: scroll;
+  /* overflow-y: scroll; */
 }
 
 .leader-board-name {
@@ -55,9 +55,32 @@
   margin: 0.1em 0.5em;
 }
 
-.slide-top-enter {
-	-webkit-animation: slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-	        animation: slide-top 0.5s cubic-bezier(0.250, 0.460, 0.450, 0.940) both;
-          animation-iteration-count: infinite;
+@keyframes fadeInUp {
+  from {
+      transform: translate3d(0,40px,0)
+  }
+
+  to {
+      transform: translate3d(0,0,0);
+      opacity: 1
+  }
 }
+
+/* .gold-medal {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-in 2.5s forwards;
+}
+
+.silver-medal {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-in 1.5s forwards;
+}
+
+.bronze-medal {
+  opacity: 0;
+  animation: fadeInUp 0.5s ease-in 0.5s forwards;
+} */
+
+
+
 
