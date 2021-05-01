@@ -1,5 +1,6 @@
 const express = require('express');
 var MongoClient = require('mongodb').MongoClient;
+const db = require('./config/db');
 const bodyParser = require('body-parser');
 const app = express();
 var cors = require('cors');
@@ -16,24 +17,26 @@ app.use(cors())
 const port = 8000;
 
 
-var all_room_info=[]
-var all_users=[]
+var all_room_info = []
+var all_users = []
 
-// app.use(bodyParser.urlencoded({ extended: true }));
-io.on('connection', function (socket) {
-  //调用传入的回调方法，将操作结果返回
-  const init_data = {rooms: all_room_info}
-  socket.emit('user_on_conection', init_data)
-  socket.broadcast.emit('user_on_conection', init_data);
-  console.log("User Connected")
-  require('./routes')(app, socket, all_room_info,init_data,all_users,io);
+MongoClient.connect(db.url, {useUnifiedTopology: true, useNewUrlParser: true},(err, database) => {
+  if (err) return console.log(err)
 
+  // Make sure you add the database name and not the collection name
+  database = database.db("drawguess")
+  // app.use(bodyParser.urlencoded({ extended: true }));
+  io.on('connection', function (socket) {
+    //调用传入的回调方法，将操作结果返回
+    const init_data = { rooms: all_room_info }
+    socket.emit('user_on_conection', init_data)
+    socket.broadcast.emit('user_on_conection', init_data);
+    console.log("User Connected")
+    require('./routes')(app, socket, all_room_info, init_data, all_users, io, database);
+  });
 
-});
+  server.listen(port, () => {
+    console.log('We are live on ' + port);
 
-
-
-server.listen(port, () => {
-  console.log('We are live on ' + port);
-
-});
+  });
+})

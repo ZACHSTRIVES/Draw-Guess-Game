@@ -2,16 +2,10 @@ import React from 'react';
 import Timer from './timer'
 
 export default function TestRoom({ socket }) {
-    const [time,setTime]=React.useState(60)
-    
-
-
-
-    React.useEffect(() => {
-        socket.on('timer', (data) => {
-            setTime(data)
-        })
-    }, []);
+    const [userName,setUsername]=React.useState("")
+    const [password,setPassword]=React.useState("")
+    const [email,setEmail]=React.useState("")
+    const [info,setInfo]=React.useState("")
 
 
 
@@ -19,27 +13,29 @@ export default function TestRoom({ socket }) {
 
 
     function handleStart() {
-        socket.emit('startTimer',0)
+        const data={userName:userName,password:password,email:email}
+        socket.emit('register',data)
         
     }
-    
-    function handleSet() {
-        socket.emit("finishedTimer",0)
-    }
 
+    React.useEffect(() => {
+        socket.on('registerResponse', (data) => {
+         setInfo(data)
+    
+        })
+      }, []);
+    
+ 
 
     return (
         <div>
-            <button onClick={handleStart}>开始计时</button>
-            <button onClick={handleSet}>结束计时</button>
-            <p>{time}</p>
-           
-
+            <label>Email</label> <input onChange={e=>setEmail(e.target.value)}></input>
+           <br></br>
+           <label>UserName</label> <input onChange={e=>setUsername(e.target.value)}></input>
+           <br></br>
+           <label>Password</label> <input type="password" onChange={e=>setPassword(e.target.value)}></input>    
+           <button onClick={handleStart}>注册</button>      
+           <h1>{info}</h1>
         </div>
-
     )
-
-
-
-
 }
