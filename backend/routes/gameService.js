@@ -39,25 +39,6 @@ module.exports = {
         })
     },
 
-    setWord: function (socket, io, all_room_info) {
-        socket.on('setWord', (data) => {
-            var temp_data = get_current_room_by_id(all_room_info, data.roomID)
-            const current_room = temp_data.current_room;
-            const current_index = temp_data.current_index;
-
-            if (current_room) {
-                console.log("set word:", data.word)
-                current_room.game.status = "drawing";
-                current_room.game.word = data.word;
-                io.sockets.to(data.roomID).emit("drawing", current_room)
-                all_room_info[current_index] = current_room
-                io.sockets.emit("updateRoomInfo", all_room_info)
-
-            } else {
-                console.log("[ERROR]:Room Undefined")
-            }
-        })
-    },
 
     draw: function (socket, io, all_room_info) {
         socket.on('draw', (data) => {
@@ -77,10 +58,11 @@ module.exports = {
         })
     },
 
-    timer: function (socket, io, all_room_info) {
+    gaming: function (socket, io, all_room_info) {
         let globalTimer;
         let seconds = 60;
-        function changeDrawer(roomID, all_room_info) {
+        let settingWordsSeconds = 10;
+        function changeDrawer(roomID, all_room_info, show_leaderBoard) {
             var temp_data = get_current_room_by_id(all_room_info, roomID);
             const current_room = temp_data.current_room;
             const current_index = temp_data.current_index;
@@ -105,15 +87,22 @@ module.exports = {
 
 
                     all_room_info[current_index] = current_room;
-                    setTimeout(function () {
+                    if (show_leaderBoard) {
+                        setTimeout(function () {
+                            console.log("第", drawerIndex + 1, "位drawer开始绘画");
+                            io.to(socket.PLAYER_INFO.roomID).emit("choosingWord", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+                        }, 5000)
+
+                    } else {
                         console.log("第", drawerIndex + 1, "位drawer开始绘画");
                         io.to(socket.PLAYER_INFO.roomID).emit("choosingWord", current_room);
                         io.sockets.emit("updateRoomInfo", all_room_info);
-                    }, 5000)
+                    }
 
                 } else {
 
-                    if (current_room.game.currentRound !== current_room.maxRound) { //If it's not the last round
+                    if (current_room.game.currentRound !== current_room.rounds) { //If it's not the last round
                         console.log("第", drawerIndex + 1, "位drawer完成绘画")
                         console.log("第", current_room.game.currentRound, "轮结束")
                         current_room.game.currentRound++;
@@ -124,10 +113,16 @@ module.exports = {
                         console.log("第", drawerIndex + 1, "位drawer开始绘画");
                         all_room_info[current_index] = current_room
 
-                        setTimeout(function () {
+                        if (show_leaderBoard) {
+                            setTimeout(function () {
+                                io.to(socket.PLAYER_INFO.roomID).emit("choosingWord", current_room);
+                                io.sockets.emit("updateRoomInfo", all_room_info);
+                            }, 5000)
+
+                        } else {
                             io.to(socket.PLAYER_INFO.roomID).emit("choosingWord", current_room);
                             io.sockets.emit("updateRoomInfo", all_room_info);
-                        }, 5000)
+                        }
 
 
 
@@ -172,17 +167,18 @@ module.exports = {
                             }
                         }
                         current_room.game.status = "finished"
-                        current_room.game.num_of_right=0
+                        current_room.game.num_of_right = 0
                         all_room_info[current_index] = current_room
                         io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
                         io.sockets.emit("updateRoomInfo", all_room_info);
-                        changeDrawer(current_room.roomID, all_room_info)
+                        changeDrawer(current_room.roomID, all_room_info,true)
 
                     }
 
                 }
             }, 1000)
         }),
+
             socket.on('finishedTimer', (data) => {
                 var temp_data = get_current_room_by_id(all_room_info, data.roomID)
                 const current_room = temp_data.current_room;
@@ -196,15 +192,49 @@ module.exports = {
                         }
                     }
                     current_room.game.status = "finished"
-                    current_room.game.num_of_right=0
+                    current_room.game.num_of_right = 0
                     all_room_info[current_index] = current_room
                     io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
                     io.sockets.emit("updateRoomInfo", all_room_info);
-                    changeDrawer(current_room.roomID, all_room_info)
+                    changeDrawer(current_room.roomID, all_room_info,true)
 
                 }
                 seconds = 60;
 
+            }),
+
+            socket.on('startSettingWord', (roomID) => {
+                globalTimer = setInterval(() => {
+                    settingWordsSeconds--;
+                    console.log(settingWordsSeconds)
+                    io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
+
+                    if (settingWordsSeconds <= 0) {
+                        clearInterval(globalTimer);
+                        settingWordsSeconds = 10;
+                        changeDrawer(roomID, all_room_info,false)
+                    }
+
+                }, 1000)
+            }),
+            socket.on('setWord', (data) => {
+                var temp_data = get_current_room_by_id(all_room_info, data.roomID)
+                const current_room = temp_data.current_room;
+                const current_index = temp_data.current_index;
+                clearInterval(globalTimer)
+                settingWordsSeconds = 10;
+
+                if (current_room) {
+                    console.log("set word:", data.word)
+                    current_room.game.status = "drawing";
+                    current_room.game.word = data.word;
+                    io.sockets.to(data.roomID).emit("drawing", current_room)
+                    all_room_info[current_index] = current_room
+                    io.sockets.emit("updateRoomInfo", all_room_info)
+
+                } else {
+                    console.log("[ERROR]:Room Undefined")
+                }
             })
 
 

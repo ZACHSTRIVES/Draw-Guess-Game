@@ -38,6 +38,9 @@ export default function GameRoom({ socket, userName, init_room }) {
   React.useEffect(() => {
     socket.on('choosingWord', (data) => {
       setRoomInfo(data);
+      if (data.game.drawer === userName) {
+        socket.emit("startSettingWord", roomInfo.roomID);
+      }
 
     })
   }, []);

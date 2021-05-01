@@ -39,25 +39,6 @@ function Canvas({ roomInfo, userName, socket }) {
   const [headerMsg, setHeaderMsg] = useState("");
   const [drawingMode, setDrawingMode] = useState("none");
 
-  // const deboundCanvasChange = debounce(function handleCanvasChange() {
-  //   const canvas = canvasRef.current;
-  //   const drawings = canvas.getSaveData();
-  //   console.log(drawingMode)
-
-  //   if (drawings !== "") {
-  //     // setDrawing(drawings);
-  //     if (roomInfo.game.drawer === userName) {
-  //       if (drawingMode === "done") {
-  //         const data = { roomID: roomInfo.roomID, canvas: drawings }
-  //         socket.emit('draw', data)
-  //         setDrawingMode("none")
-  //         console.log("JS51")
-  //       }
-
-  //     }
-
-  //   }
-  // }, 50);
 
   const deboundCanvasChange = function handleCanvasChange() {
     const canvas = canvasRef.current;
@@ -243,34 +224,10 @@ function Canvas({ roomInfo, userName, socket }) {
 
         if (roomInfo.globalStatus === "waiting") {
           return (<StartGameMask isHost={isHost} onStartGame={handleStartGame}></StartGameMask>);
-          // return (<LeaderBoardMask players={
-          //     [{
-          //       userName: "Alex",
-          //       score: 100
-          //     }, {
-          //       userName: "Momo",
-          //       score: 65
-          //     }, {
-          //       userName: "Tom",
-          //       score: 20
-          //     }, {
-          //       userName: "Jojo",
-          //       score: 45
-          //     }, {
-          //       userName: "Jessie",
-          //       score: 20
-          //     }, {
-          //       userName: "David",
-          //       score: 70
-          //     }, {
-          //       userName: "John",
-          //       score: 50
-          //     }]
-          //   }></LeaderBoardMask>);
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
-            return (<WordSelectionMask isDrawer={isDrawer} words={words.slice(0, 3)} onSelectWord={handleSelectWord}></WordSelectionMask>);
+            return (<WordSelectionMask isDrawer={isDrawer} words={words.slice(0, 3)} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
           }
           else if (roomInfo.game.status === "drawing") {
             return (<div className="canvas-header glass-rect">

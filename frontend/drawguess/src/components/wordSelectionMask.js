@@ -1,10 +1,21 @@
 import Button from '@material-ui/core/Button';
+import { useEffect, useRef, useState } from 'react';
 
-export default function WordSelectionMask({ isDrawer, words, onSelectWord }) {
+export default function WordSelectionMask({ isDrawer, words, onSelectWord, socket}) {
+  const [timer,setTime]=useState(10)
+  useEffect(() => {
+    socket.on('settingWordTimer', (data) => {
+        setTime(data)
+    })
+  }, []);
+
+
+
   return (
     <div className="mask-container flex-center-all mask rounded-rect">
       {isDrawer ?
         <div className="pop-up-container flex-center-all flex-column rounded-rect glass-rect">
+          <p>Timer: {timer}</p>
           <p>Choose a word:</p>
           <div className="options-btn-group">
             <Button variant="outlined" className="option-btn" onClick={() => onSelectWord(words[0])}>{words[0]}</Button>
