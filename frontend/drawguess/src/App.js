@@ -7,9 +7,9 @@ import io from 'socket.io-client'
 import axios from 'axios'
 import React from 'react';
 import Test  from'./components/testroom';
-import Test2 from './components/testroom2';
 import Register from './components/register';
 import Login from './components/login';
+import TestLogin from './components/testLogin';
 import {
   BrowserRouter as Router,
   Switch,
@@ -98,10 +98,10 @@ function App() {
           <Route path='/test/'>
             <Test socket={socket}></Test>
           </Route>
-
           <Route path='/test2/'>
-            <Test2 socket={socket}></Test2>
+            <TestLogin socket={socket}></TestLogin>
           </Route>
+
         </div>
 
 
