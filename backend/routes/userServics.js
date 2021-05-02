@@ -64,17 +64,21 @@ module.exports = {
         })
 
     },
-    // testLogin: function(socket,io,database){
-    //     socket.on('testLogin',function(data){
-    //         var query={email:data.email}
-    //         database.collection("users").findOne(query).toArray(function(err,result){
-    //             if (err) throw err;
-    //             if(result.length!==0){
-    //                 console.log()
-
-
-    //             }
-    //         })
-    //     })
-    // }
+    testLogin: function(socket,io,database){
+        socket.on('testLogin',function(data){
+            var query={email:data.email}
+            database.collection("users").find(query).toArray(function(err,result){
+                if (err) throw err;
+                if(result.length!==0){
+                    if(result[0].password===md5(data.password)){
+                        socket.emit("loginResponse","loginSuccess")
+                    }else{
+                        socket.emit("loginResponse","passwordInvalid")
+                    }
+                }else{
+                    socket.emit("loginResponse","emailInvalid")
+                }
+            })
+        })
+    }
 }
