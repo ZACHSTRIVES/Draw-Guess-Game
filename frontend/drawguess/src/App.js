@@ -1,12 +1,14 @@
 import logo from './static/logo.png';
 import './App.css';
 import Lobby from './components/lobby/lobby';
-import Login from './components/login/login.js'
+// import Login from './components/login/login.js'
 import Game from './components/game';
 import io from 'socket.io-client'
 import axios from 'axios'
 import React from 'react';
 import Test  from'./components/testroom';
+import Register from './components/register';
+import Login from './components/login';
 import TestLogin from './components/testLogin';
 import {
   BrowserRouter as Router,
@@ -43,6 +45,7 @@ function App() {
       <Switch>
         <div>
           <Route exact path='/'>
+            {/* {userName === null ? <Redirect to="/login" /> : */}
             {userName === null ? <Redirect to="/login" /> :
 
               <div className="App">
@@ -56,14 +59,33 @@ function App() {
 
           </Route>
 
+          <Route exact path='/register'>
+            <div className="App">
+              <header className="App-header">
+                <img src={logo} className="logo"></img>
+                <Register></Register>
+              </header>
+            </div>
+          </Route>
+
           <Route exact path='/login'>
+            <div className="App">
+              <header className="App-header">
+                <img src={logo} className="logo"></img>
+                <Login/>
+              </header>
+            </div>
+          </Route>
+
+          {/* <Route exact path='/login'>
             <div className="App">
               <header className="App-header">
                 <img src={logo} className="logo"></img>
                 <Login socket={socket} handleLogin={handleLogin}></Login>
               </header>
             </div>
-          </Route>
+          </Route> */}
+          
 
           <Route path='/room/'>
             {userName === null ? <Redirect to="/login" /> :
