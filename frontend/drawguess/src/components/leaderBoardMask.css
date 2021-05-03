@@ -41,7 +41,7 @@
 .leader-board-container {
   padding: 2em;
   min-height: 70%;
-  /* overflow-y: scroll; */
+  overflow-y: auto;
 }
 
 .leader-board-name {
@@ -66,7 +66,7 @@
   }
 }
 
-/* .gold-medal {
+.gold-medal {
   opacity: 0;
   animation: fadeInUp 0.5s ease-in 2.5s forwards;
 }
@@ -79,7 +79,7 @@
 .bronze-medal {
   opacity: 0;
   animation: fadeInUp 0.5s ease-in 0.5s forwards;
-} */
+}
 
 
 

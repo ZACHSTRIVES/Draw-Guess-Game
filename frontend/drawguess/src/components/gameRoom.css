@@ -27,6 +27,22 @@
 .margin-sm {
   margin: 0.5em;
 }
+@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+
+.round {
+  overflow-y: auto;
+}
+
+.title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.3em;
+}
+
+.no-spacing {
+  letter-spacing: 0;
+}
 
 @media(orientation: portrait) {
   .container {
@@ -134,3 +150,17 @@
 .start-game-txt > p {
   margin: 1em;
 }
+
+.player {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.2em 1em;
+  margin-bottom: 0.4em;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 15px;
+}
+

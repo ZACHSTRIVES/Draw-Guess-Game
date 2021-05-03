@@ -58,8 +58,8 @@ export default function GameRoom({ socket, userName, init_room }) {
   React.useEffect(() => {
     socket.on('userGotRightAns', (data) => {
       setRoomInfo(data);
-      if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {  
-        socket.emit('finishedTimer',data)
+      if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {
+        socket.emit('finishedTimer', data)
       }
 
     })
@@ -82,27 +82,18 @@ export default function GameRoom({ socket, userName, init_room }) {
           <Canvas roomInfo={roomInfo} userName={userName} socket={socket} />
         </div>
         <div className="round rounded-rect border glass-rect margin-sm">
-          <h5 className="title">ROUND {roomInfo.game.currentRound} / {roomInfo.rounds}</h5>
-          <ul>
-            {roomInfo.scoreBoard.map((player, index) =>
-              <li key={index} alignItems="flex-start">
-                <div className="player">
-                  <List dense={dense}>
-                    <ListItem>
-                      <ListItemText
-                        primary={player.userName}
-                        secondary={secondary ? 'Secondary text' : null}
-                      />
-                      <ListItemText
-                        edge="end"
-                        primary={player.score}
-                        secondary={secondary ? 'Secondary text' : null}
-                      />
-                    </ListItem>
-                  </List>
-                </div>
-              </li>)}
-          </ul>
+          <h5 className="title sticky">ROUND <span className="no-spacing">{roomInfo.game.currentRound} / {roomInfo.rounds}</span></h5>
+          <div className="playerList">
+            <ul>
+              {roomInfo.scoreBoard.map((player, index) =>
+                <li key={index} alignItems="flex-start">
+                  <div className="player flex">
+                    <div className="username">{player.userName}</div>
+                    <div className="score">{player.score}</div>
+                  </div>
+                </li>)}
+            </ul>
+          </div>
         </div>
         <div className="message rounded-rect border glass-rect margin-sm">
           <h5 className="title">MESSAGE</h5>
