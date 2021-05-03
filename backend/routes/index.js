@@ -10,10 +10,11 @@ module.exports = function(app,socket,all_room_info,initdata,all_users,io,databas
 
   roomService.joinRoom(app,socket,all_room_info,all_users,io);
   roomService.watchRoom(app,socket,all_room_info,all_users,io);
+  roomService.getRoomInfo(socket,io,all_room_info);
+  roomService.joinRoomViaURL(socket,io,all_room_info);
 
-  userService.userLogin(app,socket,all_room_info,initdata,all_users);
+  userService.userLogin(app,socket,all_room_info,initdata,all_users,database);
   userService.userRegister(socket,io,database);
-  userService.testLogin(socket,io,database)
 
   gameService.chatAnswer(app,socket,all_room_info,all_users,io);
   gameService.beginGame(socket,io,all_room_info);

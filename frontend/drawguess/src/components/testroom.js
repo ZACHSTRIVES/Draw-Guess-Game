@@ -8,10 +8,6 @@ export default function TestRoom({ socket }) {
     const [info,setInfo]=React.useState("")
 
 
-
-
-
-
     function handleStart() {
         const data={userName:userName,password:password,email:email}
         socket.emit('register',data)

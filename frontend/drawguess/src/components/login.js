@@ -1,84 +1,82 @@
 import React, { useState } from 'react';
-import { Link } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 import './register.css';
 
-export default function Register(props) {
-    const [state , setState] = useState({
-        username: "",
-        password : "",
-    })
-    const handleChange = (e) => {
-        const {id , value} = e.target   
-        setState(prevState => ({
-            ...prevState,
-            [id] : value
-        }))
-    }
-    const handleSubmitClick = (e) => {
-        e.preventDefault();
-        console.log(state)
-        console.log(state.password)
-        console.log(state.confirmPassword)
-        if(state.password === state.confirmPassword) {
-            console.log('Passwords match');
-        } else {
-           console.log('Passwords do not match');
-        }
-    }
-  
-    return (
-        <div className="paper">
-          <Typography component="h1" variant="h5">
-            Login
-          </Typography>
-          <form className="form" noValidate>
-            <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
-              <div>
-              <label htmlFor="exampleInputUsername1">User Name</label>
-                <input
-                  variant="outlined"
-                  required
-                  fullWidth
-                  id="username"
-                  label="User name"
-                  name="Username"
-                  autoComplete="Username"
-                  value={state.username}
-                onChange={handleChange}
-                />
-              </div>
-              <div>
-              <label htmlFor="exampleInputEmail1">Email address</label>
-                <input
-                  variant="outlined"
-                  required
-                  fullWidth
-                  name="password"
-                  label="Password"
-                  type="password"
-                  id="password"
-                  autoComplete="current-password"
-                  value={state.password}
-                  onChange={handleChange}
-                />
-              </div>
-            </div>
-            <button 
-            type="submit" 
-            className="btn btn-primary"
-            onClick={handleSubmitClick}
-            >
-            Login
-            </button>
-            <button 
-            type="submit" 
-            className="btn btn-primary"
-            >
-            <Link to="/register">Register</Link>
-            </button>
-          </form>
-        </div>
-    );
+export default function Login({socket,handleLogin}) {
+  const [password, setPassword] = React.useState("")
+  const [emailUserName, setEmail] = React.useState("")
+  const [info, setInfo] = React.useState("")
+  var  history= useHistory();
+
+
+  function handleLoginButton() {
+    const data = { password: password, flag: emailUserName }
+    socket.emit('login', data)
+
   }
-  
+
+  function handleNavToReg(){
+    history.push('/register')
+
+  }
+
+  React.useEffect(() => {
+    socket.on('loginFiled', (data) => {
+      setInfo(data)
+    })
+  }, []);
+
+  React.useEffect(() => {
+    socket.on('loginSuccess', (data) => {
+      handleLogin(data.userName, data.initdata)
+      localStorage.setItem("userName",data.userName)
+      console.log(data)
+      history.push('/')
+    })
+  }, []);
+
+
+
+
+  return (
+    <div className="paper">
+      <Typography component="h1" variant="h5">
+        Login
+          </Typography>
+        <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+          <div>
+            <label htmlFor="exampleInputUsername1">Email/Username</label>
+            <input
+              variant="outlined"
+              required
+              fullWidth
+              value={emailUserName}
+              onChange={e=>setEmail(e.target.value)}
+            />
+          </div>
+          <div>
+            <label htmlFor="exampleInputEmail1">Password</label>
+            <input
+              variant="outlined"
+              required
+              fullWidth
+              value={password}
+              onChange={e=>setPassword(e.target.value)}
+            />
+          </div>
+        </div>
+        <button
+          className="btn btn-primary"
+          onClick={handleLoginButton} >
+          Login
+            </button>
+        <button
+          onClick={handleNavToReg}
+          className="btn btn-primary"
+        >
+        </button>
+   
+    </div>
+  );
+}

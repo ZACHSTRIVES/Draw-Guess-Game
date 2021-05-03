@@ -34,9 +34,8 @@ module.exports = {
       io.sockets.emit('updateRoomInfo', all_room_info)
       socket.PLAYER_INFO={userName:data.userName,roomID:data.room.roomID}
       socket.join(data.room.roomID)
-      if(user){
-        user.socket.emit('joinRoomSuccess', data.room)
-      }
+      socket.emit('joinRoomSuccess', data.room)
+      
 
     });
 

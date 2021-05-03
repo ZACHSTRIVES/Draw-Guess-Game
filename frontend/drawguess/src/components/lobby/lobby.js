@@ -47,33 +47,38 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Lobby({ socket,userName,initData}) {
+export default function Lobby({ socket,userName,rooms}) {
   const history = useHistory();
 
   const classes = useStyles();
-  const [rooms, setRooms] = React.useState(initData.rooms)
 
-  React.useEffect(() => {
-    socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
-      console.log("Listen for 'Create Room'")
-      setRooms(data)
-    })
-  }, []);
 
-  React.useEffect(() => {
-    socket.on('user_on_conection', (data) => {   //Listen for "User Connection"
-      setRooms(data.rooms)
+  // React.useEffect(() => {
+  //   socket.on('user_on_conection', (data) => {   //Listen for "User Connection"
+  //     setRooms(data.rooms)
 
-    })
-  }, []);
+  //   })
+  // }, []);
+
+  // React.useEffect(() => {
+  //   socket.on('joinRoomSuccess', (data) => {  
+  //     var path = {
+  //       pathname:'/room/'+data.roomID,
+  //       query:data,
+  //     }
+  //     history.push(path);
+  //     console.log("Listen join room lobby.js:85")
+  //   })
+  // }, []);
 
   React.useEffect(() => {
     socket.on('joinRoomSuccess', (data) => {  
-      var path = {
-        pathname:'/room',
-        query:data,
-      }
-      history.push(path);
+      // var path = {
+      //   pathname:'/room/'+data.roomID,
+      //   query:data,
+      // }
+      console.log("listen join room")
+      history.push('room/'+data.roomID);
       console.log("Listen join room lobby.js:85")
     })
   }, []);

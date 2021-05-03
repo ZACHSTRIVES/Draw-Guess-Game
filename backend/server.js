@@ -20,7 +20,7 @@ const port = 8000;
 var all_room_info = []
 var all_users = []
 
-MongoClient.connect(db.url, {useUnifiedTopology: true, useNewUrlParser: true},(err, database) => {
+MongoClient.connect(db.url, { useUnifiedTopology: true, useNewUrlParser: true }, (err, database) => {
   if (err) return console.log(err)
 
   // Make sure you add the database name and not the collection name
@@ -29,8 +29,12 @@ MongoClient.connect(db.url, {useUnifiedTopology: true, useNewUrlParser: true},(e
   io.on('connection', function (socket) {
     //调用传入的回调方法，将操作结果返回
     const init_data = { rooms: all_room_info }
-    socket.emit('user_on_conection', init_data)
-    socket.broadcast.emit('user_on_conection', init_data);
+    setTimeout(function () {
+
+      socket.emit('user_on_connection', init_data)
+    }, 200)
+
+    socket.emit('user_on_connection', init_data)
     console.log("User Connected")
     require('./routes')(app, socket, all_room_info, init_data, all_users, io, database);
   });
