@@ -4,6 +4,7 @@ import CanvasDraw from "react-canvas-draw";
 import { DeleteForever, LineWeight, Palette, Undo, } from '@material-ui/icons';
 import { Slider } from '@material-ui/core';
 import { TwitterPicker } from 'react-color';
+import data from './words';
 import React from 'react';
 import Timer from './timer';
 import WordSelectionMask from './wordSelectionMask';
@@ -23,7 +24,7 @@ function debounce(fn, ms) {
 
 function Canvas({ roomInfo, userName, socket }) {
   const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
-  const words = ['pig', 'rabbit', 'dog', 'starfish', 'bridge', 'library', 'park', 'tower'];
+  const words = data.words;
   const DEFAULT_BRUSH_SIZE = 10;
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
@@ -150,6 +151,12 @@ function Canvas({ roomInfo, userName, socket }) {
     colorBtn.classList.remove('btn-active');
   }
 
+  const setRandomWord = () => {
+    const index = Math.floor(Math.random() * words.length);
+    const word = words[index].word;
+    setWord(word);
+  }
+  
   const handleSelectWord = (word) => {
     const data = { word: word, roomID: roomInfo.roomID }
     console.log(data)
