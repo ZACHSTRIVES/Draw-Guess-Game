@@ -158,9 +158,16 @@
   margin-bottom: 0.4em;
 }
 
+.username {
+  align-items: center;
+}
+
 .sticky {
   position: -webkit-sticky;
   position: sticky;
   top: 15px;
 }
 
+.margin-left-extra {
+  margin-left: 1em;
+}

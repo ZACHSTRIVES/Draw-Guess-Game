@@ -5,6 +5,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
 import './gameRoom.css';
+import HostIcon from '../static/house.png';
+import BrushIcon from '../static/brush.png';
 import {
   Redirect, useLocation
 
@@ -88,7 +90,11 @@ export default function GameRoom({ socket, userName, init_room }) {
               {roomInfo.scoreBoard.map((player, index) =>
                 <li key={index} alignItems="flex-start">
                   <div className="player flex">
-                    <div className="username">{player.userName}</div>
+                    <div className="username flex">
+                      {player.userName}
+                      {player.userName === roomInfo.host && <div className="rank-icon-xs margin-left-extra"><img src={HostIcon} alt="host icon" /></div>}
+                      {player.userName === roomInfo.game.drawer && <div className="rank-icon-xs green-icon margin-left-extra"><img src={BrushIcon} alt="brush icon" /></div>}
+                    </div>
                     <div className="score">{player.score}</div>
                   </div>
                 </li>)}

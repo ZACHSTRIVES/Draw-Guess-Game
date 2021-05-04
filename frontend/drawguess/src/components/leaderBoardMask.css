@@ -17,8 +17,6 @@
 .rank-icon-none {
   width: 3.5em;
   height: 3.5em;
-  /* background: rgba( 255, 255, 255, 0.30 ); */
-  /* border-radius: 1em; */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -34,8 +32,26 @@
   justify-content: center;
 }
 
+.rank-icon-xs {
+  width: 1.5em;
+  height: 1.5em;
+  background: rgba( 255, 255, 255, 0.30 );
+  border-radius: 0.8em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
 .rank-icon > img {
   height: 100%;
+}
+
+.rank-icon-xs > img {
+  height: 100%;
+}
+
+.green-icon {
+  background: rgba(130, 207, 145, 0.7);
 }
 
 .leader-board-container {
