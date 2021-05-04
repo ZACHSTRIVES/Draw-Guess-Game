@@ -1,63 +1,42 @@
-import React, { Component } from "react";
+import React, { useState } from 'react';
 import ReactDOM from "react-dom";
-import ChatWindow from "./ChatWindow";
-import ChatComposer from "./ChatComposer";
+import ChatWindow from "./ChatWindow.js";
+
 import "./styles.css";
 
-export default class App extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-        messages: [
-            {   id: 0,
-                user: "john",
-                type: 'msg',
-                text: "First stored message",
-            },
-            {   id: 1,
-                user: "json",
-                type: 'msg',
-                text: "hahaha",
-            },
-            {   id: 2,
-                user: "kido",
-                type: 'ans',
-                text: "vodka",
-            },
-            {   id: 3,
-                user: "batto",
-                type: 'in',
-            },
-          ]
+export default function Chat({ socket,userName,room}) {
+    // const [messages, setMessage] = useState(room.messages);
+    const [newMsg, setNewMsg] = useState("");
+
+    function handleCompose(value) {
+        setNewMsg(value)
     };
-  }
 
-  // if new message was submitted from child component // process
-  submitted = getNewMessage => {
-    if (getNewMessage !== "") {
-      // match the state format
-      const newMessage = { text: getNewMessage };
-      // merge new message in copy of state stored messages
-      let updatedMessages = [...this.state.messages, newMessage];
-      // update state
-      this.setState({
-        messages: updatedMessages
-      });
+    function handleNewMessage() {
+        if (newMsg != "") {
+            socket.emit("new_msg",newMsg)
+            setNewMsg("")
+
+        }
+
     }
-  };
 
-  render() {
     return (
-      <div className="App">
-        {/* send stored messages as props to chat window */}
-        <ChatWindow messagesList={this.state.messages} />
-        {/* send submitted props to chat composer */}
-        <ChatComposer submitted={this.submitted} />
-      </div>
+        <div className="App">
+            <ChatWindow messagesList={room.messages} />
+
+            <div className="chat-composer">
+
+                <input
+                    className="form-control"
+                    placeholder="Type & hit enter"
+                    onChange={e => handleCompose(e.target.value)}
+                    value={newMsg}
+                />
+                <button onClick={handleNewMessage}> submit</button>
+
+            </div>
+        </div>
     );
-  }
+
 }
-
-const rootElement = document.getElementById("root");
-ReactDOM.render(<App />, rootElement);
-
