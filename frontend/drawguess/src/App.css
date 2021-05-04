@@ -9,15 +9,21 @@
   pointer-events: none;
 }
 
+
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
+.main-background {  
+  background: linear-gradient(to right, rgba(147,214,242,1) 0%, rgba(235,177,228,1) 64%, rgba(255,162,175,0.9) 100%);  
+}
+
 .App-header {
   /* background-image:url(https://media.giphy.com/media/l1BgRuUbcL5wgQLtu/giphy.gif); */
-  background: linear-gradient(to right top, #85bdbf, 15%, #c2fcf7);
+  /* background: linear-gradient(to right top, #85bdbf, 15%, #c2fcf7); */
+  /* background: linear-gradient(to right, rgba(147,214,242,1) 0%, rgba(235,177,228,1) 64%, rgba(255,162,175,0.9) 100%);   */
   background-size: 100% 100%;
   min-height: 100vh;
   display: flex;

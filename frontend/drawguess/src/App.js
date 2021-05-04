@@ -74,7 +74,7 @@ function App() {
             {userName === null ? <Redirect to="/login" /> :
 
               <div className="App">
-                <header className="App-header">
+                <header className="App-header main-background">
                   <img src={logo} className="logo"></img>
                   <Lobby socket={socket} userName={userName} rooms={rooms}></Lobby>
                 </header>
@@ -86,7 +86,7 @@ function App() {
 
           <Route exact path='/register'>
             <div className="App">
-              <header className="App-header">
+              <header className="App-header main-background">
                 <img src={logo} className="logo"></img>
                 <Register socket={socket}></Register>
               </header>
@@ -95,7 +95,7 @@ function App() {
 
           <Route exact path='/login'>
             <div className="App">
-              <header className="App-header">
+              <header className="App-header main-background">
                 <img src={logo} className="logo"></img>
                 <Login socket={socket} handleLogin={handleLogin} />
               </header>
@@ -110,7 +110,7 @@ function App() {
               if (userName === null) {
                 return <Redirect to="/login" />
               } else {
-                return (<div className="App game-room">
+                return (<div className="App main-background">
                   <Game socket={socket} userName={userName} />
                 </div>)
               }
