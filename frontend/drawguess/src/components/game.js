@@ -1,5 +1,6 @@
 import React from 'react';
 import Game from './gameRoom';
+import '../App.css';
 import {
   Redirect, useLocation, useParams
 
@@ -62,7 +63,7 @@ export default function GameExcessive({ socket, userName }) {
         if (userName === null) {  //如果没有登陆， 去登陆页面
           return <Redirect to="/login" />
         } else if (loading) {
-          return (<div className="App game-room">
+          return (<div className="App main-background">
             loading...
           </div>)
         } else if (roomNull) {

@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
 import './gameRoom.css';
+import '../App.css';
 import HostIcon from '../static/house.png';
 import BrushIcon from '../static/brush.png';
 import {
