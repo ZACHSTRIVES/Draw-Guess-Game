@@ -151,11 +151,11 @@ function Canvas({ roomInfo, userName, socket }) {
     colorBtn.classList.remove('btn-active');
   }
 
-  const setRandomWord = () => {
-    const index = Math.floor(Math.random() * words.length);
-    const word = words[index].word;
-    setWord(word);
-  }
+  // const setRandomWord = () => {
+  //   const index = Math.floor(Math.random() * words.length);
+  //   const word = words[index].word;
+  //   setWord(word);
+  // }
   
   const handleSelectWord = (word) => {
     const data = { word: word, roomID: roomInfo.roomID }
@@ -165,12 +165,12 @@ function Canvas({ roomInfo, userName, socket }) {
 
   }
 
-  const handleGamePause = () => {
-    console.log("handle game pause");
-    setWord("");
-    var results = words.slice(0, 3);
-    setWordChoices(results);
-  }
+  // const handleGamePause = () => {
+  //   console.log("handle game pause");
+  //   setWord("");
+  //   var results = words.slice(0, 3);
+  //   setWordChoices(results);
+  // }
 
   const handleStartGame = () => {
     const temp = { roomID: roomInfo.roomID, userName: userName }
@@ -198,6 +198,27 @@ function Canvas({ roomInfo, userName, socket }) {
     }
     draw();
   }, 100);
+
+  const getRandomWords = (size, words) => {
+    var arr = getRandomNumbers(size, words.length);
+
+    var randomWords = [];
+    arr.forEach(i => randomWords.push(words[i].word));
+
+    console.log("random words: ", randomWords);
+    return randomWords;
+  }
+
+  const getRandomNumbers = (size, length) => {
+    var arr = [];
+    while(arr.length < size){
+      var r = Math.floor(Math.random() * length);
+      if(arr.indexOf(r) === -1) arr.push(r);
+    }
+
+    console.log("array indices: ", arr);
+    return arr;
+  }
 
   useEffect(() => {
     debouncedHandleResize();
@@ -234,7 +255,7 @@ function Canvas({ roomInfo, userName, socket }) {
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
-            return (<WordSelectionMask isDrawer={isDrawer} words={words.slice(0, 3)} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
+            return (<WordSelectionMask isDrawer={isDrawer} words={getRandomWords(3, words)} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
           }
           else if (roomInfo.game.status === "drawing") {
             return (<div className="canvas-header glass-rect">
