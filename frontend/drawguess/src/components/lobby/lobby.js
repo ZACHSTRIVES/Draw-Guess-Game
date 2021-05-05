@@ -7,7 +7,7 @@ import SearchIcon from '@material-ui/icons/Search';
 import Button from '@material-ui/core/Button';
 import RoomList from './roomList';
 import axios from 'axios'
-import CreateRoom from '../CreateRoom/CreateRoomModal';
+import CreateRoom from '../CreateRoom/CreateRoomModal/CreateRoomModal';
 import {
   Redirect, useHistory
 } from "react-router-dom";
@@ -47,34 +47,16 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Lobby({ socket,userName,initData}) {
+export default function Lobby({ socket,userName,rooms}) {
   const history = useHistory();
 
   const classes = useStyles();
-  const [rooms, setRooms] = React.useState(initData.rooms)
-
-  React.useEffect(() => {
-    socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
-      console.log("Listen for 'Create Room'")
-      setRooms(data)
-    })
-  }, []);
-
-  React.useEffect(() => {
-    socket.on('user_on_conection', (data) => {   //Listen for "User Connection"
-      setRooms(data.rooms)
-
-    })
-  }, []);
 
   React.useEffect(() => {
     socket.on('joinRoomSuccess', (data) => {  
-      var path = {
-        pathname:'/room',
-        query:data,
-      }
+      const path = "/room/"+data.roomID;
       history.push(path);
-      console.log("Listen join room lobby.js:85")
+  
     })
   }, []);
 

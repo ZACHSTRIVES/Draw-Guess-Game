@@ -19,7 +19,7 @@ import { NavLink } from 'react-router-dom';
 
 
 
-export default function CreateRoomModal({socket,handleCreateRoom}) {
+export default function CreateRoom({socket,handleCreateRoom}) {
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -202,7 +202,7 @@ export default function CreateRoomModal({socket,handleCreateRoom}) {
             Cancel
           </Button>
           
-          <Button onClick={handleSubmit} color="primary">
+          <Button onClick={()=>handleSubmit()} color="primary">
             Create
           </Button>
           

@@ -13,29 +13,29 @@ module.exports = {
             
         }
     }
-
-
       all_room_ID.push(tempID)
       data.room.roomID = tempID;
       data.room.currentPlayers = 0;
       data.room.scoreBoard = [];
       data.room.messages=[];
-
+      data.room.game={ status: "waiting", round: 0, drawer: null, drawerindex: null, currentRound: 1, word: null, canvas:null,num_of_right:0};
+      data.room.globalStatus="waiting"
+      data.room.host=data.userName
+      data.room.currentPlayers += 1;
+      var userScoreBoard = { userName: data.userName, score: 0 ,right:false};
+      data.room.scoreBoard.push(userScoreBoard)
       console.log("Create Room:", data.room)
       
       socket.emit('updateRoomInfo', all_room_info)
-      data.room.currentPlayers += 1;
-      var userScoreBoard = { userName: data.userName, score: 0 };
-      data.room.scoreBoard.push(userScoreBoard)
+      
       all_room_info.push(data.room)
       socket.emit('updateRoomInfo', all_room_info)
       socket.broadcast.emit('updateRoomInfo', all_room_info)
       io.sockets.emit('updateRoomInfo', all_room_info)
       socket.PLAYER_INFO={userName:data.userName,roomID:data.room.roomID}
       socket.join(data.room.roomID)
-      if(user){
-        user.socket.emit('joinRoomSuccess', data.room)
-      }
+      socket.emit('joinRoomSuccess', data.room)
+      
 
     });
 
