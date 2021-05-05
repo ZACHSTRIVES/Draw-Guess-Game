@@ -4,6 +4,7 @@ import CanvasDraw from "react-canvas-draw";
 import { DeleteForever, LineWeight, Palette, Undo, } from '@material-ui/icons';
 import { Slider } from '@material-ui/core';
 import { TwitterPicker } from 'react-color';
+import data from './words';
 import React from 'react';
 import Timer from './timer';
 import WordSelectionMask from './wordSelectionMask';
@@ -23,8 +24,8 @@ function debounce(fn, ms) {
 
 function Canvas({ roomInfo, userName, socket }) {
   const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
-  const words = ['pig', 'rabbit', 'dog', 'starfish', 'bridge', 'library', 'park', 'tower'];
-  const DEFAULT_BRUSH_SIZE = 10;
+  const words = data.words;
+  const DEFAULT_BRUSH_SIZE = 5;
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [showOption, setShowOption] = useState("none");
@@ -32,11 +33,6 @@ function Canvas({ roomInfo, userName, socket }) {
   const [drawing, setDrawing] = useState("");
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
-  const [lock, setLock] = useState(false)
-  const [word, setWord] = useState("");
-  const [wordChoices, setWordChoices] = useState(null);
-  const [startGame, setStartGame] = useState(false);
-  const [headerMsg, setHeaderMsg] = useState("");
   const [drawingMode, setDrawingMode] = useState("none");
 
 
@@ -158,20 +154,13 @@ function Canvas({ roomInfo, userName, socket }) {
     const colorBtn = document.querySelector('.color-btn');
     colorBtn.classList.remove('btn-active');
   }
-
+  
   const handleSelectWord = (word) => {
     const data = { word: word, roomID: roomInfo.roomID }
     console.log(data)
     socket.emit('setWord', data)
 
 
-  }
-
-  const handleGamePause = () => {
-    console.log("handle game pause");
-    setWord("");
-    var results = words.slice(0, 3);
-    setWordChoices(results);
   }
 
   const handleStartGame = () => {
@@ -202,6 +191,27 @@ function Canvas({ roomInfo, userName, socket }) {
     draw();
   }, 100);
 
+  const getRandomWords = (size, words) => {
+    var arr = getRandomNumbers(size, words.length);
+
+    var randomWords = [];
+    arr.forEach(i => randomWords.push(words[i].word));
+
+    console.log("random words: ", randomWords);
+    return randomWords;
+  }
+
+  const getRandomNumbers = (size, length) => {
+    var arr = [];
+    while(arr.length < size){
+      var r = Math.floor(Math.random() * length);
+      if(arr.indexOf(r) === -1) arr.push(r);
+    }
+
+    console.log("array indices: ", arr);
+    return arr;
+  }
+
   useEffect(() => {
     debouncedHandleResize();
 
@@ -211,16 +221,6 @@ function Canvas({ roomInfo, userName, socket }) {
       window.removeEventListener('resize', debouncedHandleResize)
     }
   }, []);
-
-
-
-
-  useEffect(() => {
-    // setRandomWord();
-
-    // var results = words.slice(0, 3);
-    // setWordChoices(results);
-  });
 
   return (
     <div className="canvas-container flex-center-all" ref={containerRef} >
@@ -237,7 +237,7 @@ function Canvas({ roomInfo, userName, socket }) {
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
-            return (<WordSelectionMask isDrawer={isDrawer} words={words.slice(0, 3)} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
+            return (<WordSelectionMask isDrawer={isDrawer} words={getRandomWords(3, words)} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
           }
           else if (roomInfo.game.status === "drawing") {
             return (<div className="canvas-header glass-rect">

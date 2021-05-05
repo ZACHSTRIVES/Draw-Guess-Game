@@ -5,6 +5,9 @@ import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
 import './gameRoom.css';
+import '../App.css';
+import HostIcon from '../static/house.png';
+import BrushIcon from '../static/brush.png';
 import {
   Redirect, useLocation,useHistory, Link
 
@@ -60,8 +63,8 @@ export default function GameRoom({ socket, userName, init_room }) {
   React.useEffect(() => {
     socket.on('userGotRightAns', (data) => {
       setRoomInfo(data);
-      if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {  
-        socket.emit('finishedTimer',data)
+      if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {
+        socket.emit('finishedTimer', data)
       }
 
     })
@@ -96,27 +99,22 @@ export default function GameRoom({ socket, userName, init_room }) {
           <Canvas roomInfo={roomInfo} userName={userName} socket={socket} />
         </div>
         <div className="round rounded-rect border glass-rect margin-sm">
-          <h5 className="title">ROUND {roomInfo.game.currentRound} / {roomInfo.rounds}</h5>
-          <ul>
-            {roomInfo.scoreBoard.map((player, index) =>
-              <li key={index} alignItems="flex-start">
-                <div className="player">
-                  <List dense={dense}>
-                    <ListItem>
-                      <ListItemText
-                        primary={player.userName}
-                        secondary={secondary ? 'Secondary text' : null}
-                      />
-                      <ListItemText
-                        edge="end"
-                        primary={player.score}
-                        secondary={secondary ? 'Secondary text' : null}
-                      />
-                    </ListItem>
-                  </List>
-                </div>
-              </li>)}
-          </ul>
+          <h5 className="title sticky">ROUND <span className="no-spacing">{roomInfo.game.currentRound} / {roomInfo.rounds}</span></h5>
+          <div className="playerList">
+            <ul>
+              {roomInfo.scoreBoard.map((player, index) =>
+                <li key={index} alignItems="flex-start">
+                  <div className="player flex">
+                    <div className="username flex">
+                      {player.userName}
+                      {player.userName === roomInfo.host && <div className="rank-icon-xs margin-left-extra"><img src={HostIcon} alt="host icon" /></div>}
+                      {player.userName === roomInfo.game.drawer && <div className="rank-icon-xs green-icon margin-left-extra"><img src={BrushIcon} alt="brush icon" /></div>}
+                    </div>
+                    <div className="score">{player.score}</div>
+                  </div>
+                </li>)}
+            </ul>
+          </div>
         </div>
         <div className="message rounded-rect border glass-rect margin-sm">
           <h5 className="title">MESSAGE</h5>

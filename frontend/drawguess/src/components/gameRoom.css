@@ -1,6 +1,6 @@
-.game-room {  
+/* .game-room {  
   background: linear-gradient(to right, rgba(147,214,242,1) 0%, rgba(235,177,228,1) 64%, rgba(255,162,175,0.9) 100%);  
-}
+} */
 
 .room-bg {
   background: linear-gradient(to top, rgba(255, 255, 255, 0.7) 0%, rgba(255, 255, 255, 0) 80%);  
@@ -26,6 +26,22 @@
 
 .margin-sm {
   margin: 0.5em;
+}
+@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
+
+.round {
+  overflow-y: auto;
+}
+
+.title {
+  font-family: 'Rajdhani', sans-serif;
+  font-weight: 800;
+  color: white;
+  letter-spacing: 0.3em;
+}
+
+.no-spacing {
+  letter-spacing: 0;
 }
 
 @media(orientation: portrait) {
@@ -133,4 +149,25 @@
 
 .start-game-txt > p {
   margin: 1em;
+}
+
+.player {
+  background: rgba(255, 255, 255, 0.5);
+  border-radius: 8px;
+  padding: 0.2em 1em;
+  margin-bottom: 0.4em;
+}
+
+.username {
+  align-items: center;
+}
+
+.sticky {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 15px;
+}
+
+.margin-left-extra {
+  margin-left: 1em;
 }

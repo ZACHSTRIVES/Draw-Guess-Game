@@ -17,6 +17,7 @@ export default function WordSelectionMask({ isDrawer, words, onSelectWord, socke
         <div className="pop-up-container flex-center-all flex-column rounded-rect glass-rect">
           <p>Timer: {timer}</p>
           <p>Choose a word:</p>
+          {console.log("timer words: ", words)}
           <div className="options-btn-group">
             <Button variant="outlined" className="option-btn" onClick={() => onSelectWord(words[0])}>{words[0]}</Button>
             <Button variant="outlined" className="option-btn" onClick={() => onSelectWord(words[1])}>{words[1]}</Button>

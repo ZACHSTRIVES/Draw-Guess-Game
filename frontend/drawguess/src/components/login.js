@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
 import Typography from '@material-ui/core/Typography';
 import './register.css';
+import '../App.css';
 
 export default function Login({socket,handleLogin}) {
   const [password, setPassword] = React.useState("")
@@ -75,6 +76,7 @@ export default function Login({socket,handleLogin}) {
           onClick={handleNavToReg}
           className="btn btn-primary"
         >
+          Register
         </button>
    
     </div>
