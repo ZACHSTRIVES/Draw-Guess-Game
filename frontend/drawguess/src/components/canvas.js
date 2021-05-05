@@ -25,7 +25,7 @@ function debounce(fn, ms) {
 function Canvas({ roomInfo, userName, socket }) {
   const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
   const words = data.words;
-  const DEFAULT_BRUSH_SIZE = 10;
+  const DEFAULT_BRUSH_SIZE = 5;
   const canvasRef = useRef(null);
   const containerRef = useRef(null);
   const [showOption, setShowOption] = useState("none");
@@ -33,11 +33,6 @@ function Canvas({ roomInfo, userName, socket }) {
   const [drawing, setDrawing] = useState("");
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
-  const [lock, setLock] = useState(false)
-  const [word, setWord] = useState("");
-  const [wordChoices, setWordChoices] = useState(null);
-  const [startGame, setStartGame] = useState(false);
-  const [headerMsg, setHeaderMsg] = useState("");
   const [drawingMode, setDrawingMode] = useState("none");
 
 
@@ -150,12 +145,6 @@ function Canvas({ roomInfo, userName, socket }) {
     const colorBtn = document.querySelector('.color-btn');
     colorBtn.classList.remove('btn-active');
   }
-
-  // const setRandomWord = () => {
-  //   const index = Math.floor(Math.random() * words.length);
-  //   const word = words[index].word;
-  //   setWord(word);
-  // }
   
   const handleSelectWord = (word) => {
     const data = { word: word, roomID: roomInfo.roomID }
@@ -164,13 +153,6 @@ function Canvas({ roomInfo, userName, socket }) {
 
 
   }
-
-  // const handleGamePause = () => {
-  //   console.log("handle game pause");
-  //   setWord("");
-  //   var results = words.slice(0, 3);
-  //   setWordChoices(results);
-  // }
 
   const handleStartGame = () => {
     const temp = { roomID: roomInfo.roomID, userName: userName }
@@ -229,16 +211,6 @@ function Canvas({ roomInfo, userName, socket }) {
       window.removeEventListener('resize', debouncedHandleResize)
     }
   }, []);
-
-
-
-
-  useEffect(() => {
-    // setRandomWord();
-
-    // var results = words.slice(0, 3);
-    // setWordChoices(results);
-  });
 
   return (
     <div className="canvas-container flex-center-all" ref={containerRef} >
