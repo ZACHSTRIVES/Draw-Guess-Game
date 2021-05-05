@@ -202,7 +202,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
             Cancel
           </Button>
           
-          <Button onClick={handleSubmit} color="primary">
+          <Button onClick={()=>handleSubmit()} color="primary">
             Create
           </Button>
           

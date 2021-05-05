@@ -62,6 +62,10 @@ module.exports = {
         let globalTimer;
         let seconds = 60;
         let settingWordsSeconds = 10;
+        function randomNumber(min, max) {
+            const r = Math.random() * (max - min) + min
+            return Math.floor(r)
+        };
         function changeDrawer(roomID, all_room_info, show_leaderBoard) {
             var temp_data = get_current_room_by_id(all_room_info, roomID);
             const current_room = temp_data.current_room;
@@ -148,35 +152,39 @@ module.exports = {
             }
         }
         socket.on('startTimer', (roomID) => {
-            globalTimer = setInterval(() => {
-                seconds--;
-                io.sockets.to(roomID).emit('timer', seconds);
+            if (socket.PLAYER_INFO.roomID === roomID) {
+                globalTimer = setInterval(() => {
+                    seconds--;
+                    io.sockets.to(roomID).emit('timer', seconds);
 
-                if (seconds <= 0) {
-                    clearInterval(globalTimer);
-                    seconds = 60;
-                    var temp_data = get_current_room_by_id(all_room_info, roomID);
-                    const current_room = temp_data.current_room;
-                    const current_index = temp_data.current_index;
+                    if (seconds <= 0) {
+                        clearInterval(globalTimer);
+                        seconds = 60;
+                        var temp_data = get_current_room_by_id(all_room_info, roomID);
+                        const current_room = temp_data.current_room;
+                        const current_index = temp_data.current_index;
 
-                    if (current_room) {
-                        const drawerScore = Math.min(10 * current_room.game.num_of_right, 40)
-                        for (var i = 0; i < current_room.scoreBoard.length; i++) {
-                            if (current_room.scoreBoard[i].userName == current_room.game.drawer) {
-                                current_room.scoreBoard[i].score += drawerScore
+                        if (current_room) {
+                            const drawerScore = Math.min(10 * current_room.game.num_of_right, 40)
+                            for (var i = 0; i < current_room.scoreBoard.length; i++) {
+                                if (current_room.scoreBoard[i].userName == current_room.game.drawer) {
+                                    current_room.scoreBoard[i].score += drawerScore
+                                }
                             }
+                            current_room.game.status = "finished"
+                            current_room.game.num_of_right = 0
+                            all_room_info[current_index] = current_room
+                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+                            changeDrawer(current_room.roomID, all_room_info, true)
+                            io.sockets.to(roomID).emit("clearCanvas")
+
                         }
-                        current_room.game.status = "finished"
-                        current_room.game.num_of_right = 0
-                        all_room_info[current_index] = current_room
-                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
-                        io.sockets.emit("updateRoomInfo", all_room_info);
-                        changeDrawer(current_room.roomID, all_room_info,true)
 
                     }
+                }, 1000)
 
-                }
-            }, 1000)
+            }
         }),
 
             socket.on('finishedTimer', (data) => {
@@ -196,7 +204,8 @@ module.exports = {
                     all_room_info[current_index] = current_room
                     io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
                     io.sockets.emit("updateRoomInfo", all_room_info);
-                    changeDrawer(current_room.roomID, all_room_info,true)
+                    changeDrawer(current_room.roomID, all_room_info, true)
+                    io.sockets.to(data.roomID).emit("clearCanvas")
 
                 }
                 seconds = 60;
@@ -204,18 +213,27 @@ module.exports = {
             }),
 
             socket.on('startSettingWord', (roomID) => {
-                globalTimer = setInterval(() => {
-                    settingWordsSeconds--;
-                    console.log(settingWordsSeconds)
-                    io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
+                var temp_data = get_current_room_by_id(all_room_info, roomID)
+                const current_room = temp_data.current_room;
+                const current_index = temp_data.current_index;
 
-                    if (settingWordsSeconds <= 0) {
-                        clearInterval(globalTimer);
-                        settingWordsSeconds = 10;
-                        changeDrawer(roomID, all_room_info,false)
-                    }
+                if (current_room) {
+                    globalTimer = setInterval(() => {
+                        settingWordsSeconds--;
+                        console.log(settingWordsSeconds)
+                        io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
 
-                }, 1000)
+                        if (settingWordsSeconds <= 0) {
+                            clearInterval(globalTimer);
+                            settingWordsSeconds = 10;
+                            changeDrawer(roomID, all_room_info, false)
+                        }
+
+                    }, 1000)
+
+
+                }
+
             }),
             socket.on('setWord', (data) => {
                 var temp_data = get_current_room_by_id(all_room_info, data.roomID)
@@ -235,11 +253,238 @@ module.exports = {
                 } else {
                     console.log("[ERROR]:Room Undefined")
                 }
+            }),
+            socket.on('forceStopTimer', () => {
+                clearInterval(globalTimer);
+                seconds = 60;
+                settingWordsSeconds = 10;
+            })
+        socket.on('leaveRoom', (data) => {
+            var temp_data = get_current_room_by_id(all_room_info, data.roomID)
+            var current_room = temp_data.current_room;
+            const current_index = temp_data.current_index;
+            socket.leave(data.roomID)
+
+            if (current_room) {
+
+                current_room.currentPlayers--;
+                if (current_room.currentPlayers == 0) { //If there are no players left in the room, delete the room.
+                    all_room_info.splice(current_index, 1)
+                    console.log("Room", socket.PLAYER_INFO.roomID, "Deleted due to insufficient players")
+                    socket.leave(data.roomID)
+                    io.to(current_room.roomID).emit("updateCurrentRoomInfo", current_room)
+                    io.sockets.emit("updateRoomInfo", all_room_info);
+                    socket.emit('leave')
+
+                } else {
+                    if (current_room.globalStatus === "playing") { //When exiting the room the game is being played
+                        if (current_room.currentPlayers === 1) {
+                            for (i = 0; i < current_room.scoreBoard.length; i++) {
+                                if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                    current_room.scoreBoard.splice(i, 1)
+                                }
+                            }
+                            socket.leave(data.roomID)
+
+                            seconds = 60;
+                            settingWordsSeconds = 10;
+                            current_room.globalStatus = "finished";
+                            current_room.game.status = "ChoosingWord";
+                            all_room_info[current_index] = current_room
+                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+                            socket.emit('leave')
+
+                        } else if (current_room.game.drawer === socket.PLAYER_INFO.userName) {
+                            all_room_info[current_index] = current_room
+                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+                            if (current_room) {
+                                const drawerScore = Math.min(10 * current_room.game.num_of_right, 40)
+                                for (var i = 0; i < current_room.scoreBoard.length; i++) {
+                                    if (current_room.scoreBoard[i].userName == current_room.game.drawer) {
+                                        current_room.scoreBoard[i].score += drawerScore
+                                    }
+                                }
+                                current_room.game.status = "finished"
+                                current_room.game.num_of_right = 0
+                                all_room_info[current_index] = current_room
+                                io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                io.sockets.emit("updateRoomInfo", all_room_info);
+                                changeDrawer(current_room.roomID, all_room_info, true)
+                                io.sockets.to(data.roomID).emit("clearCanvas")
+
+                            }
+                            socket.emit('leave')
+
+
+                            current_room = all_room_info[current_index]
+
+                            for (i = 0; i < current_room.scoreBoard.length; i++) {
+                                if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                    current_room.scoreBoard.splice(i, 1)
+                                }
+                            }
+                            all_room_info[current_index] = current_room
+                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+                        } else {
+                            socket.leave(data.roomID)
+                            for (i = 0; i < current_room.scoreBoard.length; i++) {
+                                if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                    current_room.scoreBoard.splice(i, 1)
+                                }
+                            }
+                            socket.emit('leave')
+                            all_room_info[current_index] = current_room
+                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                            io.sockets.emit("updateRoomInfo", all_room_info);
+
+                        }
+                    } else {
+                        for (i = 0; i < current_room.scoreBoard.length; i++) {
+                            if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                current_room.scoreBoard.splice(i, 1)
+                            }
+                        }
+                        socket.emit('leave')
+                        all_room_info[current_index] = current_room
+                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                        io.sockets.emit("updateRoomInfo", all_room_info);
+
+                    }
+
+                    if (current_room.host === socket.PLAYER_INFO.userName) {
+                        socket.leave(data.roomID)
+                        const randomIndex = randomNumber(0, current_room.scoreBoard.length - 1)
+                        current_room.host = current_room.scoreBoard[randomIndex].userName
+                        all_room_info[current_index] = current_room
+                        io.sockets.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                        io.sockets.emit("updateRoomInfo", all_room_info);
+                    }
+                }
+                socket.PLAYER_INFO.roomID = null
+            }
+
+        }),
+            socket.on('disconnect', () => {
+                if (socket.PLAYER_INFO) {
+                    if (socket.PLAYER_INFO.roomID) {
+                        
+                        var temp_data = get_current_room_by_id(all_room_info, socket.PLAYER_INFO.roomID)
+                        var current_room = temp_data.current_room;
+                        const current_index = temp_data.current_index;
+                        socket.leave(socket.PLAYER_INFO.roomID)
+
+                        if (current_room) {
+                            if(current_room.game.drawer===socket.PLAYER_INFO.userName){
+                                clearInterval(globalTimer)
+                            }
+                            current_room.currentPlayers--;
+                            if (current_room.currentPlayers == 0) { //If there are no players left in the room, delete the room.
+                                all_room_info.splice(current_index, 1)
+                                console.log("Room", socket.PLAYER_INFO.roomID, "Deleted due to insufficient players")
+                                socket.leave(socket.PLAYER_INFO.roomID)
+                                io.to(current_room.roomID).emit("updateCurrentRoomInfo", current_room)
+                                io.sockets.emit("updateRoomInfo", all_room_info);
+                                socket.emit('leave')
+
+                            } else {
+                                if (current_room.globalStatus === "playing") { //When exiting the room the game is being played
+                                    if (current_room.currentPlayers === 1) {
+                                        for (i = 0; i < current_room.scoreBoard.length; i++) {
+                                            if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                                current_room.scoreBoard.splice(i, 1)
+                                            }
+                                        }
+                                        socket.leave(socket.PLAYER_INFO.roomID)
+
+                                        seconds = 60;
+                                        settingWordsSeconds = 10;
+                                        current_room.globalStatus = "finished";
+                                        current_room.game.status = "ChoosingWord";
+                                        all_room_info[current_index] = current_room
+                                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                        io.sockets.emit("updateRoomInfo", all_room_info);
+                                        socket.emit('leave')
+
+                                    } else if (current_room.game.drawer === socket.PLAYER_INFO.userName) {
+                                        all_room_info[current_index] = current_room
+                                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                        io.sockets.emit("updateRoomInfo", all_room_info);
+                                        if (current_room) {
+                                            const drawerScore = Math.min(10 * current_room.game.num_of_right, 40)
+                                            for (var i = 0; i < current_room.scoreBoard.length; i++) {
+                                                if (current_room.scoreBoard[i].userName == current_room.game.drawer) {
+                                                    current_room.scoreBoard[i].score += drawerScore
+                                                }
+                                            }
+                                            current_room.game.status = "finished"
+                                            current_room.game.num_of_right = 0
+                                            all_room_info[current_index] = current_room
+                                            io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                            io.sockets.emit("updateRoomInfo", all_room_info);
+                                            changeDrawer(current_room.roomID, all_room_info, true)
+                                            io.sockets.to(socket.PLAYER_INFO.roomID).emit("clearCanvas")
+
+                                        }
+                                        socket.emit('leave')
+
+
+                                        current_room = all_room_info[current_index]
+
+                                        for (i = 0; i < current_room.scoreBoard.length; i++) {
+                                            if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                                current_room.scoreBoard.splice(i, 1)
+                                            }
+                                        }
+                                        all_room_info[current_index] = current_room
+                                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                        io.sockets.emit("updateRoomInfo", all_room_info);
+                                    } else {
+                                        socket.leave(socket.PLAYER_INFO.roomID)
+                                        for (i = 0; i < current_room.scoreBoard.length; i++) {
+                                            if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                                current_room.scoreBoard.splice(i, 1)
+                                            }
+                                        }
+                                        socket.emit('leave')
+                                        all_room_info[current_index] = current_room
+                                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                        io.sockets.emit("updateRoomInfo", all_room_info);
+
+                                    }
+                                } else {
+                                    for (i = 0; i < current_room.scoreBoard.length; i++) {
+                                        if (current_room.scoreBoard[i].userName == socket.PLAYER_INFO.userName) {
+                                            current_room.scoreBoard.splice(i, 1)
+                                        }
+                                    }
+                                    socket.emit('leave')
+                                    all_room_info[current_index] = current_room
+                                    io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                    io.sockets.emit("updateRoomInfo", all_room_info);
+
+                                }
+
+                                if (current_room.host === socket.PLAYER_INFO.userName) {
+                                    socket.leave(data.roomID)
+                                    const randomIndex = randomNumber(0, current_room.scoreBoard.length - 1)
+                                    current_room.host = current_room.scoreBoard[randomIndex].userName
+                                    all_room_info[current_index] = current_room
+                                    io.sockets.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                                    io.sockets.emit("updateRoomInfo", all_room_info);
+                                }
+                            }
+                        }
+                        socket.PLAYER_INFO.roomID = null;
+                    }
+                }
             })
 
-
-
     },
+
+
 
     chatAnswer: function (app, socket, all_room_info, all_user, io) {
         socket.on('new_msg', function (data) {

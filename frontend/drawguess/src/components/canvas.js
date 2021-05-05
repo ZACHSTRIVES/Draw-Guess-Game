@@ -59,6 +59,17 @@ function Canvas({ roomInfo, userName, socket }) {
 
     }
   }
+  React.useEffect(() => {
+    socket.on('clearCanvas', () => {
+      const canvas = canvasRef.current;
+
+      if (!canvas) return;
+
+      canvas.clear();
+
+
+    })
+  }, []);
 
   React.useEffect(() => {
     socket.on('onDraw', (data) => {
@@ -67,8 +78,6 @@ function Canvas({ roomInfo, userName, socket }) {
       canvas.loadSaveData(data.game.canvas, true)
 
     })
-
-
   }, []);
 
   React.useEffect(() => {
@@ -166,6 +175,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const handleStartGame = () => {
+    
     const temp = { roomID: roomInfo.roomID, userName: userName }
     socket.emit('beginGame', temp)
   }
@@ -238,7 +248,7 @@ function Canvas({ roomInfo, userName, socket }) {
 
           }
           else {
-            return(<LeaderBoardMask players={roomInfo.scoreBoard}></LeaderBoardMask>);
+            return (<LeaderBoardMask players={roomInfo.scoreBoard}></LeaderBoardMask>);
           }
         }
         else {

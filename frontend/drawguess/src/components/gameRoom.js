@@ -6,7 +6,7 @@ import Canvas from './canvas';
 import Chat from './chat';
 import './gameRoom.css';
 import {
-  Redirect, useLocation
+  Redirect, useLocation,useHistory, Link
 
 } from "react-router-dom";
 
@@ -18,6 +18,7 @@ export default function GameRoom({ socket, userName, init_room }) {
 
 
   const [roomInfo, setRoomInfo] = React.useState(init_room)
+  const history = useHistory()
 
   React.useEffect(() => {
     socket.on('newUserJoinRoom', (data) => {
@@ -31,6 +32,7 @@ export default function GameRoom({ socket, userName, init_room }) {
   React.useEffect(() => {
     socket.on('updateCurrentRoomInfo', (data) => {
       setRoomInfo(data);
+      console.log(data)
 
     })
   }, []);
@@ -68,6 +70,17 @@ export default function GameRoom({ socket, userName, init_room }) {
 
 
 
+
+  function handleLeaveRoom(){
+    if(roomInfo.game.drawer===userName){
+      socket.emit("forceStopTimer")
+    }
+    socket.emit("leaveRoom",roomInfo)
+  }
+
+
+
+
   const dense = false;
   const secondary = false;
 
@@ -76,6 +89,7 @@ export default function GameRoom({ socket, userName, init_room }) {
     <div className="room-bg">
       <div className="room container">
         <div className="title rounded-rect border glass-rect margin-sm">
+          <button onClick={e=>handleLeaveRoom()}><Link to="/">Return Lobby</Link></button>
           <h5 className="title">{roomInfo.roomName}</h5>
         </div>
         <div className="canvas rounded-rect border glass-rect margin-sm">

@@ -14,13 +14,14 @@ export default function GameExcessive({ socket, userName }) {
   const [roomNull, setRoomNull] = React.useState(false);
 
   React.useEffect(() => {
-    socket.emit("getRoomInfo", id)
+    const data={roomID:id,userName:userName};
+    socket.emit("getRoomInfo", data);
   }, []);
 
   React.useEffect(() => {
     socket.on('roomFull', () => {
-      setRoomFull(true)
-      setLoading(false)
+      setRoomFull(true);
+      setLoading(false);
     })
 
   }, []);
@@ -28,29 +29,15 @@ export default function GameExcessive({ socket, userName }) {
 
   React.useEffect(() => {
     socket.on('setRoomInfo', (data) => {
-
-      if (data) {
-        var flag = false
-        data.scoreBoard.forEach(item => {
-          if (userName === item.userName) {
-            console.log("35")
-            flag = true // 对象里的唯一标识id
-          }
-
-        })
-        if (flag === false) {
-          socket.emit("joinRoomViaURL", data.roomID)
-          console.log("45")
-        } else{
-          setRoomInfo(data)
-          setLoading(false)
-        }
-
-      } else {
-        setRoomNull(true)
+      if(data){
+        setRoomInfo(data);
+        setLoading(false);
+      }else{
+        setRoomNull(true);
         setLoading(false)
-        console.log("51")
+
       }
+
 
     })
   }, []);
