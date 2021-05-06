@@ -128,7 +128,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
     const room={
       "roomName":room_name,
       "roomType":type,
-      "passowrd":password,
+      "password":password,
       "maxPlayers":max_players,
       "rounds":rounds}
     handleCreateRoom(room)

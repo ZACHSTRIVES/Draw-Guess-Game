@@ -29,7 +29,7 @@ export default function Public({rooms,joinRoom}) {
         <div className="room_title">Private Rooms</div>
         <ul>
             {privateRooms.map((room) => 
-            <PrivateRoomCard room={room}></PrivateRoomCard>
+            <PrivateRoomCard room={room} joinRoom={joinRoom}></PrivateRoomCard>
             
              
             )}
