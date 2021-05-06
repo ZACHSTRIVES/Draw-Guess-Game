@@ -34,12 +34,13 @@ function Canvas({ roomInfo, userName, socket }) {
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
   const [drawingMode, setDrawingMode] = useState("none");
+  const [randomWords, setRandomWords] = useState([])
 
 
   const deboundCanvasChange = function handleCanvasChange() {
     const canvas = canvasRef.current;
     const drawings = canvas.getSaveData();
-    console.log(drawingMode)
+
 
     if (drawings !== "") {
       // setDrawing(drawings);
@@ -48,7 +49,6 @@ function Canvas({ roomInfo, userName, socket }) {
           const data = { roomID: roomInfo.roomID, canvas: drawings }
           socket.emit('draw', data)
           setDrawingMode("none")
-          console.log("JS51")
         }
 
       }
@@ -63,6 +63,16 @@ function Canvas({ roomInfo, userName, socket }) {
 
       canvas.clear();
 
+
+    })
+  }, []);
+
+  React.useEffect(() => {
+    socket.on('choosingWord', (data) => {
+      if (data.game.drawer === userName) {
+          setRandomWords(getRandomWords(3, words));
+        
+      }
 
     })
   }, []);
@@ -83,10 +93,8 @@ function Canvas({ roomInfo, userName, socket }) {
   }, []);
 
   const stopDrawing = () => {
-    console.log("canvas stop drawing");
     if (drawingMode === "none") {
       setDrawingMode("done");
-      console.log("drawing mode: ", drawingMode);
     }
   }
 
@@ -154,17 +162,16 @@ function Canvas({ roomInfo, userName, socket }) {
     const colorBtn = document.querySelector('.color-btn');
     colorBtn.classList.remove('btn-active');
   }
-  
-  const handleSelectWord = (word) => {
+
+  function handleSelectWord(word) {
     const data = { word: word, roomID: roomInfo.roomID }
-    console.log(data)
     socket.emit('setWord', data)
 
 
   }
 
   const handleStartGame = () => {
-    
+
     const temp = { roomID: roomInfo.roomID, userName: userName }
     socket.emit('beginGame', temp)
   }
@@ -179,7 +186,6 @@ function Canvas({ roomInfo, userName, socket }) {
     const containerWidth = containerRef.current.offsetWidth;
     const containerHeight = containerRef.current.offsetHeight;
     const length = containerHeight < containerWidth ? containerHeight : containerWidth;
-    console.log("width: ", containerWidth, "height: ", containerHeight);
     setSize(length);
 
     const canvas = canvasRef.current;
@@ -196,19 +202,15 @@ function Canvas({ roomInfo, userName, socket }) {
 
     var randomWords = [];
     arr.forEach(i => randomWords.push(words[i].word));
-
-    console.log("random words: ", randomWords);
     return randomWords;
   }
 
   const getRandomNumbers = (size, length) => {
     var arr = [];
-    while(arr.length < size){
+    while (arr.length < size) {
       var r = Math.floor(Math.random() * length);
-      if(arr.indexOf(r) === -1) arr.push(r);
+      if (arr.indexOf(r) === -1) arr.push(r);
     }
-
-    console.log("array indices: ", arr);
     return arr;
   }
 
@@ -224,9 +226,9 @@ function Canvas({ roomInfo, userName, socket }) {
 
   return (
     <div className="canvas-container flex-center-all" ref={containerRef} >
-      {console.log("room info in canvas: ", roomInfo)}
+
       {(() => {
-        console.log("Global status: ", roomInfo.globalStatus);
+
         // const isDrawer = roomInfo.game.drawer === userName;
         const isDrawer = roomInfo.game.drawer === userName
         const isHost = roomInfo.host === userName
@@ -237,7 +239,7 @@ function Canvas({ roomInfo, userName, socket }) {
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
-            return (<WordSelectionMask isDrawer={isDrawer} words={getRandomWords(3, words)} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
+            return (<WordSelectionMask isDrawer={isDrawer} words={randomWords} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
           }
           else if (roomInfo.game.status === "drawing") {
             return (<div className="canvas-header glass-rect">

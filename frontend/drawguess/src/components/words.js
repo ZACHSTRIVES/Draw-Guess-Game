@@ -157,10 +157,6 @@ const data ={
         type: "transportation",
     },
     {
-        word: "truct",
-        type: "transportation",
-    },
-    {
         word: "truck",
         type: "transportation",
     },
@@ -201,7 +197,7 @@ const data ={
         type: "action",
     },
     {
-        word: "boxingl",
+        word: "boxing",
         type: "action",
     },
 
