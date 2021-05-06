@@ -72,4 +72,6 @@
   font-size: small;
   text-align: left;
   color: rgb(150, 150, 150);
+  display: flex;
+  align-items: center;
 }

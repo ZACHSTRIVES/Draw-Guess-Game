@@ -11,58 +11,55 @@ import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import './room.css';
+import doorClosed from '../../static/doorClosed.png';
 
 const useStyles = makeStyles({
-    root: {
-      Width: 400,
-      height: 100,
-    },
-    title: {
-      fontSize: 14,
-      textAlign: 'left',
-    },
-    pos: {
+  root: {
+    Width: 400,
+    height: 100,
+  },
+  title: {
+    fontSize: 14,
+    textAlign: 'left',
+  },
+  pos: {
     //   marginBottom: 12,
-      textAlign: 'right',
-    },
-    name: {
-        textAlign: 'left',
-    },
-    icon:{
-      display: 'inline-flex',
-    }
-  });
+    textAlign: 'right',
+  },
+  name: {
+    textAlign: 'left',
+  },
+  icon: {
+    display: 'inline-flex',
+  }
+});
 
-export default function PublicRoomCard({room}) {
-    const classes = useStyles();
-    const [open, setOpen] = React.useState(false);
-    const handleOpen=()=>{
-        setOpen(true);
-    }
+export default function PublicRoomCard({ room }) {
+  const classes = useStyles();
+  const [open, setOpen] = React.useState(false);
+  const handleOpen = () => {
+    setOpen(true);
+  }
 
-    const handleClose = () => {
-      setOpen(false);
-    };
+  const handleClose = () => {
+    setOpen(false);
+  };
 
 
-    return  (
+  return (
     <li>
-    <Card className="{classes.root} margin_top_card" onClick={handleOpen}>
-        <CardContent>
-        <Typography className={classes.title} color="textSecondary" gutterBottom>
-            ID {room.roomID}
-        </Typography>
-        <Typography className={classes.name} variant="h5" component="h2">
-            {room.roomName}
-        </Typography>
-        <Typography className={classes.pos} color="textSecondary">
-            {/* <GroupIcon className={classes.icon}/> */}
-            <GroupIcon style={{verticalAlign: 'middle'}}/>
+      <div className="room-card flex" onClick={handleOpen}>
+        <div className="room-icon private-room-icon"><img src={doorClosed} alt="private room" /></div>
+        <div className="room-info flex-column">
+          <div className="room-title">{room.roomName}</div>
+          <div className="room-id">ID {room.roomID}</div>
+          <div className="room-players">
+            <GroupIcon className={classes.icon} />
             {room.currentPlayers}/{room.maxPlayers}
-        </Typography>
-        </CardContent>
-    </Card>
-    <Dialog
+          </div>
+        </div>
+      </div>
+      <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
@@ -83,5 +80,5 @@ export default function PublicRoomCard({room}) {
           </Button>
         </DialogActions>
       </Dialog>
-   </li>)
+    </li>)
 }
