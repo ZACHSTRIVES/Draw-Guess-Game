@@ -4,3 +4,37 @@
 .scroll_bar_margin{
     margin-top: 40px;
 }
+
+.create-btn {
+  background: transparent;
+  position: relative;
+  width: 15em;
+  height: 2.5em;
+  margin: 20px;
+  font-size: large;
+}
+
+.btn-bg {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.05);
+  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  border-radius: 20px;
+  z-index: 1;
+  overflow: hidden;
+  transition: 0.3s;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  backdrop-filter: blur(20px);
+}
+
+.create-btn:hover .btn-bg {
+  letter-spacing: 2px;
+}

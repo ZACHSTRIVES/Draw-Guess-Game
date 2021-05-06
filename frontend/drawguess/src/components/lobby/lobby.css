@@ -1,0 +1,116 @@
+.lobby {
+  width: 100vw;
+  height: 100vh;
+  padding: 0 2em;
+
+  --lobby-height: 90%;
+  color: black;
+  font-family: sans-serif;
+}
+
+.left {
+  flex: 1.5;
+  height: var(--lobby-height);
+  border-radius: 32px 0 0 32px;
+  background: rgba(255, 255, 255, 0.9);
+  align-items: center;
+  padding: 2em;
+}
+
+.middle {
+  flex: 3;
+  height: var(--lobby-height);
+  background: rgba(255, 255, 255, 0.6);
+  padding: 2em;
+}
+
+.right {
+  flex: 2;
+  height: var(--lobby-height);
+  border-radius: 0 32px 32px 0;
+  background: rgba(255, 255, 255, 0.3);
+  border-top: 1px solid white;
+  padding: 2em;
+}
+
+.logo-bg {
+  height: 2.5em;
+  width: 100%;
+  border-radius: 50%;
+  padding-top: 0.4em;
+  color: rgb(92,205,242);
+}
+
+.logo-bg > .logo {
+  height: 100%;
+}
+
+.account-bg {
+  width: 15em;
+  height: 3em;
+  font-size: large;
+  background: rgba(239,227,245, 0.8);
+  color: black;
+  border-radius: 20px;
+}
+
+.room-banner {
+  width: 100%;
+  height: 2.5em;
+  align-items: center;
+  justify-content: space-between;
+  margin-top: 2.5em;
+}
+
+.room-type {
+  font-weight: 900;
+  flex: 3;
+}
+
+.search-room {
+  flex: 3;
+  height: 3em;
+  display: flex;
+  align-items: center;
+}
+
+.search-input {
+  border: none !important;
+}
+
+.nav-room {
+  margin-top: 2em;
+}
+
+.nav-btn {
+  background: rgba(255, 255, 255, 0.7);
+  width: 15em;
+  height: 3em;
+  font-size: large;
+  border-radius: 20px;
+  margin-bottom: 1em;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.nav-btn:hover {
+  transform: scale(1.1);
+  background: rgba(200, 200, 200, 0.3);
+}
+
+.nav-icon {
+  width: 2.5em;
+  height: 2.5em;
+  padding: 0.5em;
+  border-radius: 10px;
+  margin: 0 0.5em 0 1.5em;
+}
+
+.nav-icon > img {
+  width: 100%;
+  height: 100%;
+}

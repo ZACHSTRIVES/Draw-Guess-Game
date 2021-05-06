@@ -17,6 +17,11 @@
   border: 1px solid rgba( 255, 255, 255, 0.18 );
 }
 
+.glass-blur {
+  backdrop-filter: blur( 10px );
+  -webkit-backdrop-filter: blur( 10px );
+}
+
 .glass-rect-bright {
   background: rgba( 255, 255, 255, 0.80 );
   backdrop-filter: blur( 5.0px );

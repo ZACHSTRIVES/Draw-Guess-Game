@@ -50,9 +50,7 @@ function Canvas({ roomInfo, userName, socket }) {
           setDrawingMode("none")
           console.log("JS51")
         }
-
       }
-
     }
   }
 
@@ -63,8 +61,6 @@ function Canvas({ roomInfo, userName, socket }) {
       canvas.loadSaveData(data.game.canvas, true)
 
     })
-
-
   }, []);
 
   React.useEffect(() => {
@@ -277,7 +273,6 @@ function Canvas({ roomInfo, userName, socket }) {
                           max={20}
                           onChange={handleSliderChange}
                           onChangeCommitted={handleSliderChangeCommitted}
-
                         />
                       </div>
                     }
@@ -333,13 +328,8 @@ function Canvas({ roomInfo, userName, socket }) {
               onChange={deboundCanvasChange}
               hideInterface={true}
             />)
-
         }
-
-
       })()}
-
-
     </div>
   );
 }

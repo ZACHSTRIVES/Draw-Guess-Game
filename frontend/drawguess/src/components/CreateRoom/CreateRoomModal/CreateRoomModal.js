@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,10 +15,20 @@ import { makeStyles } from '@material-ui/core/styles';
 
 import './CreateRoomModal.css';
 import { NavLink } from 'react-router-dom';
+import { Button } from '@material-ui/core';
 
-
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: 300,
+    background: 'rgba(255, 255, 255, 0.5)',
+  },
+  margin: {
+    height: theme.spacing(3),
+  },
+}));
 
 export default function CreateRoom({socket,handleCreateRoom}) {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -30,14 +39,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
     setOpen(false);
   };
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      width: 300,
-    },
-    margin: {
-      height: theme.spacing(3),
-    },
-  }));
+  
 
   const players_marks = [
     {
@@ -138,10 +140,11 @@ export default function CreateRoom({socket,handleCreateRoom}) {
 
 
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
+    <div className="flex-center-all">
+      <div className="create-btn" onClick={handleClickOpen}><div className="btn-bg">Create Room</div></div>
+      {/* <Button className={classes.root} variant="outlined" color="primary" onClick={handleClickOpen}>
         Create Room
-      </Button>
+      </Button> */}
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
         <DialogContent>
