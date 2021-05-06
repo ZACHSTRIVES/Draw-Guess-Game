@@ -1,56 +1,44 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
+import "./chat.css";
 
-export default function ChatWindow({messagesList}) {
-  // componentDidUpdate = (prevProps, prevState) => {
-  //   if (this.props.messagesList !== prevProps.messagesList) {
-  //     this.messageListEnd.scrollIntoView({ behavior: "smooth" });
-  //   }
-  // };
-  
+export default function ChatWindow({ messagesList }) {
 
-  
-    return(
-      <div className="chat-window">
-        <div className="box">
-          <div className="inner">
-            {Array.isArray(messagesList) &&
-              messagesList.map((message, index) => {
-                if (message.type === "in") {
-                  return (
-                    <p key={index} className="message">
-                      {message.user} has enter the room
-                    </p>
-                  )
-                }
-                else if (message.type === "out") {
-                  return (
-                    <p key={index} className="outr">
-                      {message.user} has left game!
-                    </p>
-                  )
-                }
-                else if (message.type === "ans") {
-                  return (
-                    <p key={index} className="answer">
-                      {message.user} got right answer!
-                    </p>
-                  )
-                }
-                else {
-                  return (
-                    <p key={index} className="message">
-                      {message.user} : {message.text}
-                    </p>
-                  )
-                }
-              })
+  return (
+    <div className="chat-window">
+      <div className="messages">
+        {Array.isArray(messagesList) &&
+          messagesList.map((message, index) => {
+            if (message.type === "in") {
+              return (
+                <p key={index} className="info-in msg-margin">
+                  {message.user} has enter the room
+                </p>
+              );
+            } 
+            else if (message.type === "out") {
+              return (
+                <p key={index} className="info-out msg-margin">
+                  {message.user} has left game
+                </p>
+              )
             }
-            {/* <div
-              className="reference"
-              ref={node => (this.messageListEnd = node)}
-            /> */}
-          </div>
-        </div>
+            else if (message.type === "ans") {
+              return (
+                <p key={index} className="answer msg-margin">
+                  {message.user} got right answer!
+                </p>
+              )
+            }
+            else {
+              return (
+                <p key={index} className="message msg-margin">
+                  <div className="user">{message.user}</div>
+                  <div className="text">{message.text}</div>
+                </p>
+              );
+            }
+          })}
       </div>
-    )
+    </div>
+  );
 }

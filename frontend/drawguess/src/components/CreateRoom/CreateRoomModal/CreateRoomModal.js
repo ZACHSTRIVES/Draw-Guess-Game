@@ -13,10 +13,7 @@ import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
 import Slider from '@material-ui/core/Slider';
 import Alert from '@material-ui/lab/Alert';
-import IconButton from '@material-ui/core/IconButton';
 import Collapse from '@material-ui/core/Collapse';
-import CloseIcon from '@material-ui/icons/Close';
-
 import './CreateRoomModal.css';
 import { NavLink } from 'react-router-dom';
 
@@ -150,7 +147,6 @@ export default function CreateRoom({socket,handleCreateRoom}) {
       }
       else if(type == "Private"){
         if (room_name == '' & password == ''){
-          // console.log("empty private roomname")
           setAlert(true);
           setAlertPass(true);
         }
@@ -159,7 +155,6 @@ export default function CreateRoom({socket,handleCreateRoom}) {
           setAlertPass(true);
         }
         else if (room_name == ''){
-          // console.log("empty private roomname")
           setAlert(true);
         } 
         else{
