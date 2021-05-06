@@ -13,8 +13,7 @@ export default function Register({socket}) {
 
 
   function handleReg() {
-    const data = { userName: userName, password: password, email: email }
-    console.log(data)
+    const data = { userName: userName, password: password, email: email };
     if(password!==c_password){
       
       setInfo("Fuck! Two Passwords are different!")

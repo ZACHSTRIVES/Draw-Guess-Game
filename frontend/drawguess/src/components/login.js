@@ -32,7 +32,6 @@ export default function Login({socket,handleLogin}) {
     socket.on('loginSuccess', (data) => {
       handleLogin(data.userName, data.initdata)
       localStorage.setItem("userName",data.userName)
-      console.log(data)
       history.push('/')
     })
   }, []);

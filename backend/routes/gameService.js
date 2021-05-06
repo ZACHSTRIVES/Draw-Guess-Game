@@ -60,6 +60,7 @@ module.exports = {
 
     gaming: function (socket, io, all_room_info) {
         let globalTimer;
+        let wordTimer;
         let seconds = 60;
         let settingWordsSeconds = 10;
         function randomNumber(min, max) {
@@ -188,74 +189,85 @@ module.exports = {
         }),
 
             socket.on('finishedTimer', (data) => {
-                var temp_data = get_current_room_by_id(all_room_info, data.roomID)
-                const current_room = temp_data.current_room;
-                const current_index = temp_data.current_index;
-                clearInterval(globalTimer);
-                if (current_room) {
-                    const drawerScore = Math.min(10 * current_room.game.num_of_right, 40)
-                    for (var i = 0; i < current_room.scoreBoard.length; i++) {
-                        if (current_room.scoreBoard[i].userName == current_room.game.drawer) {
-                            current_room.scoreBoard[i].score += drawerScore
+                if (socket.PLAYER_INFO.roomID === data.roomID) {
+                    var temp_data = get_current_room_by_id(all_room_info, data.roomID)
+                    const current_room = temp_data.current_room;
+                    const current_index = temp_data.current_index;
+                    clearInterval(globalTimer);
+                    if (current_room) {
+                        const drawerScore = Math.min(10 * current_room.game.num_of_right, 40)
+                        for (var i = 0; i < current_room.scoreBoard.length; i++) {
+                            if (current_room.scoreBoard[i].userName == current_room.game.drawer) {
+                                current_room.scoreBoard[i].score += drawerScore
+                            }
                         }
-                    }
-                    current_room.game.status = "finished"
-                    current_room.game.num_of_right = 0
-                    all_room_info[current_index] = current_room
-                    io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
-                    io.sockets.emit("updateRoomInfo", all_room_info);
-                    changeDrawer(current_room.roomID, all_room_info, true)
-                    io.sockets.to(data.roomID).emit("clearCanvas")
+                        current_room.game.status = "finished"
+                        current_room.game.num_of_right = 0
+                        all_room_info[current_index] = current_room
+                        io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
+                        io.sockets.emit("updateRoomInfo", all_room_info);
+                        changeDrawer(current_room.roomID, all_room_info, true)
+                        io.sockets.to(data.roomID).emit("clearCanvas")
 
+                    }
+                    seconds = 60;
                 }
-                seconds = 60;
 
             }),
 
             socket.on('startSettingWord', (roomID) => {
-                var temp_data = get_current_room_by_id(all_room_info, roomID)
-                const current_room = temp_data.current_room;
-                const current_index = temp_data.current_index;
+                if (socket.PLAYER_INFO.roomID === roomID) {
+                    console.log(socket.PLAYER_INFO.roomID, roomID, socket.PLAYER_INFO.userName)
+                    var temp_data = get_current_room_by_id(all_room_info, roomID)
+                    const current_room = temp_data.current_room;
+                    const current_index = temp_data.current_index;
 
-                if (current_room) {
-                    globalTimer = setInterval(() => {
-                        settingWordsSeconds--;
-                        console.log(settingWordsSeconds)
-                        io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
+                    if (current_room) {
+                        wordTimer = setInterval(() => {
+                            settingWordsSeconds--;
+                            console.log(settingWordsSeconds)
+                            io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
 
-                        if (settingWordsSeconds <= 0) {
-                            clearInterval(globalTimer);
-                            settingWordsSeconds = 10;
-                            changeDrawer(roomID, all_room_info, false)
-                        }
+                            if (settingWordsSeconds <= 0) {
+                                clearInterval(wordTimer);
+                                settingWordsSeconds = 10;
+                                changeDrawer(roomID, all_room_info, false)
+                            }
 
-                    }, 1000)
+                        }, 1000)
 
 
+                    }
                 }
 
             }),
             socket.on('setWord', (data) => {
-                var temp_data = get_current_room_by_id(all_room_info, data.roomID)
-                const current_room = temp_data.current_room;
-                const current_index = temp_data.current_index;
-                clearInterval(globalTimer)
-                settingWordsSeconds = 10;
+                if (socket.PLAYER_INFO.roomID === data.roomID) {
 
-                if (current_room) {
-                    console.log("set word:", data.word)
-                    current_room.game.status = "drawing";
-                    current_room.game.word = data.word;
-                    io.sockets.to(data.roomID).emit("drawing", current_room)
-                    all_room_info[current_index] = current_room
-                    io.sockets.emit("updateRoomInfo", all_room_info)
 
-                } else {
-                    console.log("[ERROR]:Room Undefined")
+                    console.log(socket.PLAYER_INFO.roomID, data.roomID, socket.PLAYER_INFO.userName, data.word)
+                    var temp_data = get_current_room_by_id(all_room_info, data.roomID)
+                    const current_room = temp_data.current_room;
+                    const current_index = temp_data.current_index;
+                    clearInterval(wordTimer)
+                    settingWordsSeconds = 10;
+
+                    if (current_room) {
+                        console.log("set word:", data.word)
+                        current_room.game.status = "drawing";
+                        current_room.game.word = data.word;
+                        io.sockets.to(data.roomID).emit("drawing", current_room)
+                        all_room_info[current_index] = current_room
+                        io.sockets.emit("updateRoomInfo", all_room_info)
+
+                    } else {
+                        console.log("[ERROR]:Room Undefined")
+                    }
                 }
             }),
             socket.on('forceStopTimer', () => {
                 clearInterval(globalTimer);
+                clearInterval(wordTimer);
                 seconds = 60;
                 settingWordsSeconds = 10;
             })
@@ -370,14 +382,14 @@ module.exports = {
             socket.on('disconnect', () => {
                 if (socket.PLAYER_INFO) {
                     if (socket.PLAYER_INFO.roomID) {
-                        
+
                         var temp_data = get_current_room_by_id(all_room_info, socket.PLAYER_INFO.roomID)
                         var current_room = temp_data.current_room;
                         const current_index = temp_data.current_index;
                         socket.leave(socket.PLAYER_INFO.roomID)
 
                         if (current_room) {
-                            if(current_room.game.drawer===socket.PLAYER_INFO.userName){
+                            if (current_room.game.drawer === socket.PLAYER_INFO.userName) {
                                 clearInterval(globalTimer)
                             }
                             current_room.currentPlayers--;
@@ -468,7 +480,7 @@ module.exports = {
                                 }
 
                                 if (current_room.host === socket.PLAYER_INFO.userName) {
-                                    socket.leave(data.roomID)
+                                    socket.leave(socket.PLAYER_INFO.roomID)
                                     const randomIndex = randomNumber(0, current_room.scoreBoard.length - 1)
                                     current_room.host = current_room.scoreBoard[randomIndex].userName
                                     all_room_info[current_index] = current_room
