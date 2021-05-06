@@ -14,9 +14,7 @@ export default function Chat({ socket,userName,room}) {
 
     function handleNewMessage() {
         if (newMsg != "") {
-            const new_msg = { user: userName, type: 'msg', text: newMsg };
-            // setMessage(updatedMessages)
-            socket.emit("new_msg",new_msg)
+            socket.emit("new_msg",newMsg)
             setNewMsg("")
 
         }
@@ -25,7 +23,7 @@ export default function Chat({ socket,userName,room}) {
 
     function onKeyup(e){
         if(e.keyCode === 13) {
-            handleNewMessage()
+            handleNewMessage(newMsg)
         }
     }
 
@@ -33,17 +31,20 @@ export default function Chat({ socket,userName,room}) {
         <div className="App">
             <ChatWindow messagesList={room.messages} />
 
-            <div className="form-horizontal">
+            <div className="chat-composer">
+
                 <input
-                    id="box"
-                    placeholder="Type enter"
+                    className="form-control"
+                    placeholder="Type & hit enter"
                     onChange={e => handleCompose(e.target.value)}
                     value={newMsg}
                     onKeyUp={onKeyup}
                 />
-                {/* <button onClick={handleNewMessage} class="btn btn-outline-secondary"> submit</button> */}
+                {/* <button onClick={handleNewMessage}> submit</button> */}
+
             </div>
         </div>
     );
 
 }
+

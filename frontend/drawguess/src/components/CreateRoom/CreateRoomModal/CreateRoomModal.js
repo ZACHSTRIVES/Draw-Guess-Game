@@ -31,6 +31,8 @@ export default function CreateRoom({socket,handleCreateRoom}) {
 
   const handleClose = () => {
     setOpen(false);
+    setAlert(false);
+    setAlertPass(false);
   };
 
   const useStyles = makeStyles((theme) => ({
@@ -161,6 +163,8 @@ export default function CreateRoom({socket,handleCreateRoom}) {
           setAlert(true);
         } 
         else{
+          setAlert(false);
+          setAlertPass(false);
           handleCreateRoom(room)
         }
       }
@@ -202,12 +206,14 @@ export default function CreateRoom({socket,handleCreateRoom}) {
             <FormControlLabel value="Private" control={<Radio />} label="Private" />
           </RadioGroup>
 
-          {type==='Private'?<TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e=>setPassword(e.target.value)}/>:<a></a>}
-          <Collapse in={alertPass}>
+          {type==='Private'?<TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e=>setPassword(e.target.value)}/>
+          :<a></a>}
+          {type==='Private'?<Collapse in={alertPass}>
             <Alert severity="error">
               Password cannot leave empty in Private mode!
             </Alert>
-          </Collapse>
+          </Collapse>:<a></a>}
+          
 
           <FormLabel component="legend" className="margin_top" >Max Players</FormLabel>
           <Slider
