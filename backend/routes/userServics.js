@@ -20,7 +20,6 @@ module.exports = {
                                     userName: res[0].userName,
                                     socket: socket
                                 })
-                                /*login success*/
                                 console.log(res[0].userName, "has logged in successfully")
                                 data = { userName: res[0].userName, initdata: initdata }
                                 socket.emit('loginSuccess', data)
@@ -55,7 +54,6 @@ module.exports = {
     },
     userRegister: function (socket, io, database) {
         socket.on('register', function (data) {
-            console.log(data)
             var query = { userName: data.userName };
             database.collection("users").find(query).toArray(function (err, result) { //Check if the user name already exists?
                 if (err) throw err;
@@ -82,5 +80,42 @@ module.exports = {
 
         })
 
+    },
+
+    getGameStats: function (socket, database) {
+        socket.on('gameStats', function (userName) {
+            const query = { userName: userName }
+            database.collection("records").find(query).toArray(function (err, result) {
+                if (err) throw err;
+                var stats = {
+                    rounds: result.length,
+                    firstRanks: 0,
+                    secondRanks: 0,
+                    thirdRanks: 0,
+                    firstRate: 0,
+                    secondRate: 0,
+                    thirdRate: 0,
+                    history: result
+                };
+
+                for (i = 0; i < result.length; i++) {
+                    if (result[i].rank === 1) {
+                        stats.firstRanks = stats.firstRanks + 1;
+                    } else if (result[i].rank === 2) {
+                        stats.secondRanks = stats.secondRanks + 1;
+                    } else if (result[i].rank === 3) {
+                        stats.thirdRanks = stats.thirdRanks + 1;
+                    }
+                }
+
+                stats.firstRate = Math.ceil((stats.firstRanks / stats.rounds) * 100)
+                stats.secondRate = Math.ceil((stats.secondRanks / stats.rounds) * 100)
+                stats.thirdRate = Math.ceil((stats.thirdRanks / stats.rounds) * 100)
+                socket.emit("setStats",stats);
+
+            })
+
+
+        });
     }
 }

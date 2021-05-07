@@ -1,5 +1,4 @@
-
-
+var dateTime = require('silly-datetime');
 
 function get_current_room_by_id(all_room_info, roomID) {
     var current_room = null;
@@ -22,11 +21,10 @@ module.exports = {
 
             if (current_room) {
                 if (current_room.host == data.userName) {
-                    console.log("接收到游戏开始信号")
+                    console.log("Room",all_room_info.roomID,"Start the game")
                     current_room.globalStatus = "playing";
                     current_room.game.status = "ChoosingWord";
                     current_room.game.round++;
-                    console.log("进入第", current_room.game.round, "轮");
                     current_room.game.drawer = current_room.scoreBoard[0].userName
                     io.sockets.to(data.roomID).emit("choosingWord", current_room)
                     all_room_info[current_index] = current_room
@@ -58,7 +56,7 @@ module.exports = {
         })
     },
 
-    gaming: function (socket, io, all_room_info) {
+    gaming: function (socket, io, all_room_info, db) {
         let globalTimer;
         let wordTimer;
         let seconds = 60;
@@ -84,8 +82,6 @@ module.exports = {
 
             if (drawerIndex != null) {
                 if (drawerIndex !== current_room.scoreBoard.length - 1) { //If the player is not the last player
-                    //TODO：在这里发送答案 设置Round Type为：Finished
-                    console.log("第", drawerIndex + 1, "位drawer完成绘画");
                     drawerIndex++;
                     current_room.game.drawer = current_room.scoreBoard[drawerIndex].userName;
                     current_room.game.status = "ChoosingWord"
@@ -94,13 +90,11 @@ module.exports = {
                     all_room_info[current_index] = current_room;
                     if (show_leaderBoard) {
                         setTimeout(function () {
-                            console.log("第", drawerIndex + 1, "位drawer开始绘画");
                             io.to(socket.PLAYER_INFO.roomID).emit("choosingWord", current_room);
                             io.sockets.emit("updateRoomInfo", all_room_info);
                         }, 5000)
 
                     } else {
-                        console.log("第", drawerIndex + 1, "位drawer开始绘画");
                         io.to(socket.PLAYER_INFO.roomID).emit("choosingWord", current_room);
                         io.sockets.emit("updateRoomInfo", all_room_info);
                     }
@@ -108,14 +102,10 @@ module.exports = {
                 } else {
 
                     if (current_room.game.currentRound !== current_room.rounds) { //If it's not the last round
-                        console.log("第", drawerIndex + 1, "位drawer完成绘画")
-                        console.log("第", current_room.game.currentRound, "轮结束")
                         current_room.game.currentRound++;
-                        console.log("第", current_room.game.currentRound, "轮开始")
                         drawerIndex = 0;
                         current_room.game.drawer = current_room.scoreBoard[drawerIndex].userName;
                         current_room.game.status = "ChoosingWord"
-                        console.log("第", drawerIndex + 1, "位drawer开始绘画");
                         all_room_info[current_index] = current_room
 
                         if (show_leaderBoard) {
@@ -132,24 +122,35 @@ module.exports = {
 
 
                     } else {
-                        console.log("第", drawerIndex + 1, "位drawer完成绘画")
-                        console.log("第", current_room.game.currentRound, "轮结束")
                         current_room.globalStatus = "finished";
                         current_room.game.status = "ChoosingWord";
-                        all_room_info[current_index] = current_room
-                        console.log("现在是最终结果展示时间...")
-                        console.log("游戏结束")
+                        all_room_info[current_index] = current_room;
+                        console.log("Room",current_room.roomID,"End the game")
                         setTimeout(function () {
                             io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
                             io.sockets.emit("updateRoomInfo", all_room_info);
 
                         }, 5000)
+                        var records = [];
+                        const playersToSort = current_room.scoreBoard;
+                        playersToSort.sort((a, b) => b.score - a.score);
+                        var time = dateTime.format(new Date(), 'YYYY-MM-DD HH:mm');
+                        for (var i = 0; i < playersToSort.length; i++) {
+                            records.push({
+                                userName: playersToSort[i].userName,
+                                rank: i + 1,
+                                players: current_room.currentPlayers,
+                                score: playersToSort[i].score,
+                                time: time
+                            })
 
+                        }
+                        db.collection("records").insertMany(records);
                     }
                 }
             } else {
                 //TODO: Drawer已经退出房间的情况
-                console.log("Drawer已经退出房间的情况")
+                console.log("[ERROR]")
             }
         }
         socket.on('startTimer', (roomID) => {
@@ -217,7 +218,6 @@ module.exports = {
 
             socket.on('startSettingWord', (roomID) => {
                 if (socket.PLAYER_INFO.roomID === roomID) {
-                    console.log(socket.PLAYER_INFO.roomID, roomID, socket.PLAYER_INFO.userName)
                     var temp_data = get_current_room_by_id(all_room_info, roomID)
                     const current_room = temp_data.current_room;
                     const current_index = temp_data.current_index;
@@ -225,7 +225,6 @@ module.exports = {
                     if (current_room) {
                         wordTimer = setInterval(() => {
                             settingWordsSeconds--;
-                            console.log(settingWordsSeconds)
                             io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
 
                             if (settingWordsSeconds <= 0) {
@@ -243,9 +242,6 @@ module.exports = {
             }),
             socket.on('setWord', (data) => {
                 if (socket.PLAYER_INFO.roomID === data.roomID) {
-
-
-                    console.log(socket.PLAYER_INFO.roomID, data.roomID, socket.PLAYER_INFO.userName, data.word)
                     var temp_data = get_current_room_by_id(all_room_info, data.roomID)
                     const current_room = temp_data.current_room;
                     const current_index = temp_data.current_index;
@@ -253,7 +249,6 @@ module.exports = {
                     settingWordsSeconds = 10;
 
                     if (current_room) {
-                        console.log("set word:", data.word)
                         current_room.game.status = "drawing";
                         current_room.game.word = data.word;
                         io.sockets.to(data.roomID).emit("drawing", current_room)
@@ -282,7 +277,6 @@ module.exports = {
                 current_room.currentPlayers--;
                 if (current_room.currentPlayers == 0) { //If there are no players left in the room, delete the room.
                     all_room_info.splice(current_index, 1)
-                    console.log("Room", socket.PLAYER_INFO.roomID, "Deleted due to insufficient players")
                     socket.leave(data.roomID)
                     io.to(current_room.roomID).emit("updateCurrentRoomInfo", current_room)
                     io.sockets.emit("updateRoomInfo", all_room_info);
@@ -395,7 +389,6 @@ module.exports = {
                             current_room.currentPlayers--;
                             if (current_room.currentPlayers == 0) { //If there are no players left in the room, delete the room.
                                 all_room_info.splice(current_index, 1)
-                                console.log("Room", socket.PLAYER_INFO.roomID, "Deleted due to insufficient players")
                                 socket.leave(socket.PLAYER_INFO.roomID)
                                 io.to(current_room.roomID).emit("updateCurrentRoomInfo", current_room)
                                 io.sockets.emit("updateRoomInfo", all_room_info);
