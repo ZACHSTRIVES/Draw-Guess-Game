@@ -70,7 +70,6 @@ export default function Lobby({ socket,userName,rooms}) {
   function handleJoinRoom(roomID){
     const temp={roomID:roomID,userName:userName}
     socket.emit('joinRoom',temp)
-    console.log("handle JoinRoom  lobby.js:98")
   }
 
   return (

@@ -16,7 +16,6 @@ export default function LeaderBoardMask({ players }) {
   }, [sortedPlayers])
 
   function getTopThreePlayers() {
-    console.log("Players before top three: ", sortedPlayers);
     const topThree = sortedPlayers.slice(0, 3);
 
     return (
@@ -96,7 +95,6 @@ export default function LeaderBoardMask({ players }) {
       <div className="pop-up-container flex flex-column rounded-rect glass-rect leader-board-container">
         <div className="title">Leaderboard</div>
         <div className="picture"><img src="" alt="" /></div>
-        {console.log("Sorted players are: ", sortedPlayers)}
         {
           sortedPlayers && getTopThreePlayers()
         }

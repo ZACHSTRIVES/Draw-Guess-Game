@@ -28,6 +28,7 @@ export default function Register({ socket }) {
       if (password === c_password) {
         socket.emit("register", data);
       }
+
     }
   }
 

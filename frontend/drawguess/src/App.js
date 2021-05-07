@@ -1,16 +1,13 @@
 import logo from './static/logo.png';
 import './App.css';
 import Lobby from './components/lobby/lobby';
-// import Login from './components/login/login.js'
 import Game from './components/game';
 import io from 'socket.io-client'
 import axios from 'axios'
 import React from 'react';
-import Test from './components/testroom';
 import Register from './components/register';
 import Login from './components/login';
-import TestLogin from './components/testLogin';
-import { AppContext } from "./libs/contextLib";
+
 
 import {
   BrowserRouter as Router,
@@ -38,7 +35,6 @@ function App() {
   const [rooms, setRooms] = React.useState([])
 
   function handleLogin(username, initData) {
-    console.log(username, initData)
     setUserName(username);
     setRooms(initData.rooms)
   }
@@ -54,12 +50,10 @@ function App() {
   React.useEffect(() => {
     socket.on('user_on_connection', (data) => {
       setRooms(data.rooms)
-      console.log(rooms)
     })
   }, []);
   React.useEffect(() => {
     socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
-      console.log("Listen for 'Create Room'")
       setRooms(data)
     })
   }, []);
@@ -118,9 +112,7 @@ function App() {
             })()}
           </Route>
 
-          <Route path='/test/'>
-            <Test socket={socket}></Test>
-          </Route>
+         
 
         </div>
 
