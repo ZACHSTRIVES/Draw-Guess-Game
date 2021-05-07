@@ -46,6 +46,10 @@ Draw and Guess is a drawing queuing game that integrates drawing and making frie
 #### Ranking
 The ranking part will display all player points, and the ranking will be displayed from high to low based on the points.
 
+## Technologies
+We will use React for the frontend, and MongoDB, Node.js and Express for the backend. MongoDB would be used to store the drawing paths, rooms, and users. Package use-persisted-state will be used to store the username persistently so that the user doesn’t have to re-enter the name. We will use a third-party package for the canvas called [react-sketch-canvas](https://www.npmjs.com/package/react-sketch-canvas). It provides functions to connect to different drawing tools like eraser mode, changing the color and size of the stroke. It also has a function called savePath() which creates an array of xy coordinates that would allow us to save the drawing to our database with the API and loadPath() can load the drawing back to other users. [Socket.IO](https://socket.io/docs/v3) will be used for handling the real-time, bidirectional and event-based communication for the chat and drawing. It can be used to track the number of people in each room too. We would use a React hook called [use-sound](https://www.joshwcomeau.com/react/announcing-use-sound-react-hook/) to allow sound playing for different conditions. The app would be hosted on [Firebase](https://www.joshwcomeau.com/react/announcing-use-sound-react-hook/).
+
+## project management
 
 
 
