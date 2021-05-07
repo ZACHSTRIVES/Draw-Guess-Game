@@ -225,6 +225,7 @@ module.exports = {
                     if (current_room) {
                         wordTimer = setInterval(() => {
                             settingWordsSeconds--;
+
                             io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
 
                             if (settingWordsSeconds <= 0) {
@@ -242,6 +243,7 @@ module.exports = {
             }),
             socket.on('setWord', (data) => {
                 if (socket.PLAYER_INFO.roomID === data.roomID) {
+
                     var temp_data = get_current_room_by_id(all_room_info, data.roomID)
                     const current_room = temp_data.current_room;
                     const current_index = temp_data.current_index;
@@ -254,7 +256,6 @@ module.exports = {
                         io.sockets.to(data.roomID).emit("drawing", current_room)
                         all_room_info[current_index] = current_room
                         io.sockets.emit("updateRoomInfo", all_room_info)
-
                     } else {
                         console.log("[ERROR]:Room Undefined")
                     }
