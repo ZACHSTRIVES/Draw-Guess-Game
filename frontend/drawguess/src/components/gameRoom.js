@@ -1,7 +1,4 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
 import './gameRoom.css';
@@ -12,8 +9,6 @@ import {
   Redirect, useLocation, useHistory, Link
 
 } from "react-router-dom";
-
-// socket.emit("UserJoin",data)
 
 
 export default function GameRoom({ socket, userName, init_room }) {
@@ -117,7 +112,7 @@ export default function GameRoom({ socket, userName, init_room }) {
             </ul>
           </div>
         </div>
-        <div className="message rounded-rect border glass-rect margin-sm">
+        <div className="message-section rounded-rect border glass-rect margin-sm">
           <h5 className="title">MESSAGE</h5>
           <Chat socket={socket} userName={userName} room={roomInfo} />
         </div>
