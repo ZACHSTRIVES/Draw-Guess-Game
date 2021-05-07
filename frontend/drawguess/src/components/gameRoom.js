@@ -13,13 +13,20 @@ import {
 
 } from "react-router-dom";
 
+import useSound from 'use-sound';
+
+
+import ClickonSfx from '../sounds/Clickon.wav';
+import successSfx from '../sounds/success.wav';
+
 // socket.emit("UserJoin",data)
 
 
 export default function GameRoom({ socket, userName, init_room }) {
   let location = useLocation();
 
-
+  const [Clickon] = useSound(ClickonSfx);
+  const [success] = useSound(successSfx);
   const [roomInfo, setRoomInfo] = React.useState(init_room)
   const history = useHistory()
 
@@ -62,6 +69,7 @@ export default function GameRoom({ socket, userName, init_room }) {
 
   React.useEffect(() => {
     socket.on('userGotRightAns', (data) => {
+      successSound();
       setRoomInfo(data);
       if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {
         socket.emit('finishedTimer', data)
@@ -70,7 +78,10 @@ export default function GameRoom({ socket, userName, init_room }) {
     })
   }, []);
 
+  function successSound(){
+    success();
 
+  }
 
 
 
@@ -79,6 +90,7 @@ export default function GameRoom({ socket, userName, init_room }) {
       socket.emit("forceStopTimer")
     }
     socket.emit("leaveRoom",roomInfo)
+    Clickon();
   }
 
 

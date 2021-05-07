@@ -1,14 +1,21 @@
 import Button from '@material-ui/core/Button';
 
+import useSound from 'use-sound';
+//import ClickonSfx from '../../../sounds/Clickon.wav';
+import ClickonSfx from '../sounds/Clickon.wav';
+
 export default function StartGameMask({ isHost, onStartGame }) {
 
+  const [Clickon] = useSound(ClickonSfx);
+  
   return (
     <div className="mask-container flex-center-all mask rounded-rect">
       <div className="pop-up-container flex-center-all flex-column rounded-rect glass-rect">
+    
         {isHost
           ? <div className="flex-center-all flex-column start-game-txt">
               <p>Are you ready?</p>
-              <Button variant="outlined" className="option-btn" onClick={() => onStartGame()}>Start</Button>
+              <Button variant="outlined" className="option-btn" onClick={() => onStartGame()} >Start</Button>
             </div>
           : <p>Waiting for host to start game</p>
         }

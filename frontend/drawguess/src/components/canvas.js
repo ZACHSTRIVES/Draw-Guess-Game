@@ -11,7 +11,12 @@ import WordSelectionMask from './wordSelectionMask';
 import StartGameMask from './startGameMask';
 import LeaderBoardMask from './leaderBoardMask';
 
+import useSound from 'use-sound';
+import ClickonSfx from '../sounds/Clickon.wav';
+
+
 function debounce(fn, ms) {
+  
   let timer
   return _ => {
     clearTimeout(timer)
@@ -22,7 +27,9 @@ function debounce(fn, ms) {
   };
 }
 
+
 function Canvas({ roomInfo, userName, socket }) {
+ 
   const colors = ['#DB3E00', '#FF6900', '#ffeb3b', '#008B02', '#4caf50', '#03a9f4', '#8ED1FC', '#F78DA7', '#9900EF', '#000000'];
   const words = data.words;
   const DEFAULT_BRUSH_SIZE = 5;
@@ -34,7 +41,8 @@ function Canvas({ roomInfo, userName, socket }) {
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
   const [drawingMode, setDrawingMode] = useState("none");
-
+  
+  const [Clickon] = useSound(ClickonSfx);
 
   const deboundCanvasChange = function handleCanvasChange() {
     const canvas = canvasRef.current;
@@ -87,6 +95,7 @@ function Canvas({ roomInfo, userName, socket }) {
     if (drawingMode === "none") {
       setDrawingMode("done");
       console.log("drawing mode: ", drawingMode);
+      Clickon();
     }
   }
 
@@ -103,6 +112,7 @@ function Canvas({ roomInfo, userName, socket }) {
     if (!canvas) return;
 
     canvas.clear();
+    Clickon();
   }
 
   const handleUndo = () => {
@@ -111,6 +121,7 @@ function Canvas({ roomInfo, userName, socket }) {
     if (!canvas) return;
 
     canvas.undo();
+    Clickon();
   }
 
   const handleStrokeSizeToggle = () => {
@@ -122,6 +133,7 @@ function Canvas({ roomInfo, userName, socket }) {
 
     const sizeBtn = document.querySelector('.size-btn');
     sizeBtn.classList.toggle('btn-active');
+    Clickon();
   }
 
   const handleStrokeColorToggle = () => {
@@ -133,10 +145,14 @@ function Canvas({ roomInfo, userName, socket }) {
 
     const colorBtn = document.querySelector('.color-btn');
     colorBtn.classList.toggle('btn-active');
+    Clickon();
+
   }
 
   const handleSliderChange = (event, newValue) => {
     setBrushSize(newValue);
+    Clickon();
+
   }
 
   const handleSliderChangeCommitted = (event, newValue) => {
@@ -145,6 +161,7 @@ function Canvas({ roomInfo, userName, socket }) {
 
     const sizeBtn = document.querySelector('.size-btn');
     sizeBtn.classList.remove('btn-active')
+    Clickon();
   }
 
   const handleColorChangeComplete = (color, event) => {
@@ -153,6 +170,7 @@ function Canvas({ roomInfo, userName, socket }) {
 
     const colorBtn = document.querySelector('.color-btn');
     colorBtn.classList.remove('btn-active');
+    Clickon();
   }
   
   const handleSelectWord = (word) => {
@@ -160,6 +178,7 @@ function Canvas({ roomInfo, userName, socket }) {
     console.log(data)
     socket.emit('setWord', data)
 
+    Clickon();
 
   }
 
@@ -167,10 +186,13 @@ function Canvas({ roomInfo, userName, socket }) {
     
     const temp = { roomID: roomInfo.roomID, userName: userName }
     socket.emit('beginGame', temp)
+    Clickon();
   }
 
   const maskWord = (word) => {
     return word.replace(/\S/gi, '_ ');
+    
+
   }
 
   const debouncedHandleResize = debounce(function handleResize() {

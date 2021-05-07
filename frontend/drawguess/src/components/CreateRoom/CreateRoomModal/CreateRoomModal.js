@@ -17,16 +17,26 @@ import { makeStyles } from '@material-ui/core/styles';
 import './CreateRoomModal.css';
 import { NavLink } from 'react-router-dom';
 
+import useSound from 'use-sound';
+import ClickonSfx from '../../../sounds/Clickon.wav';
+
 
 
 export default function CreateRoom({socket,handleCreateRoom}) {
   const [open, setOpen] = React.useState(false);
 
+  
+  const [Clickon] = useSound(ClickonSfx);
+
+
   const handleClickOpen = () => {
+    Clickon();
     setOpen(true);
+
   };
 
   const handleClose = () => {
+    Clickon();
     setOpen(false);
   };
 
@@ -125,6 +135,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
 
 
   function handleSubmit(){
+    Clickon();
     const room={
       "roomName":room_name,
       "roomType":type,
@@ -197,16 +208,21 @@ export default function CreateRoom({socket,handleCreateRoom}) {
 
 
         </DialogContent>
+       
         <DialogActions>
-          <Button onClick={handleClose} color="primary">
+
+         
+           <Button  onClick={handleClose} color="primary" >
             Cancel
           </Button>
           
-          <Button onClick={()=>handleSubmit()} color="primary">
+           <Button  onClick={()=>handleSubmit()} color="primary" >
             Create
           </Button>
-          
+        
+
         </DialogActions>
+
       </Dialog>
     </div>
   );

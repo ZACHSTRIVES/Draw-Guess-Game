@@ -12,6 +12,8 @@ import {
   Redirect, useHistory
 } from "react-router-dom";
 
+import useSound from 'use-sound';
+import ClickonSfx from '../../sounds/Clickon.wav';
 
 const config = {
   headers: {
@@ -52,6 +54,8 @@ export default function Lobby({ socket,userName,rooms}) {
 
   const classes = useStyles();
 
+  const [Clickon] = useSound(ClickonSfx);
+
   React.useEffect(() => {
     socket.on('joinRoomSuccess', (data) => {  
       const path = "/room/"+data.roomID;
@@ -61,6 +65,7 @@ export default function Lobby({ socket,userName,rooms}) {
   }, []);
 
   function handleCreateRoom(room) {
+    Clickon();
     const data={room:room,userName:userName}
     socket.emit('create_room', data);
   
@@ -68,6 +73,7 @@ export default function Lobby({ socket,userName,rooms}) {
   }
 
   function handleJoinRoom(roomID){
+    Clickon();
     const temp={roomID:roomID,userName:userName}
     socket.emit('joinRoom',temp)
     console.log("handle JoinRoom  lobby.js:98")
