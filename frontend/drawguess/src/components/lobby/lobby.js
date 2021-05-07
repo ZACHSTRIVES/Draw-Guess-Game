@@ -47,29 +47,43 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Lobby({ socket,userName,rooms}) {
+export default function Lobby({ socket, userName, rooms }) {
   const history = useHistory();
 
   const classes = useStyles();
 
+  const [stats, setStats] = React.useState({});
+
   React.useEffect(() => {
-    socket.on('joinRoomSuccess', (data) => {  
-      const path = "/room/"+data.roomID;
+    socket.on('joinRoomSuccess', (data) => {
+      const path = "/room/" + data.roomID;
       history.push(path);
-  
+
     })
   }, []);
+  React.useEffect(() => {
+    socket.on('setStats', (data) => {
+      setStats(data);
+      console.log(data);
+
+    })
+  }, []);
+  React.useEffect(() => {
+    socket.emit('gameStats', (userName));
+  }, []);
+
 
   function handleCreateRoom(room) {
-    const data={room:room,userName:userName}
+    const data = { room: room, userName: userName }
     socket.emit('create_room', data);
-  
+
 
   }
 
-  function handleJoinRoom(roomID){
-    const temp={roomID:roomID,userName:userName}
-    socket.emit('joinRoom',temp)
+
+  function handleJoinRoom(roomID) {
+    const temp = { roomID: roomID, userName: userName }
+    socket.emit('joinRoom', temp)
   }
 
   return (

@@ -12,7 +12,7 @@ module.exports = {
 
             if (current_room != null) { //Determines whether the local storage has the room
                 if (current_room.maxPlayers === current_room.currentPlayers) {
-                    console.log("房间已满！！！")
+                    console.log("Room Full")
                 } else {
                     current_room.currentPlayers += 1;
                     var userScoreBoard = { userName: data.userName, score: 0, right: false };
@@ -31,7 +31,7 @@ module.exports = {
                 }
 
             } else {
-                console.log("房间不存在！！")
+                console.log("[ERROR]")
             }
         })
     },
@@ -67,7 +67,6 @@ module.exports = {
                         socket.PLAYER_INFO = { userName: data.userName, roomID: data.roomID }
                         current_room.messages.push({ user: data.userName, type: 'in' })
                         current_room.scoreBoard.push(userScoreBoard)
-                        console.log(current_room)
                         all_room_info[current_index] = current_room;
                         socket.emit('updateRoomInfo', all_room_info)
                         socket.broadcast.emit('updateRoomInfo', all_room_info)
@@ -76,7 +75,7 @@ module.exports = {
                         // var temp_data = { userName: data.userName, roomInfo: current_room }
                         // socket.to(data.roomID).emit("newUserJoinRoom", temp_data)
                         io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room)
-                        console.log("url加入房间被激活")
+                        
                     }
 
                 }
