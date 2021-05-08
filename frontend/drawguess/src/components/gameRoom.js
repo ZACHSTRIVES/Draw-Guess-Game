@@ -1,7 +1,4 @@
 import React from 'react';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
-import ListItemText from '@material-ui/core/ListItemText';
 import Canvas from './canvas';
 import Chat from './chat';
 import './gameRoom.css';
@@ -9,11 +6,9 @@ import '../App.css';
 import HostIcon from '../static/house.png';
 import BrushIcon from '../static/brush.png';
 import {
-  Redirect, useLocation
+  Redirect, useLocation, useHistory, Link
 
 } from "react-router-dom";
-
-// socket.emit("UserJoin",data)
 
 
 export default function GameRoom({ socket, userName, init_room }) {
@@ -21,10 +16,11 @@ export default function GameRoom({ socket, userName, init_room }) {
 
 
   const [roomInfo, setRoomInfo] = React.useState(init_room)
+  const history = useHistory()
 
   React.useEffect(() => {
     socket.on('newUserJoinRoom', (data) => {
-      console.log(data)
+         
       setRoomInfo(data.roomInfo);
 
     })
@@ -34,7 +30,7 @@ export default function GameRoom({ socket, userName, init_room }) {
   React.useEffect(() => {
     socket.on('updateCurrentRoomInfo', (data) => {
       setRoomInfo(data);
-
+  
     })
   }, []);
 
@@ -71,6 +67,19 @@ export default function GameRoom({ socket, userName, init_room }) {
 
 
 
+
+  function handleLeaveRoom() {
+    history.go()
+    if (roomInfo.game.drawer === userName) {
+      socket.emit("forceStopTimer")
+    }
+    socket.emit("leaveRoom", roomInfo)
+
+  }
+
+
+
+
   const dense = false;
   const secondary = false;
 
@@ -79,6 +88,7 @@ export default function GameRoom({ socket, userName, init_room }) {
     <div className="room-bg">
       <div className="room container">
         <div className="title rounded-rect border glass-rect margin-sm">
+          <button onClick={e => handleLeaveRoom()}><Link to="/">Return Lobby</Link></button>
           <h5 className="title">{roomInfo.roomName}</h5>
         </div>
         <div className="canvas rounded-rect border glass-rect margin-sm">
@@ -102,7 +112,7 @@ export default function GameRoom({ socket, userName, init_room }) {
             </ul>
           </div>
         </div>
-        <div className="message rounded-rect border glass-rect margin-sm">
+        <div className="message-section rounded-rect border glass-rect margin-sm">
           <h5 className="title">MESSAGE</h5>
           <Chat socket={socket} userName={userName} room={roomInfo} />
         </div>

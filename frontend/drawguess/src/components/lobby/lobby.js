@@ -42,30 +42,30 @@ const useStyles = makeStyles((theme) => ({
 
 }));
 
-export default function Lobby({ socket, userName, rooms }) {
-  const [roomType, setRoomType] = useState("All");
+
+export default function Lobby({ socket, userName, rooms ,isLogin}) {
   const history = useHistory();
 
   const classes = useStyles();
 
+  const [stats, setStats] = React.useState({});
+  const [loading,setLoading]=React.useState(false);
 
-  // React.useEffect(() => {
-  //   socket.on('user_on_conection', (data) => {   //Listen for "User Connection"
-  //     setRooms(data.rooms)
+  React.useEffect(() => {
+    socket.on('joinRoomSuccess', (data) => {
+      const path = "/room/" + data.roomID;
+      history.push(path);
 
-  //   })
-  // }, []);
+    })
+  }, []);
+  
+  React.useEffect(() => {
+    socket.on('setStats', (data) => {
+      setStats(data);
+      console.log(data);
 
-  // React.useEffect(() => {
-  //   socket.on('joinRoomSuccess', (data) => {  
-  //     var path = {
-  //       pathname:'/room/'+data.roomID,
-  //       query:data,
-  //     }
-  //     history.push(path);
-  //     console.log("Listen join room lobby.js:85")
-  //   })
-  // }, []);
+    })
+  }, []);
 
   const handleRoomSelection = (roomType) => {
     console.log("Room type: ", roomType);
@@ -73,16 +73,32 @@ export default function Lobby({ socket, userName, rooms }) {
   }
 
   React.useEffect(() => {
-    socket.on('joinRoomSuccess', (data) => {
-      // var path = {
-      //   pathname:'/room/'+data.roomID,
-      //   query:data,
-      // }
-      console.log("listen join room")
-      history.push('room/' + data.roomID);
-      console.log("Listen join room lobby.js:85")
+
+    socket.on('autoLoginFailed', () => {
+      history.replace("/login")
+      setLoading(false)
     })
   }, []);
+
+  React.useEffect(()=>{
+    socket.on('autoLoginSuccess', () => {
+      console.log("ss")
+    setLoading(false)
+    socket.emit('gameStats',(userName));
+    })
+  }, []);
+
+  React.useEffect(() => {
+    if(isLogin){
+      socket.emit('gameStats', (userName));
+    }else{
+      setLoading(true)
+      socket.emit('autoLogin',(userName)); 
+    }
+   
+  }, []);
+
+ 
 
   function handleCreateRoom(room) {
     const data = { room: room, userName: userName }
@@ -91,10 +107,10 @@ export default function Lobby({ socket, userName, rooms }) {
 
   }
 
+
   function handleJoinRoom(roomID) {
     const temp = { roomID: roomID, userName: userName }
     socket.emit('joinRoom', temp)
-    console.log("handle JoinRoom  lobby.js:98")
   }
 
   return (

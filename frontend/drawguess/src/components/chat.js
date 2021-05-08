@@ -5,7 +5,6 @@ import ChatWindow from "./ChatWindow.js";
 import "./styles.css";
 
 export default function Chat({ socket,userName,room}) {
-    // const [messages, setMessage] = useState(room.messages);
     const [newMsg, setNewMsg] = useState("");
 
     function handleCompose(value) {
@@ -21,8 +20,16 @@ export default function Chat({ socket,userName,room}) {
 
     }
 
+    function onKeyup(e){
+        if(e.keyCode === 13) {
+            handleNewMessage(newMsg)
+        }
+    }
+
+   
+
     return (
-        <div className="App">
+        <div className="chat-box">
             <ChatWindow messagesList={room.messages} />
 
             <div className="chat-composer">
@@ -32,11 +39,12 @@ export default function Chat({ socket,userName,room}) {
                     placeholder="Type & hit enter"
                     onChange={e => handleCompose(e.target.value)}
                     value={newMsg}
+                    onKeyUp={onKeyup}
                 />
-                <button onClick={handleNewMessage}> submit</button>
 
             </div>
         </div>
     );
 
 }
+

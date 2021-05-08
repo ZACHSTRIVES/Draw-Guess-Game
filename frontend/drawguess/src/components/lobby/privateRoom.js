@@ -12,6 +12,8 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
 import './room.css';
 import doorClosed from '../../static/doorClosed.png';
+import Alert from '@material-ui/lab/Alert';
+
 
 const useStyles = makeStyles({
   root: {
@@ -34,16 +36,30 @@ const useStyles = makeStyles({
   }
 });
 
-export default function PublicRoomCard({ room }) {
+export default function PublicRoomCard({ room,joinRoom}) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
+  const [password, setPassword] = React.useState("");
+  const [passwordAlert,setPasswordAlert] = React.useState(false);
   const handleOpen = () => {
     setOpen(true);
   }
 
   const handleClose = () => {
     setOpen(false);
+
+    setPasswordAlert(false);
   };
+
+  const handleJoinPrivateRoom = () => {
+    if(password===room.password){
+      setOpen(false);
+      setPasswordAlert(false);
+      joinRoom(room.roomID);      
+    }else{
+      
+      setPasswordAlert(true);
+    }
 
 
   return (
@@ -59,24 +75,25 @@ export default function PublicRoomCard({ room }) {
           </div>
         </div>
       </div>
+    
       <Dialog
         open={open}
         onClose={handleClose}
         aria-labelledby="alert-dialog-title"
         aria-describedby="alert-dialog-description"
       >
-        <DialogTitle id="alert-dialog-title">{room.roomName}</DialogTitle>
+        <DialogTitle id="alert-dialog-title"> Private Room</DialogTitle>
         <DialogContent>
-          <DialogContentText id="alert-dialog-description">
-            {room.roomName}
-          </DialogContentText>
+          <input type="password" onChange={e=>setPassword(e.target.value)} placeholder="Room Password"></input>
+          {passwordAlert===false?<a></a>:<Alert severity="error">Incorrect Password!</Alert>}
+        
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
-            Disagree
+            cancel
           </Button>
-          <Button onClick={handleClose} color="primary" autoFocus>
-            Agree
+          <Button onClick={handleJoinPrivateRoom} color="primary" autoFocus>
+            enter
           </Button>
         </DialogActions>
       </Dialog>

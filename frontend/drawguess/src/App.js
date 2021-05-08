@@ -1,16 +1,14 @@
 import logo from './static/logo.png';
 import './App.css';
 import Lobby from './components/lobby/lobby';
-// import Login from './components/login/login.js'
 import Game from './components/game';
 import io from 'socket.io-client'
 import axios from 'axios'
 import React from 'react';
-import Test from './components/testroom';
 import Register from './components/register';
 import Login from './components/login';
-import TestLogin from './components/testLogin';
-import { AppContext } from "./libs/contextLib";
+import { PointSpreadLoading } from 'react-loadingg';
+
 
 import {
   BrowserRouter as Router,
@@ -22,12 +20,6 @@ import {
 } from "react-router-dom";
 
 
-const instance = axios.create({
-  baseURL: 'https://localhost:8000/',
-  timeout: 1000,
-  headers: { 'X-Custom-Header': 'foobar' }
-});
-
 
 
 
@@ -36,30 +28,26 @@ const socket = io('ws://localhost:8000')
 function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName'))
   const [rooms, setRooms] = React.useState([])
+  const [isLogin, setLogin] = React.useState(false)
 
   function handleLogin(username, initData) {
-    console.log(username, initData)
     setUserName(username);
-    setRooms(initData.rooms)
+    setRooms(initData.rooms);
+    setLogin(true);
   }
+  React.useEffect(() => {
+    socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
+      setRooms(data)
+    })
+  }, []);
 
-  function checkRoom(id) {
-    const room = null;
-    for (var i = 0; i < rooms.length; i++) {
-      if (rooms[i].roomID) {
-        room = rooms[i]
-      }
-    }
-  }
   React.useEffect(() => {
     socket.on('user_on_connection', (data) => {
       setRooms(data.rooms)
-      console.log(rooms)
     })
   }, []);
   React.useEffect(() => {
     socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
-      console.log("Listen for 'Create Room'")
       setRooms(data)
     })
   }, []);
@@ -75,7 +63,10 @@ function App() {
 
               <div className="App">
                 <header className="App-header main-background">
-                  <Lobby socket={socket} userName={userName} rooms={rooms}></Lobby>
+
+                  <img src={logo} className="logo"></img>
+                  <Lobby socket={socket} userName={userName} rooms={rooms} isLogin={isLogin} handleLogin={handleLogin}></Lobby>
+
                 </header>
               </div>
 
@@ -117,9 +108,12 @@ function App() {
             })()}
           </Route>
 
-          <Route path='/test/'>
-            <Test socket={socket}></Test>
+          <Route path='/test'>
+            <PointSpreadLoading color="#b08cc6"></PointSpreadLoading>
+
           </Route>
+
+
 
         </div>
 

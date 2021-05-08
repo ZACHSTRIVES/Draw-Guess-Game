@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+
+import { makeStyles } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -9,10 +11,9 @@ import Radio from '@material-ui/core/Radio';
 import RadioGroup from '@material-ui/core/RadioGroup';
 import FormControlLabel from '@material-ui/core/FormControlLabel';
 import FormLabel from '@material-ui/core/FormLabel';
-import Typography from '@material-ui/core/Typography';
 import Slider from '@material-ui/core/Slider';
-import { makeStyles } from '@material-ui/core/styles';
-
+import Alert from '@material-ui/lab/Alert';
+import Collapse from '@material-ui/core/Collapse';
 import './CreateRoomModal.css';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@material-ui/core';
@@ -37,6 +38,8 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
 
   const handleClose = () => {
     setOpen(false);
+    setAlert(false);
+    setAlertPass(false);
   };
 
 
@@ -113,10 +116,13 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
   const handleChange = (event) => {
     setType(event.target.value);
   };
-  const [room_name, setRoomName] = React.useState('')
-  const [password, setPassword] = React.useState('')
-  const [max_players, setMaxPlayers] = React.useState(5)
-  const [rounds, setRounds] = React.useState(3)
+
+  const [room_name,setRoomName]= React.useState('')
+  const [password,setPassword]= React.useState('')
+  const [max_players,setMaxPlayers] = React.useState(5)
+  const [rounds,setRounds] = React.useState(3)
+  const [alert, setAlert] = React.useState(false);
+  const [alertPass, setAlertPass] = React.useState(false);
 
   function handleMaxPlayersChange(value, newValue) {
     setMaxPlayers(newValue)
@@ -126,16 +132,43 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
   }
 
 
-  function handleSubmit() {
-    const room = {
-      "roomName": room_name,
-      "roomType": type,
-      "passowrd": password,
-      "maxPlayers": max_players,
-      "rounds": rounds
-    }
-    handleCreateRoom(room)
 
+  function handleSubmit(){
+    const room={
+      "roomName":room_name,
+      "roomType":type,
+      "password":password,
+      "maxPlayers":max_players,
+      "rounds":rounds}
+      if (type === "Public"){
+        if (room_name === ''){
+          console.log("empty public roomname");
+          setAlert(true);
+        }
+        else{
+          setAlert(false);
+          handleCreateRoom(room)
+        }
+      }
+      else if(type === "Private"){
+        if (room_name === '' & password === ''){
+          setAlert(true);
+          setAlertPass(true);
+        }
+        else if(password === ''){
+          console.log("empty private password")
+          setAlertPass(true);
+        }
+        else if (room_name === ''){
+          setAlert(true);
+        } 
+        else{
+          setAlert(false);
+          setAlertPass(false);
+          handleCreateRoom(room)
+        }
+      }
+      
 
   }
 
@@ -160,8 +193,13 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
             type="string"
             variant="filled"
             fullWidth
-            onChange={e => setRoomName(e.target.value)}
+            onChange={e=>setRoomName(e.target.value)}
           />
+          <Collapse in={alert}>
+            <Alert severity="error">
+              Room name cannot leave empty!
+            </Alert>
+          </Collapse>
 
           <FormLabel component="legend" className="margin_top" >Room Type</FormLabel>
           <RadioGroup aria-label="Room Type" name="room_type" value={type} onChange={handleChange}>
@@ -169,7 +207,14 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
             <FormControlLabel value="Private" control={<Radio />} label="Private" />
           </RadioGroup>
 
-          {type === 'Private' ? <TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e => setPassword(e.target.value)} /> : <a></a>}
+          {type==='Private'?<TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e=>setPassword(e.target.value)}/>
+          :<a></a>}
+          {type==='Private'?<Collapse in={alertPass}>
+            <Alert severity="error">
+              Password cannot leave empty in Private mode!
+            </Alert>
+          </Collapse>:<a></a>}
+          
 
           <FormLabel component="legend" className="margin_top" >Max Players</FormLabel>
           <Slider
@@ -206,7 +251,8 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
             Cancel
           </Button>
 
-          <Button onClick={handleSubmit} color="primary">
+          
+          <Button onClick={()=>handleSubmit()} color="primary">
             Create
           </Button>
 
