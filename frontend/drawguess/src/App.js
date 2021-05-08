@@ -7,6 +7,7 @@ import axios from 'axios'
 import React from 'react';
 import Register from './components/register';
 import Login from './components/login';
+import { PointSpreadLoading } from 'react-loadingg';
 
 
 import {
@@ -19,12 +20,6 @@ import {
 } from "react-router-dom";
 
 
-const instance = axios.create({
-  baseURL: 'https://localhost:8000/',
-  timeout: 1000,
-  headers: { 'X-Custom-Header': 'foobar' }
-});
-
 
 
 
@@ -33,20 +28,19 @@ const socket = io('ws://localhost:8000')
 function App() {
   const [userName, setUserName] = React.useState(localStorage.getItem('userName'))
   const [rooms, setRooms] = React.useState([])
+  const [isLogin, setLogin] = React.useState(false)
 
   function handleLogin(username, initData) {
     setUserName(username);
-    setRooms(initData.rooms)
+    setRooms(initData.rooms);
+    setLogin(true);
   }
+  React.useEffect(() => {
+    socket.on('updateRoomInfo', (data) => {   //Listen for "Create Room"
+      setRooms(data)
+    })
+  }, []);
 
-  function checkRoom(id) {
-    const room = null;
-    for (var i = 0; i < rooms.length; i++) {
-      if (rooms[i].roomID) {
-        room = rooms[i]
-      }
-    }
-  }
   React.useEffect(() => {
     socket.on('user_on_connection', (data) => {
       setRooms(data.rooms)
@@ -70,7 +64,7 @@ function App() {
               <div className="App">
                 <header className="App-header main-background">
                   <img src={logo} className="logo"></img>
-                  <Lobby socket={socket} userName={userName} rooms={rooms}></Lobby>
+                  <Lobby socket={socket} userName={userName} rooms={rooms} isLogin={isLogin} handleLogin={handleLogin}></Lobby>
                 </header>
               </div>
 
@@ -112,7 +106,12 @@ function App() {
             })()}
           </Route>
 
-         
+          <Route path='/test'>
+            <PointSpreadLoading color="#b08cc6"></PointSpreadLoading>
+
+          </Route>
+
+
 
         </div>
 

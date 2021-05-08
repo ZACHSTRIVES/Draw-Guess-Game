@@ -1,6 +1,14 @@
 const md5 = require('md5')
+
 module.exports = {
-    userLogin: function (app, socket, all_room_info, initdata, all_users, database) {
+    userLogin: function (app, socket, all_room_info, initdata, all_users, database, onlineUsers) {
+        function CheckIfTheUserIsLoggedIn(userName) {
+            if (onlineUsers.indexOf(userName) === -1) {
+                return false;
+            } else {
+                return true;
+            }
+        }
         socket.on('login', function (data) {
             var query = { email: data.flag }
             database.collection("users").find(query).toArray(function (err, result) {
@@ -15,14 +23,23 @@ module.exports = {
 
                         } else {
                             if (res[0].password === md5(data.password)) {
-                                socket.emit("loginResponse", "loginSuccess")
-                                all_users.push({
-                                    userName: res[0].userName,
-                                    socket: socket
-                                })
-                                console.log(res[0].userName, "has logged in successfully")
-                                data = { userName: res[0].userName, initdata: initdata }
-                                socket.emit('loginSuccess', data)
+                                if (CheckIfTheUserIsLoggedIn(res[0].userName)) {
+                                    socket.emit("loginFailed", "alreadyOnline")
+
+                                } else {
+
+                                    onlineUsers.push(res[0].userName)
+                                    socket.emit("loginResponse", "loginSuccess")
+                                    all_users.push({
+                                        userName: res[0].userName,
+                                        socket: socket
+                                    })
+                                    console.log(res[0].userName, "has logged in successfully")
+                                    data = { userName: res[0].userName, initdata: initdata }
+                                    socket.emit('loginSuccess', data)
+                                    const playerInfo = { userName: res[0].userName }
+                                    socket.PLAYER_INFO = playerInfo
+                                }
 
                             } else {
                                 socket.emit("loginFailed", "passwordInvalid")
@@ -32,24 +49,44 @@ module.exports = {
                     })
                 } else {
                     if (result[0].password === md5(data.password)) {
-                        socket.emit("loginResponse", "loginSuccess")
-                        all_users.push({
-                            userName: result[0].userName,
-                            socket: socket
-                        })
-                        /*login success*/
-                        console.log(result[0].userName, "has logged in successfully")
-                        data = { userName: result[0].userName, initdata: initdata }
-                        socket.emit('loginSuccess', data)
+                        if (CheckIfTheUserIsLoggedIn(result[0].userName)) {
+                            socket.emit("loginFailed", "alreadyOnline")
+
+                        } else {
+                            onlineUsers.push(res[0].userName)
+                            socket.emit("loginResponse", "loginSuccess")
+                            all_users.push({
+                                userName: result[0].userName,
+                                socket: socket
+                            })
+                            /*login success*/
+                            console.log(result[0].userName, "has logged in successfully")
+                            data = { userName: result[0].userName, initdata: initdata }
+                            socket.emit('loginSuccess', data)
+                            const playerInfo = { userName: result[0].userName }
+                            socket.PLAYER_INFO = playerInfo
+
+                        }
+
+
 
                     } else {
                         socket.emit("loginFailed", "passwordInvalid")
                     }
-
-
                 }
             })
-        })
+        }),
+
+            socket.on("autoLogin", function (userName) {
+                if (CheckIfTheUserIsLoggedIn(userName)) {
+                    socket.emit('autoLoginFailed')
+                } else {
+                    socket.emit('autoLoginSuccess')
+                    onlineUsers.push(userName)
+                    const playerInfo = { userName: userName }
+                    socket.PLAYER_INFO = playerInfo
+                }
+            })
 
     },
     userRegister: function (socket, io, database) {
@@ -111,11 +148,14 @@ module.exports = {
                 stats.firstRate = Math.ceil((stats.firstRanks / stats.rounds) * 100)
                 stats.secondRate = Math.ceil((stats.secondRanks / stats.rounds) * 100)
                 stats.thirdRate = Math.ceil((stats.thirdRanks / stats.rounds) * 100)
-                socket.emit("setStats",stats);
+                socket.emit("setStats", stats);
 
             })
 
 
         });
-    }
+    },
+
+
+
 }

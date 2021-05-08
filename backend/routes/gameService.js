@@ -21,7 +21,7 @@ module.exports = {
 
             if (current_room) {
                 if (current_room.host == data.userName) {
-                    console.log("Room",all_room_info.roomID,"Start the game")
+                    console.log("Room", all_room_info.roomID, "Start the game")
                     current_room.globalStatus = "playing";
                     current_room.game.status = "ChoosingWord";
                     current_room.game.round++;
@@ -36,8 +36,6 @@ module.exports = {
             }
         })
     },
-
-
     draw: function (socket, io, all_room_info) {
         socket.on('draw', (data) => {
             var temp_data = get_current_room_by_id(all_room_info, data.roomID)
@@ -55,8 +53,7 @@ module.exports = {
 
         })
     },
-
-    gaming: function (socket, io, all_room_info, db) {
+    gaming: function (socket, io, all_room_info, db,onlineUsers) {
         let globalTimer;
         let wordTimer;
         let seconds = 60;
@@ -125,7 +122,7 @@ module.exports = {
                         current_room.globalStatus = "finished";
                         current_room.game.status = "ChoosingWord";
                         all_room_info[current_index] = current_room;
-                        console.log("Room",current_room.roomID,"End the game")
+                        console.log("Room", current_room.roomID, "End the game")
                         setTimeout(function () {
                             io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
                             io.sockets.emit("updateRoomInfo", all_room_info);
@@ -180,12 +177,9 @@ module.exports = {
                             io.sockets.emit("updateRoomInfo", all_room_info);
                             changeDrawer(current_room.roomID, all_room_info, true)
                             io.sockets.to(roomID).emit("clearCanvas")
-
                         }
-
                     }
                 }, 1000)
-
             }
         }),
 
@@ -225,7 +219,6 @@ module.exports = {
                     if (current_room) {
                         wordTimer = setInterval(() => {
                             settingWordsSeconds--;
-
                             io.sockets.to(roomID).emit('settingWordTimer', settingWordsSeconds);
 
                             if (settingWordsSeconds <= 0) {
@@ -243,7 +236,6 @@ module.exports = {
             }),
             socket.on('setWord', (data) => {
                 if (socket.PLAYER_INFO.roomID === data.roomID) {
-
                     var temp_data = get_current_room_by_id(all_room_info, data.roomID)
                     const current_room = temp_data.current_room;
                     const current_index = temp_data.current_index;
@@ -256,6 +248,7 @@ module.exports = {
                         io.sockets.to(data.roomID).emit("drawing", current_room)
                         all_room_info[current_index] = current_room
                         io.sockets.emit("updateRoomInfo", all_room_info)
+
                     } else {
                         console.log("[ERROR]:Room Undefined")
                     }
@@ -376,6 +369,12 @@ module.exports = {
         }),
             socket.on('disconnect', () => {
                 if (socket.PLAYER_INFO) {
+                    for (i = 0; i < onlineUsers.length; i++) {
+                        if (onlineUsers[i]===socket.PLAYER_INFO.userName) {
+                            onlineUsers.splice(i, 1)
+                        }
+                    }
+                    
                     if (socket.PLAYER_INFO.roomID) {
 
                         var temp_data = get_current_room_by_id(all_room_info, socket.PLAYER_INFO.roomID)

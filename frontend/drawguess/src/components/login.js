@@ -36,6 +36,8 @@ export default function Login({socket,handleLogin}) {
       }
       else if(data==="passwordInvalid"){
         setInfo("Password Invalid!")
+      }else if(data==="alreadyOnline"){
+        setInfo("Your Account Is Already Online!")
       }
     });
   }, []);
@@ -79,7 +81,7 @@ export default function Login({socket,handleLogin}) {
         <button
           type="submit" 
           id="signup" 
-          class="btn_sign-up"
+          className="btn_sign-up"
           onClick={handleLoginButton} >
           Login
             </button>

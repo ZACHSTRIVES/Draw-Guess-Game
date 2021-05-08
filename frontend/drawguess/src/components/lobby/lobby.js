@@ -47,12 +47,13 @@ const useStyles = makeStyles((theme) => ({
 
 
 
-export default function Lobby({ socket, userName, rooms }) {
+export default function Lobby({ socket, userName, rooms ,isLogin}) {
   const history = useHistory();
 
   const classes = useStyles();
 
   const [stats, setStats] = React.useState({});
+  const [loading,setLoading]=React.useState(false);
 
   React.useEffect(() => {
     socket.on('joinRoomSuccess', (data) => {
@@ -61,6 +62,7 @@ export default function Lobby({ socket, userName, rooms }) {
 
     })
   }, []);
+  
   React.useEffect(() => {
     socket.on('setStats', (data) => {
       setStats(data);
@@ -68,10 +70,33 @@ export default function Lobby({ socket, userName, rooms }) {
 
     })
   }, []);
+
   React.useEffect(() => {
-    socket.emit('gameStats', (userName));
+    socket.on('autoLoginFailed', () => {
+      history.replace("/login")
+      setLoading(false)
+    })
   }, []);
 
+  React.useEffect(()=>{
+    socket.on('autoLoginSuccess', () => {
+      console.log("ss")
+    setLoading(false)
+    socket.emit('gameStats',(userName));
+    })
+  }, []);
+
+  React.useEffect(() => {
+    if(isLogin){
+      socket.emit('gameStats', (userName));
+    }else{
+      setLoading(true)
+      socket.emit('autoLogin',(userName)); 
+    }
+   
+  }, []);
+
+ 
 
   function handleCreateRoom(room) {
     const data = { room: room, userName: userName }
