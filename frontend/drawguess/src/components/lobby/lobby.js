@@ -106,7 +106,6 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
       setLoading(true)
       socket.emit('autoLogin', (userName));
     }
-
   }, []);
 
 
@@ -114,8 +113,6 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
   function handleCreateRoom(room) {
     const data = { room: room, userName: userName }
     socket.emit('create_room', data);
-
-
   }
 
 
