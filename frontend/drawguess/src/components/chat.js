@@ -26,6 +26,8 @@ export default function Chat({ socket,userName,room}) {
         }
     }
 
+   
+
     return (
         <div className="chat-box">
             <ChatWindow messagesList={room.messages} />

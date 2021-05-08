@@ -1,20 +1,27 @@
 import React, { useState } from 'react';
 import { useHistory } from "react-router-dom";
-import Typography from '@material-ui/core/Typography';
-import './register.css';
+import Alert from '@material-ui/lab/Alert';
+import './login.css';
 import '../App.css';
+
 
 export default function Login({socket,handleLogin}) {
   const [password, setPassword] = React.useState("")
   const [emailUserName, setEmail] = React.useState("")
   const [info, setInfo] = React.useState("")
+  const [wrongAlert, setWrongAlert] = React.useState(false)
+  const [failAlert, setFailAlert] = React.useState(false)
   var  history= useHistory();
 
 
   function handleLoginButton() {
     const data = { password: password, flag: emailUserName }
-    socket.emit('login', data)
-
+    if(password === ''|| emailUserName===''){
+      setInfo("Please Enter All Your Login Information!");
+    }
+    if(password !== '' && emailUserName!==''){
+      socket.emit('login', data)
+    }  
   }
 
   function handleNavToReg(){
@@ -23,9 +30,14 @@ export default function Login({socket,handleLogin}) {
   }
 
   React.useEffect(() => {
-    socket.on('loginFiled', (data) => {
-      setInfo(data)
-    })
+    socket.on("loginFailed", (data) => {
+      if(data==="UserNotExists"){
+        setInfo("User Not Exists!")
+      }
+      else if(data==="passwordInvalid"){
+        setInfo("Password Invalid!")
+      }
+    });
   }, []);
 
   React.useEffect(() => {
@@ -40,44 +52,39 @@ export default function Login({socket,handleLogin}) {
 
 
   return (
-    <div className="paper">
-      <Typography component="h1" variant="h5">
-        Login
-          </Typography>
-        <div className="card col-12 col-lg-4 login-card mt-2 hv-center">
+    <div className="card">
+      <div className="card--header ">
+        <p className='title'>Login</p>
+        {info===""?<a></a>: <Alert severity="error">{info}</Alert>}
+      </div>
+        <div className="card--body">
           <div>
-            <label htmlFor="exampleInputUsername1">Email/Username</label>
+         
+            <label>Email/Username</label>
             <input
-              variant="outlined"
-              required
-              fullWidth
               value={emailUserName}
+              type="text"
               onChange={e=>setEmail(e.target.value)}
             />
           </div>
           <div>
-            <label htmlFor="exampleInputEmail1">Password</label>
+            <label>Password</label>
             <input
-              variant="outlined"
-              required
-              fullWidth
               value={password}
+              type="password"
               onChange={e=>setPassword(e.target.value)}
             />
           </div>
         </div>
         <button
-          className="btn btn-primary"
+          type="submit" 
+          id="signup" 
+          class="btn_sign-up"
           onClick={handleLoginButton} >
           Login
             </button>
-        <button
-          onClick={handleNavToReg}
-          className="btn btn-primary"
-        >
-          Register
-        </button>
-   
+        <p className="link"><a onClick={handleNavToReg}>Register</a></p>
     </div>
   );
 }
+

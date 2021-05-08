@@ -5,6 +5,8 @@
   padding-left: 0.5em;
   padding-right: 0.5em;
   display: inline-block;
+  position : relative; 
+  bottom:0;
 }
 
 .chat-window {
