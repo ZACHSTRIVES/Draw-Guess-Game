@@ -102,7 +102,9 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
   }
 
   function handleLogout() {
-
+    history.push('/login');
+    history.go();
+    localStorage.clear();
   }
 
   return (
@@ -114,7 +116,7 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
           </div>
           <div className="account-bg">            
             <div className="account-name">Hello, {userName}</div> 
-            <div className="logout-btn" onClick={e => handleLogout}>Logout</div>           
+            <div className="logout-btn" onClick={e => handleLogout()}>Logout</div>           
           </div>
           <div className="nav-room">
             <div className="nav-all nav-btn" onClick={e => handleRoomSelection("All")}>
