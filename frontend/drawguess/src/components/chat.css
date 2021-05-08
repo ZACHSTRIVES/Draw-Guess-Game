@@ -1,0 +1,69 @@
+.messages {
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  padding-left: 0.5em;
+  padding-right: 0.5em;
+  display: inline-block;
+  position : relative; 
+  bottom:0;
+}
+
+.chat-window {
+  width: 100%;
+  height: 100%;
+}
+
+.chat-box {
+  width: 100%;
+  height: 70%;
+  display: inline-block;
+}
+
+.message {
+  display: flex;
+  align-items: flex-start;
+  flex-direction: column;
+}
+
+.message .text{
+  background: rgba(255, 255, 255, 0.5);
+  padding: 0 1.5em;
+  border-radius: 0 20px 20px 20px;
+  max-width: 100%;
+  /* wrap the words inside div */
+  word-wrap: break-word;
+  text-align: left;
+}
+
+.message .user{
+  font-size: x-small;
+}
+
+.info-in {
+  background: linear-gradient(to right,rgb(88, 158, 214) 0%, rgba(252, 252, 252, 0.9) 100%);
+  padding: 0 1.5em;
+  border-radius: 20px;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.info-out {
+  background: linear-gradient(to right,rgb(233, 148, 148) 0%, rgba(252, 252, 252, 0.9) 100%);
+  padding: 0 1.5em;
+  border-radius: 20px;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.answer {
+  background: linear-gradient(to right,rgb(97, 223, 170) 0%, rgba(252, 252, 252, 0.9) 100%);
+  padding: 0 1.5em;
+  border-radius: 20px;
+  width: 100%;
+  word-wrap: break-word;
+}
+
+.msg-margin {
+  margin-bottom: 0.2em;
+}
