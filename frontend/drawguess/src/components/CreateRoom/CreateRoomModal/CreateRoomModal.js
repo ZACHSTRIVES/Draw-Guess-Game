@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
+
 import { makeStyles } from '@material-ui/core/styles';
-import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -16,10 +16,20 @@ import Alert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import './CreateRoomModal.css';
 import { NavLink } from 'react-router-dom';
+import { Button } from '@material-ui/core';
+import createIcon from '../../../static/create.png';
+const useStyles = makeStyles((theme) => ({
+  root: {
+    width: 300,
+    background: 'rgba(255, 255, 255, 0.5)',
+  },
+  margin: {
+    height: theme.spacing(3),
+  },
+}));
 
-
-
-export default function CreateRoom({socket,handleCreateRoom}) {
+export default function CreateRoom({ socket, handleCreateRoom }) {
+  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -32,14 +42,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
     setAlertPass(false);
   };
 
-  const useStyles = makeStyles((theme) => ({
-    root: {
-      width: 300,
-    },
-    margin: {
-      height: theme.spacing(3),
-    },
-  }));
+
 
   const players_marks = [
     {
@@ -101,7 +104,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
       value: 5,
       label: '5',
     },
-    
+
   ];
   function valuetext(value) {
     return `${value}`;
@@ -113,6 +116,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
   const handleChange = (event) => {
     setType(event.target.value);
   };
+
   const [room_name,setRoomName]= React.useState('')
   const [password,setPassword]= React.useState('')
   const [max_players,setMaxPlayers] = React.useState(5)
@@ -120,12 +124,13 @@ export default function CreateRoom({socket,handleCreateRoom}) {
   const [alert, setAlert] = React.useState(false);
   const [alertPass, setAlertPass] = React.useState(false);
 
-  function handleMaxPlayersChange(value,newValue){
+  function handleMaxPlayersChange(value, newValue) {
     setMaxPlayers(newValue)
   }
-  function handleRoundsChange(value,newValue){
+  function handleRoundsChange(value, newValue) {
     setRounds(newValue)
   }
+
 
 
   function handleSubmit(){
@@ -164,14 +169,16 @@ export default function CreateRoom({socket,handleCreateRoom}) {
         }
       }
       
+
   }
 
 
   return (
-    <div>
-      <Button variant="outlined" color="primary" onClick={handleClickOpen}>
-        Create Room
-      </Button>
+    <div className="flex-center-all">
+      <div className="create-btn" onClick={handleClickOpen}>
+        <div className="create-btn-icon"><img src={createIcon} alt="create room"></img></div>
+        <div className="btn-bg">Create Room</div>
+      </div>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
         <DialogContent>
@@ -187,7 +194,6 @@ export default function CreateRoom({socket,handleCreateRoom}) {
             variant="filled"
             fullWidth
             onChange={e=>setRoomName(e.target.value)}
-
           />
           <Collapse in={alert}>
             <Alert severity="error">
@@ -244,11 +250,12 @@ export default function CreateRoom({socket,handleCreateRoom}) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
+
           
           <Button onClick={()=>handleSubmit()} color="primary">
             Create
           </Button>
-          
+
         </DialogActions>
       </Dialog>
     </div>

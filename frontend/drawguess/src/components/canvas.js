@@ -50,9 +50,7 @@ function Canvas({ roomInfo, userName, socket }) {
           socket.emit('draw', data)
           setDrawingMode("none")
         }
-
       }
-
     }
   }
   React.useEffect(() => {
@@ -289,7 +287,6 @@ function Canvas({ roomInfo, userName, socket }) {
                           max={20}
                           onChange={handleSliderChange}
                           onChangeCommitted={handleSliderChangeCommitted}
-
                         />
                       </div>
                     }
@@ -345,13 +342,8 @@ function Canvas({ roomInfo, userName, socket }) {
               onChange={deboundCanvasChange}
               hideInterface={true}
             />)
-
         }
-
-
       })()}
-
-
     </div>
   );
 }

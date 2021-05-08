@@ -12,6 +12,7 @@
     margin-bottom: 10px;
     overflow-y: auto;
   }
+  
   .box .inner {
     display: flex;
     flex-direction: row;

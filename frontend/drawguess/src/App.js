@@ -63,8 +63,10 @@ function App() {
 
               <div className="App">
                 <header className="App-header main-background">
+
                   <img src={logo} className="logo"></img>
                   <Lobby socket={socket} userName={userName} rooms={rooms} isLogin={isLogin} handleLogin={handleLogin}></Lobby>
+
                 </header>
               </div>
 

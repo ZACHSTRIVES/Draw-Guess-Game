@@ -1,5 +1,4 @@
 import React from 'react';
-import styles from './room.css';
 import { makeStyles } from '@material-ui/core/styles';
 import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
@@ -11,6 +10,8 @@ import DialogActions from '@material-ui/core/DialogActions';
 import DialogContent from '@material-ui/core/DialogContent';
 import DialogContentText from '@material-ui/core/DialogContentText';
 import DialogTitle from '@material-ui/core/DialogTitle';
+import './room.css';
+import doorClosed from '../../static/doorClosed.png';
 import Alert from '@material-ui/lab/Alert';
 
 
@@ -46,6 +47,7 @@ export default function PublicRoomCard({ room,joinRoom}) {
 
   const handleClose = () => {
     setOpen(false);
+
     setPasswordAlert(false);
   };
 
@@ -53,34 +55,27 @@ export default function PublicRoomCard({ room,joinRoom}) {
     if(password===room.password){
       setOpen(false);
       setPasswordAlert(false);
-      joinRoom(room.roomID);
-
-      
+      joinRoom(room.roomID);      
     }else{
       
       setPasswordAlert(true);
     }
 
-  };
-
 
   return (
     <li>
-      <Card className="{classes.root} margin_top_card" onClick={handleOpen}>
-        <CardContent>
-          <Typography className={classes.title} color="textSecondary" gutterBottom>
-            ID {room.roomID}
-          </Typography>
-          <Typography className={classes.name} variant="h5" component="h2">
-            {room.roomName}
-          </Typography>
-          <Typography className={classes.pos} color="textSecondary">
-            {/* <GroupIcon className={classes.icon}/> */}
-            <GroupIcon style={{ verticalAlign: 'middle' }} />
+      <div className="room-card flex" onClick={handleOpen}>
+        <div className="room-icon private-room-icon"><img src={doorClosed} alt="private room" /></div>
+        <div className="room-info flex-column">
+          <div className="room-title">{room.roomName}</div>
+          <div className="room-id">ID {room.roomID}</div>
+          <div className="room-players">
+            <GroupIcon className={classes.icon} />
             {room.currentPlayers}/{room.maxPlayers}
-          </Typography>
-        </CardContent>
-      </Card>
+          </div>
+        </div>
+      </div>
+    
       <Dialog
         open={open}
         onClose={handleClose}
