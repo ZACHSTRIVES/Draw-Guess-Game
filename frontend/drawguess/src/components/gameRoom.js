@@ -63,11 +63,7 @@ export default function GameRoom({ socket, userName, init_room }) {
 
     })
   }, []);
-
-
-
-
-
+  
   function handleLeaveRoom() {
     history.go()
     if (roomInfo.game.drawer === userName) {
@@ -76,13 +72,6 @@ export default function GameRoom({ socket, userName, init_room }) {
     socket.emit("leaveRoom", roomInfo)
 
   }
-
-
-
-
-  const dense = false;
-  const secondary = false;
-
 
   return (
     <div className="room-bg">

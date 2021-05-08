@@ -1,4 +1,3 @@
-// import Button from '@material-ui/core/Button';
 import goldMedal from "../static/gold medal.png";
 import silverMedal from "../static/silver medal.png";
 import bronzeMedal from "../static/bronze medal.png";
@@ -17,7 +16,6 @@ export default function LeaderBoardMask({ players }) {
 
   function getTopThreePlayers() {
     const topThree = sortedPlayers.slice(0, 3);
-
     return (
       <div className="top-three flex-column">
         {

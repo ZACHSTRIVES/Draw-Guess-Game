@@ -10,6 +10,7 @@ import Timer from './timer';
 import WordSelectionMask from './wordSelectionMask';
 import StartGameMask from './startGameMask';
 import LeaderBoardMask from './leaderBoardMask';
+import FinalLeaderBoardMask from './finalLeaderBoardMask';
 
 function debounce(fn, ms) {
   let timer
@@ -248,11 +249,11 @@ function Canvas({ roomInfo, userName, socket }) {
 
           }
           else {
-            return (<LeaderBoardMask players={roomInfo.scoreBoard}></LeaderBoardMask>);
+            return (<LeaderBoardMask players={roomInfo.scoreBoard} />);
           }
         }
         else {
-          //finish game
+          return (<FinalLeaderBoardMask players={roomInfo.scoreBoard} />)
         }
       })()}
       {(() => {
