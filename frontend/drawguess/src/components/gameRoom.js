@@ -3,8 +3,10 @@ import Canvas from './canvas';
 import Chat from './chat';
 import './gameRoom.css';
 import '../App.css';
+import './lobby/lobby.css';
 import HostIcon from '../static/house.png';
 import BrushIcon from '../static/brush.png';
+import ReturnIcon from '../static/return.png';
 import {
   Redirect, useLocation, useHistory, Link
 
@@ -69,12 +71,13 @@ export default function GameRoom({ socket, userName, init_room }) {
 
 
   function handleLeaveRoom() {
+    history.replace('/')
+    //a method that could link to the other page
     history.go()
     if (roomInfo.game.drawer === userName) {
       socket.emit("forceStopTimer")
     }
     socket.emit("leaveRoom", roomInfo)
-
   }
 
 
@@ -88,7 +91,14 @@ export default function GameRoom({ socket, userName, init_room }) {
     <div className="room-bg">
       <div className="room container">
         <div className="title rounded-rect border glass-rect margin-sm">
-          <button onClick={e => handleLeaveRoom()}><Link to="/">Return Lobby</Link></button>
+        
+          <div className="return-btn" onClick={e => handleLeaveRoom()}>
+          <div className="return-button" ><img src={ReturnIcon} alt="Return Lobby"/></div>
+            <div className="return-text"><span> Return</span></div>
+          </div>
+          
+  
+          
           <h5 className="title">{roomInfo.roomName}</h5>
         </div>
         <div className="canvas rounded-rect border glass-rect margin-sm">

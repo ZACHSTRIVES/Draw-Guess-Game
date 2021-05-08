@@ -44,6 +44,33 @@
   letter-spacing: 0;
 }
 
+.return-btn {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 0.2em;
+  border-radius: 15px;
+  float: left;
+  height: 80%;
+  margin: 5px;
+  font-size: large;
+  display: flex;
+  align-items: center;
+  transition: 0.2s;
+}
+
+.return-button {
+  height: 80%;
+}
+
+.return-text{
+  color: #000;
+  margin: 0 5px;
+  letter-spacing: 0.1em;
+}
+
+.return-button img {
+  height: 100%;
+}
+
 @media(orientation: portrait) {
   .container {
     display: grid;
@@ -78,6 +105,9 @@
     grid-column-end: 2;
     grid-row-start: 3;
     grid-row-end: 4;
+  }
+  .return-text{
+    display: none;
   }
 
 }
