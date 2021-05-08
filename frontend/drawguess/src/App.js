@@ -63,10 +63,7 @@ function App() {
 
               <div className="App">
                 <header className="App-header main-background">
-
-                  <img src={logo} className="logo"></img>
                   <Lobby socket={socket} userName={userName} rooms={rooms} isLogin={isLogin} handleLogin={handleLogin}></Lobby>
-
                 </header>
               </div>
 
@@ -77,7 +74,6 @@ function App() {
           <Route exact path='/register'>
             <div className="App">
               <header className="App-header main-background">
-                <img src={logo} className="logo"></img>
                 <Register socket={socket}></Register>
               </header>
             </div>
@@ -85,8 +81,7 @@ function App() {
 
           <Route exact path='/login'>
             <div className="App">
-              <header className="App-header main-background">
-                <img src={logo} className="logo"></img>
+              <header className="App-header main-background">    
                 <Login socket={socket} handleLogin={handleLogin} />
               </header>
             </div>

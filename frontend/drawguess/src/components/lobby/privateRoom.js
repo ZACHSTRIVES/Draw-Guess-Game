@@ -60,6 +60,7 @@ export default function PublicRoomCard({ room,joinRoom}) {
       
       setPasswordAlert(true);
     }
+  }
 
 
   return (
@@ -97,5 +98,7 @@ export default function PublicRoomCard({ room,joinRoom}) {
           </Button>
         </DialogActions>
       </Dialog>
-    </li>)
-}
+    </li>
+    )
+
+  }

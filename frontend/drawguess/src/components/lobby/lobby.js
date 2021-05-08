@@ -43,13 +43,24 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 
-export default function Lobby({ socket, userName, rooms ,isLogin}) {
+export default function Lobby({ socket, userName, rooms, isLogin }) {
+  const [roomType, setRoomType] = useState("All");
   const history = useHistory();
 
   const classes = useStyles();
 
-  const [stats, setStats] = React.useState({});
-  const [loading,setLoading]=React.useState(false);
+  const [stats, setStats] = React.useState({
+    rounds: 0,
+    firstRanks: 0,
+    secondRanks: 0,
+    thirdRanks: 0,
+    firstRate: 0,
+    secondRate: 0,
+    thirdRate: 0,
+    history: []
+  });
+
+  const [loading, setLoading] = React.useState(false);
 
   React.useEffect(() => {
     socket.on('joinRoomSuccess', (data) => {
@@ -58,7 +69,7 @@ export default function Lobby({ socket, userName, rooms ,isLogin}) {
 
     })
   }, []);
-  
+
   React.useEffect(() => {
     socket.on('setStats', (data) => {
       setStats(data);
@@ -80,25 +91,25 @@ export default function Lobby({ socket, userName, rooms ,isLogin}) {
     })
   }, []);
 
-  React.useEffect(()=>{
+  React.useEffect(() => {
     socket.on('autoLoginSuccess', () => {
       console.log("ss")
-    setLoading(false)
-    socket.emit('gameStats',(userName));
+      setLoading(false)
+      socket.emit('gameStats', (userName));
     })
   }, []);
 
   React.useEffect(() => {
-    if(isLogin){
+    if (isLogin) {
       socket.emit('gameStats', (userName));
-    }else{
+    } else {
       setLoading(true)
-      socket.emit('autoLogin',(userName)); 
+      socket.emit('autoLogin', (userName));
     }
-   
+
   }, []);
 
- 
+
 
   function handleCreateRoom(room) {
     const data = { room: room, userName: userName }
@@ -158,7 +169,7 @@ export default function Lobby({ socket, userName, rooms ,isLogin}) {
       </div>
       <div className="right glass-blur flex flex-column">
         <div className="stats-banner lobby-title text-title">Statistics</div>
-        <Statistics data="" />
+        <Statistics data={stats} />
       </div>
       {/* <img src={logo} className="logo"></img>
       <div className="online_info">Hello, {userName}</div>

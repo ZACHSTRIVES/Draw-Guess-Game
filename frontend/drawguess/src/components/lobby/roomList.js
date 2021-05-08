@@ -32,7 +32,7 @@ export default function Public({ rooms, joinRoom, show }) {
       {show !== "Public" &&
         <ul>
           {privateRooms.map((room) =>
-            <PrivateRoomCard room={room}></PrivateRoomCard>
+            <PrivateRoomCard room={room} joinRoom={joinRoom}></PrivateRoomCard>
           )}
         </ul>
       }

@@ -131,14 +131,13 @@ module.exports = {
                         var records = [];
                         const playersToSort = current_room.scoreBoard;
                         playersToSort.sort((a, b) => b.score - a.score);
-                        var time = dateTime.format(new Date(), 'YYYY-MM-DD HH:mm');
                         for (var i = 0; i < playersToSort.length; i++) {
                             records.push({
                                 userName: playersToSort[i].userName,
                                 rank: i + 1,
                                 players: current_room.currentPlayers,
                                 score: playersToSort[i].score,
-                                time: time
+                                time: new Date()
                             })
 
                         }

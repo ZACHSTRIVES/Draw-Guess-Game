@@ -1,5 +1,5 @@
 const md5 = require('md5')
-
+var dateTime = require('silly-datetime');
 module.exports = {
     userLogin: function (app, socket, all_room_info, initdata, all_users, database, onlineUsers) {
         function CheckIfTheUserIsLoggedIn(userName) {
@@ -122,7 +122,7 @@ module.exports = {
     getGameStats: function (socket, database) {
         socket.on('gameStats', function (userName) {
             const query = { userName: userName }
-            database.collection("records").find(query).toArray(function (err, result) {
+            database.collection("records").find(query).sort("time", -1).toArray(function (err, result) {
                 if (err) throw err;
                 var stats = {
                     rounds: result.length,
@@ -136,6 +136,7 @@ module.exports = {
                 };
 
                 for (i = 0; i < result.length; i++) {
+                    stats.history[i].time = dateTime.format(result[i].time, 'YYYY-MM-DD HH:mm');
                     if (result[i].rank === 1) {
                         stats.firstRanks = stats.firstRanks + 1;
                     } else if (result[i].rank === 2) {
@@ -144,10 +145,16 @@ module.exports = {
                         stats.thirdRanks = stats.thirdRanks + 1;
                     }
                 }
+                if (stats.firstRanks !== 0) {
+                    stats.firstRate = Math.ceil((stats.firstRanks / stats.rounds) * 100)
+                }
+                if (stats.secondRanks !== 0) {
+                    stats.secondRate = Math.ceil((stats.secondRanks / stats.rounds) * 100)
+                }
+                if (stats.thirdRanks !== 0) {
+                    stats.thirdRate = Math.ceil((stats.thirdRanks / stats.rounds) * 100)
+                }
 
-                stats.firstRate = Math.ceil((stats.firstRanks / stats.rounds) * 100)
-                stats.secondRate = Math.ceil((stats.secondRanks / stats.rounds) * 100)
-                stats.thirdRate = Math.ceil((stats.thirdRanks / stats.rounds) * 100)
                 socket.emit("setStats", stats);
 
             })

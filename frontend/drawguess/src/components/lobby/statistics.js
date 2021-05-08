@@ -12,8 +12,8 @@ export default function Statistics({ data }) {
           <div className="stats-first-desc-title text-subtitle">1st Rank</div>
           <div className="progress-bar">
             <CircularProgressbar
-              value={percentage}
-              text={`${percentage}%`}
+              value={data.firstRate}
+              text={`${data.firstRate}%`}
               styles={buildStyles({
                 rotation: 0,
                 strokeLinecap: 'round',
@@ -27,16 +27,16 @@ export default function Statistics({ data }) {
             />
           </div>
           <div className="stats-first-desc flex-center-all">
-            <div className="stats-rank-time text-subtitle"><span className="text-bold">23</span> times</div>
+            <div className="stats-rank-time text-subtitle"><span className="text-bold">{data.firstRanks}</span> times</div>
           </div>
         </div>
         <div className="stats-right flex flex-column">
           <div className="stats-rounds flex-column flex-center-all">
-            <div><span className="text-bold">{20}</span></div>
+            <div><span className="text-bold">{data.rounds}</span></div>
             <div className="chart-title">Rounds Played</div>
           </div>
-          <ChartCard title={"2nd Rank"} count={20} percentage={60} />
-          <ChartCard title={"3rd Rank"} count={1} percentage={60} />
+          <ChartCard title={"2nd Rank"} count={data.secondRanks} percentage={data.secondRate} />
+          <ChartCard title={"3rd Rank"} count={data.thirdRanks} percentage={data.thirdRate} />
           {/* <div className="stats-second stats-rank flex">
             <div className="stats-rank-title text-subtitle">
               <div className="stats-rank-title-desc flex">
@@ -86,76 +86,23 @@ export default function Statistics({ data }) {
         </div>
         <div className="record-list">
           {/* map */}
-          <div className="record-card flex">
-            <div className="record-rank flex flex-column record-col">
-              <div className="record-col-title">Rank</div>
-              <div className="record-col-value">1st / 10</div>
+          {data.history.map((history) =>
+            <div className="record-card flex">
+              <div className="record-rank flex flex-column record-col">
+                <div className="record-col-title">Rank</div>
+                <div className="record-col-value">{history.rank} / {history.players}</div>
+              </div>
+              <div className="record-time flex flex-column record-col">
+                <div className="record-col-title">Time</div>
+                <div className="record-col-value">{history.time}</div>
+              </div>
+              <div className="score flex flex-column record-col">
+                <div className="record-col-title">Score</div>
+                <div className="record-col-value">{history.score}</div>
+              </div>
             </div>
-            <div className="record-time flex flex-column record-col">
-              <div className="record-col-title">Time</div>
-              <div className="record-col-value">2021/05/07 02:00pm</div>
-            </div>
-            <div className="score flex flex-column record-col">
-              <div className="record-col-title">Score</div>
-              <div className="record-col-value">120</div>
-            </div>
-          </div>
-          <div className="record-card flex">
-            <div className="record-rank flex flex-column record-col">
-              <div className="record-col-title">Rank</div>
-              <div className="record-col-value">1st / 10</div>
-            </div>
-            <div className="record-time flex flex-column record-col">
-              <div className="record-col-title">Time</div>
-              <div className="record-col-value">2021/05/07 02:00pm</div>
-            </div>
-            <div className="score flex flex-column record-col">
-              <div className="record-col-title">Score</div>
-              <div className="record-col-value">120</div>
-            </div>
-          </div>
-          <div className="record-card flex">
-            <div className="record-rank flex flex-column record-col">
-              <div className="record-col-title">Rank</div>
-              <div className="record-col-value">1st / 10</div>
-            </div>
-            <div className="record-time flex flex-column record-col">
-              <div className="record-col-title">Time</div>
-              <div className="record-col-value">2021/05/07 02:00pm</div>
-            </div>
-            <div className="score flex flex-column record-col">
-              <div className="record-col-title">Score</div>
-              <div className="record-col-value">120</div>
-            </div>
-          </div>
-          <div className="record-card flex">
-            <div className="record-rank flex flex-column record-col">
-              <div className="record-col-title">Rank</div>
-              <div className="record-col-value">1st / 10</div>
-            </div>
-            <div className="record-time flex flex-column record-col">
-              <div className="record-col-title">Time</div>
-              <div className="record-col-value">2021/05/07 02:00pm</div>
-            </div>
-            <div className="score flex flex-column record-col">
-              <div className="record-col-title">Score</div>
-              <div className="record-col-value">120</div>
-            </div>
-          </div>
-          <div className="record-card flex">
-            <div className="record-rank flex flex-column record-col">
-              <div className="record-col-title">Rank</div>
-              <div className="record-col-value">1st / 10</div>
-            </div>
-            <div className="record-time flex flex-column record-col">
-              <div className="record-col-title">Time</div>
-              <div className="record-col-value">2021/05/07 02:00pm</div>
-            </div>
-            <div className="score flex flex-column record-col">
-              <div className="record-col-title">Score</div>
-              <div className="record-col-value">120</div>
-            </div>
-          </div>
+
+          )}
         </div>
       </div>
     </div>
