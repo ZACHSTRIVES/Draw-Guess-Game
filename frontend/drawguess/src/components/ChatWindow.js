@@ -2,6 +2,13 @@ import React, { useState } from "react";
 import "./chat.css";
 
 export default function ChatWindow({ messagesList }) {
+  const messagesEndRef = React.useRef(null);
+  const scrollToBottom = () => {
+    messagesEndRef.current.scrollIntoView({ behavior: "auto" });
+  };
+  React.useEffect(() => {
+    scrollToBottom();
+  }, [messagesList]);
 
   return (
     <div className="chat-window">
@@ -14,22 +21,19 @@ export default function ChatWindow({ messagesList }) {
                   {message.user} has enter the room
                 </p>
               );
-            } 
-            else if (message.type === "out") {
+            } else if (message.type === "out") {
               return (
                 <p key={index} className="info-out msg-margin">
                   {message.user} has left game
                 </p>
-              )
-            }
-            else if (message.type === "ans") {
+              );
+            } else if (message.type === "ans") {
               return (
                 <p key={index} className="answer msg-margin">
                   {message.user} got right answer!
                 </p>
-              )
-            }
-            else {
+              );
+            } else {
               return (
                 <p key={index} className="message msg-margin">
                   <div className="user">{message.user}</div>
@@ -38,7 +42,9 @@ export default function ChatWindow({ messagesList }) {
               );
             }
           })}
+           <div ref={messagesEndRef}></div>
       </div>
+     
     </div>
   );
 }
