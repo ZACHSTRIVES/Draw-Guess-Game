@@ -14,7 +14,6 @@ import {
   Redirect, useHistory
 } from "react-router-dom";
 import './lobby.css';
-import Statistics from './statistics';
 
 
 import './lobby.css';
