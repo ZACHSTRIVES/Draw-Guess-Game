@@ -10,11 +10,10 @@
   width: 120px;
   height: 100px;
   background: rgba(255, 255, 255, 0.9);
-  /* background: pink; */
 }
 
 .chart-bar-section {
-  width: 80%;
+  width: 60%;
   margin-top: 15px;
 }
 

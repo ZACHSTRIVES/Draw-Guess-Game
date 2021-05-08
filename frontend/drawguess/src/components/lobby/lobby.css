@@ -143,13 +143,10 @@
   height: 100%;
 }
 
-/* .lobby-title {
-  font-size: x-large;
+.chart-rank-bar span {
+  transform: translateX(50%);
 }
 
-.lobby-subtitle {
-  font-size: large;
-} */
 @media (max-width: 1200px) {
   .left {
     flex-direction: column;

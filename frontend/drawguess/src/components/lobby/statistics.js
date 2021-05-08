@@ -35,7 +35,7 @@ export default function Statistics({ data }) {
             <div><span className="text-bold">{data.rounds}</span></div>
             <div className="chart-title">Rounds Played</div>
           </div>
-          <ChartCard title={"2nd Rank"} count={data.secondRanks} percentage={data.secondRate} />
+          <ChartCard title={"2nd Rank"} count={data.secondRanks} percentage={100} />
           <ChartCard title={"3rd Rank"} count={data.thirdRanks} percentage={data.thirdRate} />
           {/* <div className="stats-second stats-rank flex">
             <div className="stats-rank-title text-subtitle">
