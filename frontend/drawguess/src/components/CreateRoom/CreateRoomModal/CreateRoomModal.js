@@ -16,7 +16,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import './CreateRoomModal.css';
 import { NavLink } from 'react-router-dom';
 import { Button } from '@material-ui/core';
-
+import createIcon from '../../../static/create.png';
 const useStyles = makeStyles((theme) => ({
   root: {
     width: 300,
@@ -27,7 +27,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-export default function CreateRoom({socket,handleCreateRoom}) {
+export default function CreateRoom({ socket, handleCreateRoom }) {
   const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
@@ -39,7 +39,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
     setOpen(false);
   };
 
-  
+
 
   const players_marks = [
     {
@@ -101,7 +101,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
       value: 5,
       label: '5',
     },
-    
+
   ];
   function valuetext(value) {
     return `${value}`;
@@ -113,38 +113,39 @@ export default function CreateRoom({socket,handleCreateRoom}) {
   const handleChange = (event) => {
     setType(event.target.value);
   };
-  const [room_name,setRoomName]= React.useState('')
-  const [password,setPassword]= React.useState('')
-  const [max_players,setMaxPlayers] = React.useState(5)
-  const [rounds,setRounds] = React.useState(3)
+  const [room_name, setRoomName] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [max_players, setMaxPlayers] = React.useState(5)
+  const [rounds, setRounds] = React.useState(3)
 
-  function handleMaxPlayersChange(value,newValue){
+  function handleMaxPlayersChange(value, newValue) {
     setMaxPlayers(newValue)
   }
-  function handleRoundsChange(value,newValue){
+  function handleRoundsChange(value, newValue) {
     setRounds(newValue)
   }
 
 
-  function handleSubmit(){
-    const room={
-      "roomName":room_name,
-      "roomType":type,
-      "passowrd":password,
-      "maxPlayers":max_players,
-      "rounds":rounds}
+  function handleSubmit() {
+    const room = {
+      "roomName": room_name,
+      "roomType": type,
+      "passowrd": password,
+      "maxPlayers": max_players,
+      "rounds": rounds
+    }
     handleCreateRoom(room)
 
-    
+
   }
 
 
   return (
     <div className="flex-center-all">
-      <div className="create-btn" onClick={handleClickOpen}><div className="btn-bg">Create Room</div></div>
-      {/* <Button className={classes.root} variant="outlined" color="primary" onClick={handleClickOpen}>
-        Create Room
-      </Button> */}
+      <div className="create-btn" onClick={handleClickOpen}>
+        <div className="create-btn-icon"><img src={createIcon} alt="create room"></img></div>
+        <div className="btn-bg">Create Room</div>
+      </div>
       <Dialog open={open} onClose={handleClose} aria-labelledby="form-dialog-title">
         <DialogTitle id="form-dialog-title">Create Room</DialogTitle>
         <DialogContent>
@@ -159,7 +160,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
             type="string"
             variant="filled"
             fullWidth
-            onChange={e=>setRoomName(e.target.value)}
+            onChange={e => setRoomName(e.target.value)}
           />
 
           <FormLabel component="legend" className="margin_top" >Room Type</FormLabel>
@@ -168,7 +169,7 @@ export default function CreateRoom({socket,handleCreateRoom}) {
             <FormControlLabel value="Private" control={<Radio />} label="Private" />
           </RadioGroup>
 
-          {type==='Private'?<TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e=>setPassword(e.target.value)}/>:<a></a>}
+          {type === 'Private' ? <TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e => setPassword(e.target.value)} /> : <a></a>}
 
           <FormLabel component="legend" className="margin_top" >Max Players</FormLabel>
           <Slider
@@ -204,11 +205,11 @@ export default function CreateRoom({socket,handleCreateRoom}) {
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-          
+
           <Button onClick={handleSubmit} color="primary">
             Create
           </Button>
-          
+
         </DialogActions>
       </Dialog>
     </div>

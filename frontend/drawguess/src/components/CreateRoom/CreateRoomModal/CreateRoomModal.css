@@ -6,35 +6,34 @@
 }
 
 .create-btn {
-  background: transparent;
-  position: relative;
-  width: 15em;
-  height: 2.5em;
-  margin: 20px;
+  background: rgba(255, 255, 255, 0.7);
+  width: 50%;
+  min-height: 3em;
   font-size: large;
-}
-
-.btn-bg {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.05);
-  box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+  margin: 1em;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 20px;
+  transition: 0.2s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
   border-top: 1px solid rgba(255, 255, 255, 0.8);
   border-bottom: 1px solid rgba(255, 255, 255, 0.8);
-  border-radius: 20px;
-  z-index: 1;
-  overflow: hidden;
-  transition: 0.3s;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  backdrop-filter: blur(20px);
 }
 
-.create-btn:hover .btn-bg {
-  letter-spacing: 2px;
+.create-btn-icon {
+  width: 2.5em;
+  height: 2.5em;
+  padding: 0.5em;
+  border-radius: 10px;
+}
+
+.create-btn-icon > img {
+  width: 100%;
+  height: 100%;
+}
+
+.create-btn:hover {
+  transform: scale(1.1);
+  background: rgba(200, 200, 200, 0.3);
 }

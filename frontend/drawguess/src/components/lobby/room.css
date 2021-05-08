@@ -1,35 +1,35 @@
 .topColumn {
-    width: 46%;
-    display: inline-block;
+  width: 46%;
+  display: inline-block;
   border-radius: 8px;
-  border: 2px solid #18786C;
+  border: 2px solid #18786c;
   padding: 5px;
 }
 
 .subColumn {
   border-radius: 8px;
-  border: 2px solid #18786C;
+  border: 2px solid #18786c;
   padding: 5px;
   border-top: none;
 }
-.margin_top_card{
+.margin_top_card {
   margin-top: 10px;
 }
 
-.room_title{
+.room_title {
   color: white;
   font-weight: 200;
 }
 
-.online_info{
+.online_info {
   font-weight: 200;
-  color:200;
+  color: 200;
   margin-bottom: 20px;
 }
 
 .room-card {
   width: 100%;
-  height: 5em;
+  min-height: 5em;
   align-items: center;
   background-color: rgba(255, 255, 255, 0.8);
   border-radius: 20px;
@@ -38,11 +38,19 @@
   padding-right: 0.5em;
 }
 
+.room-card:hover {
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  background: rgba(200, 200, 200, 0.3);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+}
+
 .room-icon {
-  width: 4em;
-  height: 4em;
-  border-radius: 24px;
-  margin-right: 1em;
+  width: 50px;
+  height: 50px;
+  border-radius: 16px;
+  margin-right: 20px;
+  margin-left: 20px;
 }
 
 .room-icon > img {
@@ -51,19 +59,26 @@
 }
 
 .public-room-icon {
-  background: linear-gradient(180deg, rgb(255,140,168) 0%, rgb(255,206,218) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(255, 140, 168) 0%,
+    rgb(255, 206, 218) 100%
+  );
 }
 
 .private-room-icon {
-  background: linear-gradient(45deg, rgb(255,230,143) 0%, rgb(255,242,197) 100%);
+  background: linear-gradient(
+    180deg,
+    rgb(255, 230, 143) 0%,
+    rgb(255, 242, 197) 100%
+  );
 }
 
 .room-title {
-  text-align: left;  
+  text-align: left;
 }
 
 .room-id {
-  font-size: medium;
   text-align: left;
   color: rgb(150, 150, 150);
 }

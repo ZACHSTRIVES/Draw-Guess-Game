@@ -1,7 +1,35 @@
+@import url("https://fonts.googleapis.com/css?family=Quicksand:300,500");
+@import url("https://fonts.googleapis.com/css?family=Abril+Fatface|Roboto:300,700");
+@import url("https://fonts.googleapis.com/css?family=Montserrat:900|Work+Sans:300");
+@import url("https://fonts.googleapis.com/css?family=Lato:300,700|Prata");
+@import url("https://fonts.googleapis.com/css?family=Chivo:300,700|Playfair+Display:700i");
+@import url('https://fonts.googleapis.com/css?family=Rajdhani:600&display=swap');
+
 * {
   box-sizing: border-box;
   margin: 0;
   padding: 0;
+  font-family: "Work Sans", sans-serif;
+  font-weight: 300;
+  font-size: medium;
+}
+
+.text-title {
+  font-family: "Rajdhani", sans-serif;
+  text-transform: uppercase;
+  font-size: x-large;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+}
+
+.text-subtitle {
+  font-size: large;
+  font-weight: 500;
+}
+
+.text-bold {
+  font-size: x-large;
+  font-weight: 900;
 }
 
 .App-logo {
@@ -9,15 +37,19 @@
   pointer-events: none;
 }
 
-
 @media (prefers-reduced-motion: no-preference) {
   .App-logo {
     animation: App-logo-spin infinite 20s linear;
   }
 }
 
-.main-background {  
-  background: linear-gradient(to right, rgba(147,214,242,1) 0%, rgba(235,177,228,1) 64%, rgba(255,162,175,0.9) 100%);  
+.main-background {
+  background: linear-gradient(
+    to right,
+    rgba(147, 214, 242, 1) 0%,
+    rgba(235, 177, 228, 1) 64%,
+    rgba(255, 162, 175, 0.9) 100%
+  );
 }
 
 .App-header {
@@ -30,7 +62,6 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-size: calc(10px + 2vmin);
   color: white;
 }
 
@@ -41,8 +72,17 @@ body,
   height: 100%;
 }
 
-ul {   
-  list-style-type: none;   
-  margin: 0;   
-  padding: 0;   
-}   
+html {
+  scroll-behavior: smooth;
+}
+
+ul {
+  list-style-type: none;
+  margin: 0;
+  padding: 0;
+}
+
+::-webkit-scrollbar {
+  width: 0px;
+  background: transparent;
+}

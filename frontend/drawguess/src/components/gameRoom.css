@@ -32,7 +32,6 @@
 .margin-sm {
   margin: 0.5em;
 }
-@import url('https://fonts.googleapis.com/css?family=Rajdhani:300&display=swap');
 
 .round {
   overflow-y: auto;
@@ -40,7 +39,7 @@
 
 .title {
   font-family: 'Rajdhani', sans-serif;
-  font-weight: 800;
+  font-weight: 600;
   color: white;
   letter-spacing: 0.3em;
 }

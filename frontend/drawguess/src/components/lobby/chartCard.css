@@ -1,0 +1,35 @@
+.chart-card {
+  width: 120px;
+  height: 150px;
+  background: rgba(255, 255, 255, 0.3);
+  /* background: greenyellow; */
+  align-items: center;
+}
+
+.chart-top {
+  width: 120px;
+  height: 100px;
+  background: rgba(255, 255, 255, 0.9);
+  /* background: pink; */
+}
+
+.chart-bar-section {
+  width: 80%;
+  margin-top: 15px;
+}
+
+.chart-bar {
+  width: 100%;
+}
+
+.chart-border {
+  border-radius: 20px;
+}
+
+.chart-card-title {
+  color: rgb(150, 150, 150);
+}
+
+.chart-title {
+  color: rgb(150, 150, 150);
+}
