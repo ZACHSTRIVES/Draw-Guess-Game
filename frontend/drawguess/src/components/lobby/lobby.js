@@ -4,8 +4,8 @@ import Paper from '@material-ui/core/Paper';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
 import RoomList from './roomList';
-import axios from 'axios'
 import CreateRoom from '../CreateRoom/CreateRoomModal/CreateRoomModal';
+import Statistics from './statistics';
 import logo from '../../static/drawguesslogo.png';
 import publicRoom from '../../static/publicRoom.png';
 import privateRoom from '../../static/privateRoom.png';
@@ -17,6 +17,8 @@ import './lobby.css';
 import Statistics from './statistics';
 
 
+import './lobby.css';
+
 const config = {
   headers: {
     "Access-Control-Allow-Origin": "*",
@@ -24,28 +26,9 @@ const config = {
   }
 };
 
-const useStyles = makeStyles((theme) => ({
-  root: {
-    padding: '2px 4px',
-    display: 'flex',
-    alignItems: 'center',
-    background: 'rgba(255, 255, 255, 0.8)',
-    borderRadius: '24px',
-  },
-  iconButton: {
-    padding: 10,
-  },
-
-
-}));
-
-
 export default function Lobby({ socket, userName, rooms, isLogin }) {
   const [roomType, setRoomType] = useState("All");
   const history = useHistory();
-
-  const classes = useStyles();
-
   const [stats, setStats] = React.useState({
     rounds: 0,
     firstRanks: 0,
@@ -103,7 +86,6 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
       setLoading(true)
       socket.emit('autoLogin', (userName));
     }
-
   }, []);
 
 
@@ -111,8 +93,6 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
   function handleCreateRoom(room) {
     const data = { room: room, userName: userName }
     socket.emit('create_room', data);
-
-
   }
 
 
@@ -121,17 +101,20 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
     socket.emit('joinRoom', temp)
   }
 
+  function handleLogout() {
+
+  }
+
   return (
     <div className="lobby flex">
       <div className="left flex">
         <div className="left-top glass-blur flex flex-column">
           <div className="logo-bg lobby-title">
-            {/* Draw and Guess */}
-            {/* <img src={logo} alt="logo"></img> */}
             <img src={logo} alt="logo"></img>
           </div>
-          <div className="account-bg flex-center-all">
-            Hello, {userName}
+          <div className="account-bg">            
+            <div className="account-name">Hello, {userName}</div> 
+            <div className="logout-btn" onClick={e => handleLogout}>Logout</div>           
           </div>
           <div className="nav-room">
             <div className="nav-all nav-btn" onClick={e => handleRoomSelection("All")}>
@@ -151,14 +134,6 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
         <div className="left-btm glass-blur flex flex-column">
           <div className="room-banner flex">
             <div className="room-type lobby-title text-title">{roomType} Rooms</div>
-            <div className="search-room">
-              <Paper component="form" className={classes.root}>
-                <input className="search-input" placeholder="Room number"></input>
-                <IconButton type="submit" className={classes.iconButton} aria-label="search">
-                  <SearchIcon />
-                </IconButton>
-              </Paper>
-            </div>
           </div>
           <CreateRoom socket={socket} handleCreateRoom={handleCreateRoom}></CreateRoom>
           <RoomList rooms={rooms} joinRoom={handleJoinRoom} show={roomType}></RoomList>
@@ -168,16 +143,6 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
         <div className="stats-banner lobby-title text-title">Statistics</div>
         <Statistics data={stats} />
       </div>
-      {/* <img src={logo} className="logo"></img>
-      <div className="online_info">Hello, {userName}</div>
-
-      
-      <br />
-      <CreateRoom socket={socket} handleCreateRoom={handleCreateRoom}></CreateRoom>
-      <br />
-      <div>
-        <RoomList rooms={rooms} joinRoom={handleJoinRoom} show={"public"}></RoomList>
-      </div> */}
     </div>
   );
 }

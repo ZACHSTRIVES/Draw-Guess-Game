@@ -1,6 +1,7 @@
 import React from 'react';
 import Game from './gameRoom';
 import '../App.css';
+import PromptPage from './PromptPage/PromptPage';
 import {
   Redirect, useLocation, useParams
 
@@ -15,7 +16,7 @@ export default function GameExcessive({ socket, userName }) {
   const [roomNull, setRoomNull] = React.useState(false);
 
   React.useEffect(() => {
-    const data={roomID:id,userName:userName};
+    const data = { roomID: id, userName: userName };
     socket.emit("getRoomInfo", data);
   }, []);
 
@@ -30,10 +31,10 @@ export default function GameExcessive({ socket, userName }) {
 
   React.useEffect(() => {
     socket.on('setRoomInfo', (data) => {
-      if(data){
+      if (data) {
         setRoomInfo(data);
         setLoading(false);
-      }else{
+      } else {
         setRoomNull(true);
         setLoading(false)
 
@@ -51,15 +52,28 @@ export default function GameExcessive({ socket, userName }) {
           return <Redirect to="/login" />
         } else if (loading) {
           return (<div className="App main-background">
-            loading...
+            <PromptPage></PromptPage>
           </div>)
         } else if (roomNull) {
-          return (<div> 房间不存在...</div>)
+          return (
+            <div className="App">
+              <header className="App-header main-background">
+                <PromptPage info={"Room does not exist!"}></PromptPage>
+              </header>
+            </div>
+          )
         } else if (roomFull) {
-          return (<div>房间已满。。。 </div>)
+          return (
+            <div className="App">
+              <header className="App-header main-background">
+                <PromptPage info={"The room is full!"}></PromptPage>
+              </header>
+            </div>
+
+          )
         } else {
-          return(
-          <Game socket={socket} userName={userName} init_room={roomInfo}></Game>)
+          return (
+            <Game socket={socket} userName={userName} init_room={roomInfo}></Game>)
         }
 
       })()}

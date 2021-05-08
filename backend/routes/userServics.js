@@ -53,7 +53,7 @@ module.exports = {
                             socket.emit("loginFailed", "alreadyOnline")
 
                         } else {
-                            onlineUsers.push(res[0].userName)
+                            onlineUsers.push(result[0].userName)
                             socket.emit("loginResponse", "loginSuccess")
                             all_users.push({
                                 userName: result[0].userName,
