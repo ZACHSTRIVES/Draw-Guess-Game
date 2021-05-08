@@ -31,9 +31,9 @@ export default function Statistics({ data }) {
           </div>
           <div className="stats-highest-score flex-column flex-center-all">            
             <div className="chart-title">Highest Score</div>
-            <div><span className="text-bold">//highest score</span></div>            
+            <div><span className="text-bold">{data.highestScore}</span></div>            
             <div className="chart-title">Time</div>
-            <div><span className="record-col-value">//time</span></div>
+            <div><span className="record-col-value">{data.highestScoreDate}</span></div>
           </div>
         </div>
         <div className="stats-right flex flex-column">

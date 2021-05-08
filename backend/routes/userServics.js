@@ -1,5 +1,14 @@
 const md5 = require('md5')
 var dateTime = require('silly-datetime');
+
+function compare(param){ 
+    return function(m,n){
+        var a = m[param];
+        var b = n[param];
+        return b - a; 
+    }
+}
+
 module.exports = {
     userLogin: function (app, socket, all_room_info, initdata, all_users, database, onlineUsers) {
         function CheckIfTheUserIsLoggedIn(userName) {
@@ -132,11 +141,15 @@ module.exports = {
                     firstRate: 0,
                     secondRate: 0,
                     thirdRate: 0,
-                    history: result
+                    history: result,
+                    highestScore:"N/A",
+                    highestScoreDate:"N/A"
                 };
+                var scores=[0];
 
                 for (i = 0; i < result.length; i++) {
                     stats.history[i].time = dateTime.format(result[i].time, 'YYYY-MM-DD HH:mm');
+                    scores.push(stats.history[i].score)
                     if (result[i].rank === 1) {
                         stats.firstRanks = stats.firstRanks + 1;
                     } else if (result[i].rank === 2) {
@@ -146,15 +159,24 @@ module.exports = {
                     }
                 }
                 if (stats.firstRanks !== 0) {
-                    stats.firstRate = Math.ceil((stats.firstRanks / stats.rounds) * 100)
+                    stats.firstRate = Math.ceil((stats.firstRanks / stats.rounds) * 100);
                 }
                 if (stats.secondRanks !== 0) {
-                    stats.secondRate = Math.ceil((stats.secondRanks / stats.rounds) * 100)
+                    stats.secondRate = Math.ceil((stats.secondRanks / stats.rounds) * 100);
                 }
                 if (stats.thirdRanks !== 0) {
-                    stats.thirdRate = Math.ceil((stats.thirdRanks / stats.rounds) * 100)
+                    stats.thirdRate = Math.ceil((stats.thirdRanks / stats.rounds) * 100);
+                }
+                
+                if(result.length!==0){
+                    stats.history.sort(compare("score"));
+                    stats.highestScore=stats.history[0].score;
+                    stats.highestScoreDate=stats.history[0].time;
+
                 }
 
+                
+                
                 socket.emit("setStats", stats);
 
             })
