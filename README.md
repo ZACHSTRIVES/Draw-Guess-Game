@@ -28,6 +28,8 @@ npm run dev
 ```
 The Draw Guess game will run in your default browser, the local address is: http://localhost:3000
 
+Users register an account and start the game after logging in. The same account cannot log in twice. Users can log in to two accounts in one browser, but the browser will only recognize the last logged in account.If users want to test the playability of this game, you need to register two accounts and log in to the game with two different browsers.
+
 ## Website function
 
 The main purpose of the Draw Guess project is to provide a party game where players can draw and communicate with friends or other players. The function of the project is divided into 5 main parts: lobby, room, canvas, chat room, and ranking.
@@ -39,7 +41,9 @@ To log in to the game for the first time, users first need to register simple pe
 #### User lobby
 The user lobby after a successful login is mainly divided into three parts, the query room channel, the All Rooms list, and the player's personal information list.
 In the middle of the user lobby, room query, room creation, and room list functions are displayed. Players can create announcement rooms and private rooms through the room creation function. Other players can enter the room through the room list in the game lobby. Private rooms can be connected through sharing. Enter the room. Players can join the game through multiple channels according to their needs.
+
 The left part of the page is the user name and query channels for different types of rooms.
+
 The right side of the page is the player's personal information. The Statistics section shows the player's personal record statistics, respectively showing the number of times the player won the first, second, and third place. The Records section shows the rooms that the player has entered, showing the player's rank, time, and score.
 
 ### Room
@@ -78,7 +82,7 @@ GitHub helped our team collaborate well. We create a project on GitHub and invit
 ### Team communication
 Our team consists of four members. At the beginning of the project, we established a social group on social software to communicate the progress of the project in a timely manner. In addition, a weekly face-to-face meeting is scheduled to be held every Wednesday at 4 pm.
 
-Two weeks after the initial plan was implemented, we found that network communication and limited face-to-face communication did not help us follow up the project in time. It is difficult to accomplish project goals in a limited time. So we changed our plan to meet at school every day and write code together. The face-to-face communication greatly improved our work efficiency and enabled the project to be successfully completed within a limited time. We have a dedicated person responsible for recording the daily work progress, which is recorded in Google Docs. Detailed meeting minutes can be obtained from ["Meeting Records"]().
+In the middle of the project, we found that network communication and limited face-to-face communication did not help us follow up the project in time. It is difficult to accomplish project goals in a limited time. So we changed our plan to meet at school every day and write code together. The face-to-face communication greatly improved our work efficiency and enabled the project to be successfully completed within a limited time. We have a dedicated person responsible for recording the daily work progress, which is recorded in Google Docs. Detailed meeting minutes can be obtained from ["Meeting Records"](https://docs.google.com/document/d/1vE3WjJcJxce5TtOyfvuP1DwZO3qvm0mo_t8JQNdIz7c/edit).
 
 
 
