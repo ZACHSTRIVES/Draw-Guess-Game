@@ -87,10 +87,23 @@
   .link{
     color: white;
     font-size: medium;
+    padding-top: 15px;
   }
 
   .link:hover {
     color: rgb(100, 98, 98);
     text-decoration: underline;
+  }
+  
+
+  .logo-bg {
+    width: 100%;
+    border-radius: 50%;
+    padding-top: 0.4em;
+    color: rgb(92,205,242);
+  }
+  
+  .logo-bg > img {
+    width: 60%;
   }
   

@@ -1,10 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { makeStyles, styled } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
-import InputBase from '@material-ui/core/InputBase';
 import IconButton from '@material-ui/core/IconButton';
 import SearchIcon from '@material-ui/icons/Search';
-import Button from '@material-ui/core/Button';
 import RoomList from './roomList';
 import axios from 'axios'
 import CreateRoom from '../CreateRoom/CreateRoomModal/CreateRoomModal';
@@ -16,7 +14,6 @@ import {
   Redirect, useHistory
 } from "react-router-dom";
 import './lobby.css';
-import { ContactSupportOutlined, SportsRugbySharp } from '@material-ui/icons';
 import Statistics from './statistics';
 
 
