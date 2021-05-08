@@ -3,6 +3,7 @@ import { useHistory } from "react-router-dom";
 import Alert from '@material-ui/lab/Alert';
 import './login.css';
 import '../App.css';
+import logo from '../static/drawguesslogo.png';
 
 
 export default function Login({socket,handleLogin}) {
@@ -56,6 +57,9 @@ export default function Login({socket,handleLogin}) {
   return (
     <div className="card">
       <div className="card--header ">
+        <div className="logo-bg lobby-title">
+            <img src={logo} alt="logo"></img>
+          </div>
         <p className='title'>Login</p>
         {info===""?<a></a>: <Alert severity="error">{info}</Alert>}
       </div>

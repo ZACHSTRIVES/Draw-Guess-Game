@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./login.css";
 import Alert from "@material-ui/lab/Alert";
+import logo from '../static/drawguesslogo.png';
 
 export default function Register({ socket }) {
   const [userName, setUsername] = React.useState("");
@@ -50,6 +51,9 @@ export default function Register({ socket }) {
   return (
     <div className="card">
       <div className="card--header ">
+      <div className="logo-bg lobby-title">
+            <img src={logo} alt="logo"></img>
+          </div>
         <p className="title">Sign up</p>
         {info===""?<a></a>: <Alert severity="error">{info}</Alert>}
       </div>

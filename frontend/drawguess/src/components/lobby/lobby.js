@@ -1,15 +1,21 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
+import { makeStyles, styled } from '@material-ui/core/styles';
+import Paper from '@material-ui/core/Paper';
+import IconButton from '@material-ui/core/IconButton';
+import SearchIcon from '@material-ui/icons/Search';
 import RoomList from './roomList';
 import CreateRoom from '../CreateRoom/CreateRoomModal/CreateRoomModal';
 import Statistics from './statistics';
-import {
-  useHistory
-} from "react-router-dom";
-
 import logo from '../../static/drawguesslogo.png';
 import publicRoom from '../../static/publicRoom.png';
 import privateRoom from '../../static/privateRoom.png';
 import allRoom from '../../static/allRoom.png';
+import {
+  Redirect, useHistory
+} from "react-router-dom";
+import './lobby.css';
+import Statistics from './statistics';
+
 
 import './lobby.css';
 
