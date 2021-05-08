@@ -87,22 +87,11 @@
   width: 100%;
   align-items: center;
   justify-content: space-between;
-  margin-top: 2.5em;
+  margin-top: 30px;
 }
 
 .room-type {
   flex: 3;
-}
-
-.search-room {
-  flex: 3;
-  height: 3em;
-  display: flex;
-  align-items: center;
-}
-
-.search-input {
-  border: none !important;
 }
 
 .nav-room {
@@ -144,6 +133,10 @@
 
 .chart-rank-bar span {
   transform: translateX(50%);
+}
+
+.stats-banner {
+  margin-top: 30px;
 }
 
 @media (max-width: 1200px) {

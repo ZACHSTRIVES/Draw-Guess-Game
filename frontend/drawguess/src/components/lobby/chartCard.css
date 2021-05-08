@@ -1,5 +1,5 @@
 .chart-card {
-  width: 120px;
+  width: 150px;
   height: 150px;
   background: rgba(255, 255, 255, 0.3);
   /* background: greenyellow; */
@@ -7,7 +7,7 @@
 }
 
 .chart-top {
-  width: 120px;
+  width: 150px;
   height: 100px;
   background: rgba(255, 255, 255, 0.9);
 }
