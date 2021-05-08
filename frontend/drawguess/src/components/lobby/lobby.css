@@ -3,7 +3,6 @@
   height: 100vh;
   padding: 0 40px;
   overflow-y: visible;
-
   --lobby-height: 90%;
   color: black;
   align-items: center;
@@ -42,24 +41,46 @@
   padding: 20px;
 }
 
-.logo-bg {
-  width: 100%;
-  border-radius: 50%;
-  padding-top: 0.4em;
-  color: rgb(92,205,242);
-}
-
 .logo-bg > img {
   width: 100%;
 }
 
 .account-bg {
-  width: 15em;
+  width: 100%;
   height: 3em;
-  font-size: large;
-  background: rgb(193,238,254);
+  font-size: large;  
   color: black;
   border-radius: 20px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.account-name {
+  padding: 0 2em;
+  height: 100%;
+  background: rgb(193,238,254);
+  display: flex;
+  align-items: center;
+  margin-right: 20px;
+  border-radius: 20px;
+}
+
+.logout-btn {
+  padding: 0 1em;
+  height: 2em;
+  background: rgba(255, 255, 255, 0.7);
+  border-radius: 20px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-top: 1px solid rgba(255, 255, 255, 0.8);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.8);
+  display: flex;
+  align-items: center;
+}
+
+.logout-btn:hover {
+  transform: scale(1.1);
+  background: rgba(200, 200, 200, 0.3);
 }
 
 .room-banner {

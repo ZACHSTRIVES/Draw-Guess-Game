@@ -121,6 +121,10 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
     socket.emit('joinRoom', temp)
   }
 
+  function handleLogout() {
+
+  }
+
   return (
     <div className="lobby flex">
       <div className="left flex">
@@ -130,8 +134,9 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
             {/* <img src={logo} alt="logo"></img> */}
             <img src={logo} alt="logo"></img>
           </div>
-          <div className="account-bg flex-center-all">
-            Hello, {userName}
+          <div className="account-bg">            
+            <div className="account-name">Hello, {userName}</div> 
+            <div className="logout-btn" onClick={e => handleLogout}>Logout</div>           
           </div>
           <div className="nav-room">
             <div className="nav-all nav-btn" onClick={e => handleRoomSelection("All")}>
