@@ -10,6 +10,8 @@ export default function ChatWindow({ messagesList }) {
     scrollToBottom();
   }, [messagesList]);
 
+//the functions above will keep all new msg in the bottom
+
   return (
     <div className="chat-window">
       <div className="messages">
