@@ -19,6 +19,7 @@ const port = 8000;
 
 var all_room_info = []
 var all_users = []
+var onlineUsers = [];
 
 MongoClient.connect(db.url, { useUnifiedTopology: true, useNewUrlParser: true }, (err, database) => {
   if (err) return console.log(err)
@@ -36,7 +37,7 @@ MongoClient.connect(db.url, { useUnifiedTopology: true, useNewUrlParser: true },
 
     socket.emit('user_on_connection', init_data)
     console.log("User Connected")
-    require('./routes')(app, socket, all_room_info, init_data, all_users, io, database);
+    require('./routes')(app, socket, all_room_info, init_data, all_users, io, database,onlineUsers);
   });
 
   server.listen(port, () => {

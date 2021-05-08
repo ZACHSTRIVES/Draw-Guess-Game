@@ -135,8 +135,8 @@ export default function CreateRoom({socket,handleCreateRoom}) {
       "password":password,
       "maxPlayers":max_players,
       "rounds":rounds}
-      if (type == "Public"){
-        if (room_name == ''){
+      if (type === "Public"){
+        if (room_name === ''){
           console.log("empty public roomname");
           setAlert(true);
         }
@@ -145,16 +145,16 @@ export default function CreateRoom({socket,handleCreateRoom}) {
           handleCreateRoom(room)
         }
       }
-      else if(type == "Private"){
-        if (room_name == '' & password == ''){
+      else if(type === "Private"){
+        if (room_name === '' & password === ''){
           setAlert(true);
           setAlertPass(true);
         }
-        else if(password == ''){
+        else if(password === ''){
           console.log("empty private password")
           setAlertPass(true);
         }
-        else if (room_name == ''){
+        else if (room_name === ''){
           setAlert(true);
         } 
         else{
