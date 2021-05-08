@@ -13,7 +13,6 @@ export default function Register({ socket }) {
 
   function handleReg() {
     const data = { userName: userName, password: password, email: email };
-    console.log(data);
     if (userName === "" || password === "" || email === "") {
       setInfo("Please Fill All the Field!");
     } 
