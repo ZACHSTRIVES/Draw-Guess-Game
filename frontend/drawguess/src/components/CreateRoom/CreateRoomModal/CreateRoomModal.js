@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-
-import { makeStyles } from '@material-ui/core/styles';
+import React from 'react';
 import TextField from '@material-ui/core/TextField';
 import Dialog from '@material-ui/core/Dialog';
 import DialogActions from '@material-ui/core/DialogActions';
@@ -15,21 +13,10 @@ import Slider from '@material-ui/core/Slider';
 import Alert from '@material-ui/lab/Alert';
 import Collapse from '@material-ui/core/Collapse';
 import './CreateRoomModal.css';
-import { NavLink } from 'react-router-dom';
 import { Button } from '@material-ui/core';
 import createIcon from '../../../static/create.png';
-const useStyles = makeStyles((theme) => ({
-  root: {
-    width: 300,
-    background: 'rgba(255, 255, 255, 0.5)',
-  },
-  margin: {
-    height: theme.spacing(3),
-  },
-}));
 
 export default function CreateRoom({ socket, handleCreateRoom }) {
-  const classes = useStyles();
   const [open, setOpen] = React.useState(false);
 
   const handleClickOpen = () => {
@@ -41,8 +28,6 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
     setAlert(false);
     setAlertPass(false);
   };
-
-
 
   const players_marks = [
     {
@@ -106,10 +91,10 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
     },
 
   ];
+
   function valuetext(value) {
     return `${value}`;
   }
-
 
   const [type, setType] = React.useState('Public');
 
@@ -117,61 +102,58 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
     setType(event.target.value);
   };
 
-  const [room_name,setRoomName]= React.useState('')
-  const [password,setPassword]= React.useState('')
-  const [max_players,setMaxPlayers] = React.useState(5)
-  const [rounds,setRounds] = React.useState(3)
+  const [room_name, setRoomName] = React.useState('')
+  const [password, setPassword] = React.useState('')
+  const [max_players, setMaxPlayers] = React.useState(5)
+  const [rounds, setRounds] = React.useState(3)
   const [alert, setAlert] = React.useState(false);
   const [alertPass, setAlertPass] = React.useState(false);
 
   function handleMaxPlayersChange(value, newValue) {
     setMaxPlayers(newValue)
   }
+
   function handleRoundsChange(value, newValue) {
     setRounds(newValue)
   }
 
-
-
-  function handleSubmit(){
-    const room={
-      "roomName":room_name,
-      "roomType":type,
-      "password":password,
-      "maxPlayers":max_players,
-      "rounds":rounds}
-      if (type === "Public"){
-        if (room_name === ''){
-          console.log("empty public roomname");
-          setAlert(true);
-        }
-        else{
-          setAlert(false);
-          handleCreateRoom(room)
-        }
+  function handleSubmit() {
+    const room = {
+      "roomName": room_name,
+      "roomType": type,
+      "password": password,
+      "maxPlayers": max_players,
+      "rounds": rounds
+    }
+    if (type === "Public") {
+      if (room_name === '') {
+        console.log("Empty public room name");
+        setAlert(true);
       }
-      else if(type === "Private"){
-        if (room_name === '' & password === ''){
-          setAlert(true);
-          setAlertPass(true);
-        }
-        else if(password === ''){
-          console.log("empty private password")
-          setAlertPass(true);
-        }
-        else if (room_name === ''){
-          setAlert(true);
-        } 
-        else{
-          setAlert(false);
-          setAlertPass(false);
-          handleCreateRoom(room)
-        }
+      else {
+        setAlert(false);
+        handleCreateRoom(room)
       }
-      
-
+    }
+    else if (type === "Private") {
+      if (room_name === '' & password === '') {
+        setAlert(true);
+        setAlertPass(true);
+      }
+      else if (password === '') {
+        console.log("empty private password")
+        setAlertPass(true);
+      }
+      else if (room_name === '') {
+        setAlert(true);
+      }
+      else {
+        setAlert(false);
+        setAlertPass(false);
+        handleCreateRoom(room)
+      }
+    }
   }
-
 
   return (
     <div className="flex-center-all">
@@ -185,7 +167,6 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
           <DialogContentText>
             Create a room and invite your friends to play!
           </DialogContentText>
-
           <TextField
             autoFocus
             margin="dense"
@@ -193,28 +174,27 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
             type="string"
             variant="filled"
             fullWidth
-            onChange={e=>setRoomName(e.target.value)}
+            onChange={e => setRoomName(e.target.value)}
           />
           <Collapse in={alert}>
             <Alert severity="error">
               Room name cannot leave empty!
             </Alert>
           </Collapse>
-
           <FormLabel component="legend" className="margin_top" >Room Type</FormLabel>
           <RadioGroup aria-label="Room Type" name="room_type" value={type} onChange={handleChange}>
             <FormControlLabel value="Public" control={<Radio />} label="Public" />
             <FormControlLabel value="Private" control={<Radio />} label="Private" />
           </RadioGroup>
 
-          {type==='Private'?<TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e=>setPassword(e.target.value)}/>
-          :<a></a>}
-          {type==='Private'?<Collapse in={alertPass}>
+          {type === 'Private' ? <TextField autoFocus margin="dense" id="password" label="Password" type="string" variant="filled" fullWidth onChange={e => setPassword(e.target.value)} />
+            : ""}
+          {type === 'Private' ? <Collapse in={alertPass}>
             <Alert severity="error">
               Password cannot leave empty in Private mode!
             </Alert>
-          </Collapse>:<a></a>}
-          
+          </Collapse> : ""}
+
 
           <FormLabel component="legend" className="margin_top" >Max Players</FormLabel>
           <Slider
@@ -244,18 +224,14 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
             onChange={handleRoundsChange}
           />
 
-
         </DialogContent>
         <DialogActions>
           <Button onClick={handleClose} color="primary">
             Cancel
           </Button>
-
-          
-          <Button onClick={()=>handleSubmit()} color="primary">
+          <Button onClick={() => handleSubmit()} color="primary">
             Create
           </Button>
-
         </DialogActions>
       </Dialog>
     </div>

@@ -16,7 +16,7 @@
 
 .chat-box {
   width: 100%;
-  height: 70%;
+  height: 80%;
   display: inline-block;
 }
 
@@ -66,4 +66,10 @@
 
 .msg-margin {
   margin-bottom: 0.2em;
+}
+
+@media (max-width: 1000px) { 
+  .chat-box {
+    height: 70%;
+  }
 }

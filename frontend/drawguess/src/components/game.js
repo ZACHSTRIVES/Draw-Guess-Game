@@ -3,12 +3,11 @@ import Game from './gameRoom';
 import '../App.css';
 import PromptPage from './PromptPage/PromptPage';
 import {
-  Redirect, useLocation, useParams
+  Redirect, useParams
 
 } from "react-router-dom";
 
 export default function GameExcessive({ socket, userName }) {
-  let location = useLocation();
   const [loading, setLoading] = React.useState(true);
   const [roomInfo, setRoomInfo] = React.useState(null);
   const { id } = useParams();
@@ -39,8 +38,6 @@ export default function GameExcessive({ socket, userName }) {
         setLoading(false)
 
       }
-
-
     })
   }, []);
 
@@ -75,7 +72,6 @@ export default function GameExcessive({ socket, userName }) {
           return (
             <Game socket={socket} userName={userName} init_room={roomInfo}></Game>)
         }
-
       })()}
     </div>
   )

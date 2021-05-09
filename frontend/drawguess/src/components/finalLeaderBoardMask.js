@@ -5,7 +5,7 @@ import restartIcon from "../static/restart.png";
 import { useEffect, useState } from "react";
 import "./leaderBoardMask.css";
 
-export default function FinalLeaderBoardMask({ players }) {
+export default function FinalLeaderBoardMask({ players, isHost }) {
 
   const [sortedPlayers, setSortedPlayers] = useState(null);
 
@@ -21,7 +21,7 @@ export default function FinalLeaderBoardMask({ players }) {
       <div className="top-three flex top-three-final">
         {
           (topThree.length >= 1) &&
-          <div key={1} className="gold-medal-final flex flex-column medal-final">
+          <div key={1} className="gold-medal-final flex-column medal-final">
 
             <div className="rank-icon rank-icon-final">
               <img src={goldMedal} alt="gold medal" />
@@ -34,7 +34,7 @@ export default function FinalLeaderBoardMask({ players }) {
         }
         {
           (topThree.length >= 2) &&
-          <div key={2} className="silver-medal-final flex flex-column medal-final">
+          <div key={2} className="silver-medal-final flex-column medal-final">
             <div className="rank-icon rank-icon-final">
               <img src={silverMedal} alt="silver medal" />
             </div>
@@ -44,7 +44,7 @@ export default function FinalLeaderBoardMask({ players }) {
         }
         {
           (topThree.length >= 3) &&
-          <div key={3} className="bronze-medal-final flex flex-column medal-final">
+          <div key={3} className="bronze-medal-final flex-column medal-final">
 
             <div className="rank-icon rank-icon-final">
               <img src={bronzeMedal} alt="bronze medal" />
@@ -90,8 +90,8 @@ export default function FinalLeaderBoardMask({ players }) {
 
   return (
     <div className="mask-container flex-center-all mask rounded-rect flex-column">
-      <div className="pop-up-container flex flex-column rounded-rect glass-rect leader-board-container">
-        <div className="title">Leaderboard</div>
+      <div className="pop-up-container flex-column rounded-rect glass-rect leader-board-container">
+        <div className="leader-board-title text-title">Leaderboard</div>
         <div className="picture"><img src="" alt="" /></div>
         {
           sortedPlayers && getTopThreePlayers()
@@ -100,12 +100,14 @@ export default function FinalLeaderBoardMask({ players }) {
           sortedPlayers && getRestOfPlayers()
         }
       </div>
-      <div className="restart-btn flex flex-center-all" onClick={e => handleRestartGame}>
-        <div className="rank-icon-none-sm restart-icon-wrapper">
-          <img className="restart-icon" src={restartIcon} alt="restart icon" />
+      { isHost &&
+        <div className="restart-btn flex flex-center-all" onClick={e => handleRestartGame}>
+          <div className="rank-icon-none-sm restart-icon-wrapper">
+            <img className="restart-icon" src={restartIcon} alt="restart icon" />
+          </div>
+          Restart?
         </div>
-        Restart?
-      </div>
+      }
     </div>
   );
 }

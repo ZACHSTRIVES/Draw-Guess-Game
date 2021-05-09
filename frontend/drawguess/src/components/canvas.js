@@ -31,7 +31,7 @@ function Canvas({ roomInfo, userName, socket }) {
   const containerRef = useRef(null);
   const [showOption, setShowOption] = useState("none");
   const [size, setSize] = useState(0);
-  const [drawing, setDrawing] = useState("");
+  const drawing = "";
   const [brushSize, setBrushSize] = useState(DEFAULT_BRUSH_SIZE);
   const [brushColor, setBrushColor] = useState("#000");
   const [drawingMode, setDrawingMode] = useState("none");
@@ -42,9 +42,7 @@ function Canvas({ roomInfo, userName, socket }) {
     const canvas = canvasRef.current;
     const drawings = canvas.getSaveData();
 
-
     if (drawings !== "") {
-      // setDrawing(drawings);
       if (roomInfo.game.drawer === userName) {
         if (drawingMode === "done") {
           const data = { roomID: roomInfo.roomID, canvas: drawings }
@@ -57,22 +55,17 @@ function Canvas({ roomInfo, userName, socket }) {
   React.useEffect(() => {
     socket.on('clearCanvas', () => {
       const canvas = canvasRef.current;
-
       if (!canvas) return;
 
       canvas.clear();
-
-
     })
   }, []);
 
   React.useEffect(() => {
     socket.on('choosingWord', (data) => {
       if (data.game.drawer === userName) {
-          setRandomWords(getRandomWords(3, words));
-        
+          setRandomWords(getRandomWords(3, words));        
       }
-
     })
   }, []);
 
@@ -96,13 +89,6 @@ function Canvas({ roomInfo, userName, socket }) {
       setDrawingMode("done");
     }
   }
-
-  // const handleCanvasChange = () => {
-  //   const canvas = canvasRef.current;
-  //   if (!canvas) return;
-  //   const data={roomID:roomInfo.roomID,canvas:canvas.getSaveData()}
-  //   socket.emit('draw',data)
-  // }
 
   const handleClear = () => {
     const canvas = canvasRef.current;
@@ -165,12 +151,9 @@ function Canvas({ roomInfo, userName, socket }) {
   function handleSelectWord(word) {
     const data = { word: word, roomID: roomInfo.roomID }
     socket.emit('setWord', data)
-
-
   }
 
   const handleStartGame = () => {
-
     const temp = { roomID: roomInfo.roomID, userName: userName }
     socket.emit('beginGame', temp)
   }
@@ -227,8 +210,6 @@ function Canvas({ roomInfo, userName, socket }) {
     <div className="canvas-container flex-center-all" ref={containerRef} >
 
       {(() => {
-
-        // const isDrawer = roomInfo.game.drawer === userName;
         const isDrawer = roomInfo.game.drawer === userName
         const isHost = roomInfo.host === userName
 
@@ -242,18 +223,16 @@ function Canvas({ roomInfo, userName, socket }) {
           }
           else if (roomInfo.game.status === "drawing") {
             return (<div className="canvas-header glass-rect">
-
               <span>{isDrawer ? `You're drawing: ${roomInfo.game.word}` : `The drawing is: ${maskWord(roomInfo.game.word)}`}</span>
               <Timer socket={socket} />
             </div>)
-
           }
           else {
             return (<LeaderBoardMask players={roomInfo.scoreBoard} />);
           }
         }
         else {
-          return (<FinalLeaderBoardMask players={roomInfo.scoreBoard} />)
+          return (<FinalLeaderBoardMask players={roomInfo.scoreBoard} isHost={isHost} />);
         }
       })()}
       {(() => {
