@@ -5,7 +5,7 @@ import restartIcon from "../static/restart.png";
 import { useEffect, useState } from "react";
 import "./leaderBoardMask.css";
 
-export default function FinalLeaderBoardMask({ players, isHost }) {
+export default function FinalLeaderBoardMask({ players, isHost ,handleStartGame}) {
 
   const [sortedPlayers, setSortedPlayers] = useState(null);
 
@@ -101,7 +101,7 @@ export default function FinalLeaderBoardMask({ players, isHost }) {
         }
       </div>
       { isHost &&
-        <div className="restart-btn flex flex-center-all" onClick={e => handleRestartGame}>
+        <div className="restart-btn flex flex-center-all" onClick={e => handleStartGame()}>
           <div className="rank-icon-none-sm restart-icon-wrapper">
             <img className="restart-icon" src={restartIcon} alt="restart icon" />
           </div>

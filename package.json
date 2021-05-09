@@ -1,6 +1,0 @@
-{
-  "dependencies": {
-    "@ramonak/react-progress-bar": "^3.1.0",
-    "react-circular-progressbar": "^2.0.4"
-  }
-}
