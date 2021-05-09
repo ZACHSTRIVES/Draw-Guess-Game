@@ -21,7 +21,19 @@ module.exports = {
 
       if (current_room) {
         if (current_room.host == data.userName) {
-          console.log("Room", all_room_info.roomID, "Start the game")
+          for(i=0;i<current_room.scoreBoard.length;i++){
+            current_room.scoreBoard[i].score=0,
+            current_room.scoreBoard[i].right=false
+          }
+
+          current_room.game.round=0;
+          current_room.num_of_right=0;
+          current_room.word=null;
+          current_room.canvas=null;
+          console.log(current_room)
+
+          
+          console.log("Room", current_room.roomID, "Start the game")
           current_room.globalStatus = "playing";
           current_room.game.status = "ChoosingWord";
           current_room.game.round++;
