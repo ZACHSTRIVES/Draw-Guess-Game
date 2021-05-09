@@ -249,7 +249,7 @@ function Canvas({ roomInfo, userName, socket }) {
           }
         }
         else {
-          return (<FinalLeaderBoardMask players={roomInfo.scoreBoard} />)
+          return (<FinalLeaderBoardMask players={roomInfo.scoreBoard} isHost={isHost} />)
         }
       })()}
       {(() => {
