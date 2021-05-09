@@ -42,9 +42,7 @@ function Canvas({ roomInfo, userName, socket }) {
     const canvas = canvasRef.current;
     const drawings = canvas.getSaveData();
 
-
     if (drawings !== "") {
-      // setDrawing(drawings);
       if (roomInfo.game.drawer === userName) {
         if (drawingMode === "done") {
           const data = { roomID: roomInfo.roomID, canvas: drawings }
@@ -227,8 +225,6 @@ function Canvas({ roomInfo, userName, socket }) {
     <div className="canvas-container flex-center-all" ref={containerRef} >
 
       {(() => {
-
-        // const isDrawer = roomInfo.game.drawer === userName;
         const isDrawer = roomInfo.game.drawer === userName
         const isHost = roomInfo.host === userName
 
