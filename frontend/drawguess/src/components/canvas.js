@@ -11,6 +11,8 @@ import WordSelectionMask from './wordSelectionMask';
 import StartGameMask from './startGameMask';
 import LeaderBoardMask from './leaderBoardMask';
 import FinalLeaderBoardMask from './finalLeaderBoardMask';
+import useSound from 'use-sound';
+import ClickonSfx from '../sounds/Clickon.wav';
 
 function debounce(fn, ms) {
   let timer
@@ -36,6 +38,7 @@ function Canvas({ roomInfo, userName, socket }) {
   const [brushColor, setBrushColor] = useState("#000");
   const [drawingMode, setDrawingMode] = useState("none");
   const [randomWords, setRandomWords] = useState([])
+  const [Clickon] = useSound(ClickonSfx);
 
 
   const deboundCanvasChange = function handleCanvasChange() {
@@ -85,12 +88,14 @@ function Canvas({ roomInfo, userName, socket }) {
   }, []);
 
   const stopDrawing = () => {
+    Clickon();
     if (drawingMode === "none") {
       setDrawingMode("done");
     }
   }
 
   const handleClear = () => {
+    Clickon();
     const canvas = canvasRef.current;
 
     if (!canvas) return;
@@ -99,6 +104,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const handleUndo = () => {
+    Clickon();
     const canvas = canvasRef.current;
 
     if (!canvas) return;
@@ -107,6 +113,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const handleStrokeSizeToggle = () => {
+    Clickon();
     if (showOption !== "size") {
       setShowOption("size");
     } else {
@@ -118,6 +125,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const handleStrokeColorToggle = () => {
+    Clickon();
     if (showOption !== "color") {
       setShowOption("color");
     } else {
@@ -129,10 +137,12 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const handleSliderChange = (event, newValue) => {
+    Clickon();
     setBrushSize(newValue);
   }
 
   const handleSliderChangeCommitted = (event, newValue) => {
+    Clickon();
     setBrushSize(newValue);
     setShowOption("none");
 
@@ -141,6 +151,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const handleColorChangeComplete = (color, event) => {
+    Clickon();
     setBrushColor(color.hex);
     setShowOption("none");
 
@@ -149,11 +160,13 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   function handleSelectWord(word) {
+    Clickon();
     const data = { word: word, roomID: roomInfo.roomID }
     socket.emit('setWord', data)
   }
 
   const handleStartGame = () => {
+    Clickon();
     const temp = { roomID: roomInfo.roomID, userName: userName }
     socket.emit('beginGame', temp)
   }
@@ -163,6 +176,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const debouncedHandleResize = debounce(function handleResize() {
+    Clickon();
     if (!canvasRef.current) return;
 
     const containerWidth = containerRef.current.offsetWidth;
@@ -180,6 +194,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }, 100);
 
   const getRandomWords = (size, words) => {
+    Clickon();
     var arr = getRandomNumbers(size, words.length);
 
     var randomWords = [];
@@ -188,6 +203,7 @@ function Canvas({ roomInfo, userName, socket }) {
   }
 
   const getRandomNumbers = (size, length) => {
+    Clickon();
     var arr = [];
     while (arr.length < size) {
       var r = Math.floor(Math.random() * length);

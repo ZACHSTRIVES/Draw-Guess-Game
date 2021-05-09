@@ -1,11 +1,16 @@
 import Button from '@material-ui/core/Button';
 import { useEffect, useState } from 'react';
 
+import useSound from 'use-sound';
+import timeSfx from '../sounds/time.wav';
+
 export default function WordSelectionMask({ isDrawer, words, onSelectWord, socket }) {
+  const [time] = useSound(timeSfx);
   const [timer, setTime] = useState(10)
   useEffect(() => {
     socket.on('settingWordTimer', (data) => {
       setTime(data)
+      time();
     })
   }, []);
 

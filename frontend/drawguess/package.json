@@ -24,6 +24,7 @@
     "react-scripts": "4.0.3",
     "react-sketch-canvas": "^5.3.2",
     "socket.io-client": "^4.0.1",
+    "use-sound": "^3.0.1",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
@@ -53,8 +54,5 @@
   "description": "This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).",
   "main": "index.js",
   "author": "",
-  "license": "ISC",
-  "devDependencies": {
-    "jest": "^26.6.0"
-  }
+  "license": "ISC"
 }

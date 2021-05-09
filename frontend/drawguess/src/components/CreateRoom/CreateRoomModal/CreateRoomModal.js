@@ -16,14 +16,22 @@ import './CreateRoomModal.css';
 import { Button } from '@material-ui/core';
 import createIcon from '../../../static/create.png';
 
+import useSound from 'use-sound';
+import ClickonSfx from '../../../sounds/Clickon.wav';
+
+
 export default function CreateRoom({ socket, handleCreateRoom }) {
   const [open, setOpen] = React.useState(false);
 
+  const [Clickon] = useSound(ClickonSfx);
+
   const handleClickOpen = () => {
+    Clickon();
     setOpen(true);
   };
 
   const handleClose = () => {
+    Clickon();
     setOpen(false);
     setAlert(false);
     setAlertPass(false);
@@ -99,6 +107,7 @@ export default function CreateRoom({ socket, handleCreateRoom }) {
   const [type, setType] = React.useState('Public');
 
   const handleChange = (event) => {
+    Clickon();
     setType(event.target.value);
   };
 
