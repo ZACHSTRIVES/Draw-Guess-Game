@@ -85,6 +85,16 @@ According to the needs of the project, we split the entire project into differen
 ### Code management
 GitHub helped our team collaborate well. We create a project on GitHub and invite team members to co-edit. We divide the code into different branches, and team members choose what they are good at to work at the same time. After completing the tasks claimed by each, a team member checks the code together, and after confirming that the code can run smoothly, submit the completed code to their respective branch. After completing the branch function, merge all branches and deal with conflicts.
 
+### test
+In the test part, we used the jest test. This project is based on the backend part of the test, which simulates the global game. We tested the user service and game service parts separately. There are 9 tests in total.
+
+``` bash
+# test
+cd backend
+npm test
+
+```
+
 ### Team communication
 Our team consists of four members. At the beginning of the project, we established a social group on social software to communicate the progress of the project in a timely manner. In addition, a weekly face-to-face meeting is scheduled to be held every Wednesday at 4 pm.
 
