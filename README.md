@@ -46,15 +46,21 @@ The left part of the page is the user name and query channels for different type
 
 The right side of the page is the player's personal information. The Statistics section shows the player's personal record statistics, respectively showing the number of times the player won the first, second, and third place. The Records section shows the rooms that the player has entered, showing the player's rank, time, and score.
 
+![4](https://github.com/ZACHSTRIVES/Draw-Guess-Game/blob/master/README/4.png)
+
 ### Room
 #### Canvas
 As one of the core functions of this project, the canvas provides players with a painting space. Players can choose the title they want to draw and draw on the canvas. Players can choose the canvas brush color, brush size, undo function, and clear the canvas.
+![6](https://github.com/ZACHSTRIVES/Draw-Guess-Game/blob/master/README/6.png)
 
 #### ChatRoom
 Draw Guess is a drawing queuing game that integrates drawing and making friends. The chat room is the main place for making friends. All players can chat in the chat room and guess the answer drawn. Painter cannot answer the question. If painter sends out the correct answer in the chat room, the answer will be hidden. Other players will get points if they guess right.
 
 #### Ranking
-The ranking part will display all player points, and the ranking will be displayed from high to low based on the points.
+The ranking part will display all player points, and the ranking will be displayed according to the points from high to low. After the players have completed all rounds, the top three players with the total points of this game will be displayed.
+![5](https://github.com/ZACHSTRIVES/Draw-Guess-Game/blob/master/README/5.png)
+Overall ranking
+![7](https://github.com/ZACHSTRIVES/Draw-Guess-Game/blob/master/README/7.png)
 
 ## Technologies
 
