@@ -215,7 +215,7 @@ function Canvas({ roomInfo, userName, socket }) {
 
 
         if (roomInfo.globalStatus === "waiting") {
-          return (<StartGameMask isHost={isHost} onStartGame={handleStartGame}></StartGameMask>);
+          return (<StartGameMask isHost={isHost} onStartGame={handleStartGame} currentPlayers={roomInfo.currentPlayers}></StartGameMask>);
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
@@ -232,7 +232,7 @@ function Canvas({ roomInfo, userName, socket }) {
           }
         }
         else {
-          return (<FinalLeaderBoardMask players={roomInfo.scoreBoard} isHost={isHost} />);
+          return (<FinalLeaderBoardMask players={roomInfo.scoreBoard} isHost={isHost} handleStartGame={handleStartGame}/>);
         }
       })()}
       {(() => {
