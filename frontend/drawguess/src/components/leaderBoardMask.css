@@ -79,6 +79,7 @@
 @keyframes fadeInUp {
   from {
     transform: translate3d(0, 40px, 0);
+    opacity: 0;
   }
 
   to {
@@ -114,17 +115,17 @@
 
 .gold-medal {
   opacity: 0;
-  animation: fadeInUp, scale-in-center 0.5s ease-in-out 2.5s forwards;
+  animation: fadeInUp 0.5s ease-in-out 2.5s forwards;
 }
 
 .silver-medal {
   opacity: 0;
-  animation: fadeInUp, scale-in-center 0.5s ease-out 1.5s forwards;
+  animation: fadeInUp 0.5s ease-out 1.5s forwards;
 }
 
 .bronze-medal {
   opacity: 0;
-  animation: fadeInUp, scale-in-center 0.5s ease-in 0.5s forwards;
+  animation: fadeInUp 0.5s ease-in 0.5s forwards;
 }
 
 .gold-medal-final {

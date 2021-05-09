@@ -16,8 +16,6 @@ export default function Public({ rooms, joinRoom, show }) {
 
   return (
     <div className="room-list">
-      {/* <div className="room_title">Public Rooms</div> */}
-
       {show !== "Private" &&
         <ul>
           {publicRooms.map((room) =>
@@ -27,8 +25,6 @@ export default function Public({ rooms, joinRoom, show }) {
           )}
         </ul>
       }
-
-      {/* <div className="room_title">Private Rooms</div> */}
       {show !== "Public" &&
         <ul>
           {privateRooms.map((room) =>

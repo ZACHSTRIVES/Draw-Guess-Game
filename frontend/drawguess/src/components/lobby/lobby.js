@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { makeStyles, styled } from '@material-ui/core/styles';
-import Paper from '@material-ui/core/Paper';
-import IconButton from '@material-ui/core/IconButton';
-import SearchIcon from '@material-ui/icons/Search';
+import React, { useState } from 'react';
 import RoomList from './roomList';
 import CreateRoom from '../CreateRoom/CreateRoomModal/CreateRoomModal';
 import Statistics from './statistics';
@@ -10,20 +6,8 @@ import logo from '../../static/drawguesslogo.png';
 import publicRoom from '../../static/publicRoom.png';
 import privateRoom from '../../static/privateRoom.png';
 import allRoom from '../../static/allRoom.png';
-import {
-  Redirect, useHistory
-} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import './lobby.css';
-
-
-import './lobby.css';
-
-const config = {
-  headers: {
-    "Access-Control-Allow-Origin": "*",
-    "Access-Control-Allow-Methods": "GET,PUT,POST,DELETE,PATCH,OPTIONS"
-  }
-};
 
 export default function Lobby({ socket, userName, rooms, isLogin }) {
   const [roomType, setRoomType] = useState("All");
@@ -87,13 +71,10 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
     }
   }, []);
 
-
-
   function handleCreateRoom(room) {
     const data = { room: room, userName: userName }
     socket.emit('create_room', data);
   }
-
 
   function handleJoinRoom(roomID) {
     const temp = { roomID: roomID, userName: userName }
@@ -113,9 +94,9 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
           <div className="logo-bg lobby-title">
             <img src={logo} alt="logo"></img>
           </div>
-          <div className="account-bg">            
-            <div className="account-name">Hello, {userName}</div> 
-            <div className="logout-btn" onClick={e => handleLogout()}>Logout</div>           
+          <div className="account-bg">
+            <div className="account-name">Hello, {userName}</div>
+            <div className="logout-btn" onClick={e => handleLogout()}>Logout</div>
           </div>
           <div className="nav-room">
             <div className="nav-all nav-btn" onClick={e => handleRoomSelection("All")}>

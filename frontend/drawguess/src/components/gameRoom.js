@@ -7,32 +7,21 @@ import './lobby/lobby.css';
 import HostIcon from '../static/house.png';
 import BrushIcon from '../static/brush.png';
 import ReturnIcon from '../static/return.png';
-import {
-  Redirect, useLocation, useHistory, Link
-
-} from "react-router-dom";
-
+import { useHistory } from "react-router-dom";
 
 export default function GameRoom({ socket, userName, init_room }) {
-  let location = useLocation();
-
-
   const [roomInfo, setRoomInfo] = React.useState(init_room)
   const history = useHistory()
 
   React.useEffect(() => {
     socket.on('newUserJoinRoom', (data) => {
-
       setRoomInfo(data.roomInfo);
-
     })
-
   }, []);
 
   React.useEffect(() => {
     socket.on('updateCurrentRoomInfo', (data) => {
       setRoomInfo(data);
-
     })
   }, []);
 
@@ -42,7 +31,6 @@ export default function GameRoom({ socket, userName, init_room }) {
       if (data.game.drawer === userName) {
         socket.emit("startSettingWord", roomInfo.roomID);
       }
-
     })
   }, []);
 
@@ -52,7 +40,6 @@ export default function GameRoom({ socket, userName, init_room }) {
       if (data.game.drawer === userName) {
         socket.emit("startTimer", roomInfo.roomID);
       }
-
     })
   }, []);
 
@@ -62,7 +49,6 @@ export default function GameRoom({ socket, userName, init_room }) {
       if ((data.game.drawer === userName) && (data.game.num_of_right === data.currentPlayers - 1)) {
         socket.emit('finishedTimer', data)
       }
-
     })
   }, []);
 
@@ -98,7 +84,7 @@ export default function GameRoom({ socket, userName, init_room }) {
                 <ul>
                   {roomInfo.scoreBoard.map((player, index) =>
                     <li key={index} alignItems="flex-start">
-                      <div className="player flex">
+                      <div className={`player flex ${userName === player.userName ? "player-current" : ""}`}>
                         <div className="username flex">
                           {player.userName}
                           {player.userName === roomInfo.host && <div className="rank-icon-xs margin-left-extra"><img src={HostIcon} alt="host icon" /></div>}

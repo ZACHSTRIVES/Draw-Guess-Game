@@ -91,7 +91,7 @@ export default function FinalLeaderBoardMask({ players, isHost }) {
   return (
     <div className="mask-container flex-center-all mask rounded-rect flex-column">
       <div className="pop-up-container flex-column rounded-rect glass-rect leader-board-container">
-        <div className="title">Leaderboard</div>
+        <div className="leader-board-title text-title">Leaderboard</div>
         <div className="picture"><img src="" alt="" /></div>
         {
           sortedPlayers && getTopThreePlayers()
