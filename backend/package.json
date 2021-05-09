@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon server.js"
+    "dev": "nodemon server.js",
+    "test": "jest"
   },
   "author": "",
   "license": "ISC",
@@ -12,10 +13,12 @@
     "body-parser": "^1.19.0",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "jest": "^26.6.3",
     "md5": "^2.3.0",
     "mongodb": "^3.6.5",
     "silly-datetime": "^0.1.2",
     "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.2",
     "soket.io": "*"
   },
   "devDependencies": {
