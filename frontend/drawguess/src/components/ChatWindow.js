@@ -1,11 +1,13 @@
-import React, { useState } from "react";
+import React from "react";
 import "./chat.css";
 
 export default function ChatWindow({ messagesList }) {
   const messagesEndRef = React.useRef(null);
+
   const scrollToBottom = () => {
     messagesEndRef.current.scrollIntoView({ behavior: "auto" });
   };
+
   React.useEffect(() => {
     scrollToBottom();
   }, [messagesList]);
@@ -42,9 +44,8 @@ export default function ChatWindow({ messagesList }) {
               );
             }
           })}
-           <div ref={messagesEndRef}></div>
+        <div ref={messagesEndRef}></div>
       </div>
-     
     </div>
   );
 }

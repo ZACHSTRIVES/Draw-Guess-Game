@@ -1,16 +1,14 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useHistory } from "react-router-dom";
 import Alert from '@material-ui/lab/Alert';
 import './login.css';
 import '../App.css';
-
+import logo from '../static/drawguesslogo.png';
 
 export default function Login({socket,handleLogin}) {
   const [password, setPassword] = React.useState("")
   const [emailUserName, setEmail] = React.useState("")
   const [info, setInfo] = React.useState("")
-  const [wrongAlert, setWrongAlert] = React.useState(false)
-  const [failAlert, setFailAlert] = React.useState(false)
   var  history= useHistory();
 
 
@@ -26,7 +24,6 @@ export default function Login({socket,handleLogin}) {
 
   function handleNavToReg(){
     history.push('/register')
-
   }
 
   React.useEffect(() => {
@@ -50,14 +47,14 @@ export default function Login({socket,handleLogin}) {
     })
   }, []);
 
-
-
-
   return (
     <div className="card">
       <div className="card--header ">
+        <div className="logo-bg lobby-title">
+            <img src={logo} alt="logo"></img>
+          </div>
         <p className='title'>Login</p>
-        {info===""?<a></a>: <Alert severity="error">{info}</Alert>}
+        {info===""? "" : <Alert severity="error">{info}</Alert>}
       </div>
         <div className="card--body">
           <div>

@@ -1,11 +1,9 @@
-// const rooms = require('./rooms.js');
 const createService= require("./createService.js")
 const roomService= require("./roomService.js")
 const userService=require("./userServics.js")
 const gameService=require("./gameService.js")
 
 module.exports = function(app,socket,all_room_info,initdata,all_users,io,database,onlineUsers) {
-  // rooms(app, db);
   createService.createRoom(app,socket,all_room_info,all_users,io);
 
   roomService.joinRoom(app,socket,all_room_info,all_users,io);

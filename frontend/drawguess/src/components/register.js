@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { useHistory } from "react-router-dom";
 import "./login.css";
 import Alert from "@material-ui/lab/Alert";
+import logo from '../static/drawguesslogo.png';
 
 export default function Register({ socket }) {
   const [userName, setUsername] = React.useState("");
@@ -15,19 +16,18 @@ export default function Register({ socket }) {
     const data = { userName: userName, password: password, email: email };
     if (userName === "" || password === "" || email === "") {
       setInfo("Please Fill All the Field!");
-    } 
+    }
     else if (password !== c_password) {
       setInfo("Confirm Password Does Not Match the Password!");
     }
     else if (!(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email))) {
       setInfo("Please Enter a Vaild Email Address!");
     }
-  
-    if ((userName !== "") & (password !== "") & (email !== "") &(/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email))) {
+
+    if ((userName !== "") & (password !== "") & (email !== "") & (/^[a-zA-Z0-9.!#$%&'*+\/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$/.test(email))) {
       if (password === c_password) {
         socket.emit("register", data);
       }
-
     }
   }
 
@@ -37,11 +37,11 @@ export default function Register({ socket }) {
 
   React.useEffect(() => {
     socket.on("registerResponse", (data) => {
-      if(data==="emailExisting"){
+      if (data === "emailExisting") {
         setInfo("Email Already Exist!")
-      }else if(data==="userNameExisting"){
+      } else if (data === "userNameExisting") {
         setInfo("Username Already Exist!")
-      }else{
+      } else {
         handleNavToLogin();
       }
     });
@@ -50,8 +50,11 @@ export default function Register({ socket }) {
   return (
     <div className="card">
       <div className="card--header ">
+        <div className="logo-bg lobby-title">
+          <img src={logo} alt="logo"></img>
+        </div>
         <p className="title">Sign up</p>
-        {info===""?<a></a>: <Alert severity="error">{info}</Alert>}
+        {info === "" ? <a></a> : <Alert severity="error">{info}</Alert>}
       </div>
       <div className="card--body">
         <div>
