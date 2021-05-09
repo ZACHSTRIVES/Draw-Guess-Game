@@ -16,14 +16,14 @@ This project supports local operation, just install simple dependencies.
 ``` bash
 
 # Frontend
-cd frontend/drawguess
+cd frontend
 npm install
 npm start
 
 # Backend
 cd backend
 npm install
-npm run dev
+npm start
 
 ```
 The Draw Guess game will run in your default browser, the local address is: http://localhost:3000
