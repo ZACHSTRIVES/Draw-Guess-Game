@@ -8,6 +8,8 @@ import Alert from '@material-ui/lab/Alert';
 import {
   useHistory
 } from "react-router-dom";
+import useSound from 'use-sound';
+import ClickonSfx from '../../sounds/Clickon.wav';
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -42,6 +44,7 @@ const useStyles = makeStyles((theme) => ({
 
 export default function Login({ socket, handleLogin }) {
   const classes = useStyles();
+  const [Clickon] = useSound(ClickonSfx);
   const [username, handleUsernameChange] = React.useState('')
   const [showWarning, handleShowWarning] = React.useState(false)
   const history = useHistory();
@@ -60,6 +63,7 @@ export default function Login({ socket, handleLogin }) {
   }, []);
 
   function login() {
+    Clickon();
     socket.emit('login', username)
   }
 

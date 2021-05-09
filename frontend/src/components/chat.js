@@ -3,14 +3,20 @@ import ChatWindow from "./ChatWindow.js";
 
 import "./styles.css";
 
+import useSound from 'use-sound';
+
+import sendSfx from '../sounds/send.wav';
+
 export default function Chat({ socket, userName, room }) {
   const [newMsg, setNewMsg] = useState("");
+  const [send] = useSound(sendSfx);
 
   function handleCompose(value) {
     setNewMsg(value)
   };
 
   function handleNewMessage() {
+    send();
     if (newMsg !== "") {
       socket.emit("new_msg", newMsg)
       setNewMsg("")

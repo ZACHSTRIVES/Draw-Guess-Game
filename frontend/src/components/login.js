@@ -4,8 +4,11 @@ import Alert from '@material-ui/lab/Alert';
 import './login.css';
 import '../App.css';
 import logo from '../static/drawguesslogo.png';
+import useSound from 'use-sound';
+import ClickonSfx from '../sounds/Clickon.wav';
 
 export default function Login({socket,handleLogin}) {
+  const [Clickon] = useSound(ClickonSfx);
   const [password, setPassword] = React.useState("")
   const [emailUserName, setEmail] = React.useState("")
   const [info, setInfo] = React.useState("")
@@ -13,6 +16,7 @@ export default function Login({socket,handleLogin}) {
 
 
   function handleLoginButton() {
+    Clickon();
     const data = { password: password, flag: emailUserName }
     if(password === ''|| emailUserName===''){
       setInfo("Please Enter All Your Login Information!");
@@ -23,6 +27,7 @@ export default function Login({socket,handleLogin}) {
   }
 
   function handleNavToReg(){
+    Clickon();
     history.push('/register')
   }
 
