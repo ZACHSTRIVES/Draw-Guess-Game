@@ -24,6 +24,7 @@
     "react-scripts": "4.0.3",
     "react-sketch-canvas": "^5.3.2",
     "socket.io-client": "^4.0.1",
+    "use-sound": "^3.0.1",
     "web-vitals": "^1.1.1"
   },
   "scripts": {
