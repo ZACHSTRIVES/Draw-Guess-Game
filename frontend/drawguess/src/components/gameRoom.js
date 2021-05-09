@@ -65,11 +65,7 @@ export default function GameRoom({ socket, userName, init_room }) {
 
     })
   }, []);
-
-
-
-
-
+  
   function handleLeaveRoom() {
     history.replace('/')
     //a method that could link to the other page
@@ -79,13 +75,6 @@ export default function GameRoom({ socket, userName, init_room }) {
     }
     socket.emit("leaveRoom", roomInfo)
   }
-
-
-
-
-  const dense = false;
-  const secondary = false;
-
 
   return (
     <div className="room-bg">
