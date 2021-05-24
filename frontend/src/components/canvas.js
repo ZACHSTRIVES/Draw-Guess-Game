@@ -85,6 +85,7 @@ function Canvas({ roomInfo, userName, socket }) {
     const canvasContainer = document.querySelector(".canvas-container");
     if (!canvasContainer) return;
     canvasContainer.addEventListener("mouseup", stopDrawing);
+    canvasContainer.addEventListener("touchend", stopDrawing);
   }, []);
 
   const stopDrawing = () => {
