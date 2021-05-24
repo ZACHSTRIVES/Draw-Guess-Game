@@ -3,8 +3,11 @@ import { useHistory } from "react-router-dom";
 import "./login.css";
 import Alert from "@material-ui/lab/Alert";
 import logo from '../static/drawguesslogo.png';
+import useSound from 'use-sound';
+import ClickonSfx from '../sounds/Clickon.wav';
 
 export default function Register({ socket }) {
+  const [Clickon] = useSound(ClickonSfx);
   const [userName, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
   const [c_password, setCPassowrd] = React.useState("");
@@ -13,6 +16,7 @@ export default function Register({ socket }) {
   var history = useHistory();
 
   function handleReg() {
+    Clickon();
     const data = { userName: userName, password: password, email: email };
     if (userName === "" || password === "" || email === "") {
       setInfo("Please Fill All the Field!");
@@ -32,6 +36,7 @@ export default function Register({ socket }) {
   }
 
   function handleNavToLogin() {
+    Clickon();
     history.push("/login");
   }
 
