@@ -236,7 +236,7 @@ function Canvas({ roomInfo, userName, socket }) {
         }
         else if (roomInfo.globalStatus === "playing") {
           if (roomInfo.game.status === "ChoosingWord") {
-            return (<WordSelectionMask isDrawer={isDrawer} words={randomWords} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
+            return (<WordSelectionMask drawer={roomInfo.game.drawer} isDrawer={isDrawer} words={randomWords} onSelectWord={handleSelectWord} socket={socket}>  </WordSelectionMask>);
           }
           else if (roomInfo.game.status === "drawing") {
             return (<div className="canvas-header glass-rect">
