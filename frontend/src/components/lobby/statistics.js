@@ -25,7 +25,7 @@ export default function Statistics({ data }) {
             />
           </div>
           <div className="stats-first-desc flex-center-all">
-            <div className="stats-rank-time text-subtitle"><span className="text-bold">{data.firstRanks}</span> times</div>
+            <div className="stats-rank-time text-subtitle"><span className="text-bold">{data.firstRanks}</span> {"time"}{(data.firstRanks !== 1) ? 's' : ''}</div>
           </div>
           <div className="stats-highest-score flex-column flex-center-all">
             <div className="chart-title">Highest Score</div>
