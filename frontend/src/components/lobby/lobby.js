@@ -89,9 +89,9 @@ export default function Lobby({ socket, userName, rooms, isLogin }) {
   }
 
   function handleLogout() {
+    history.go();
     Clickon();
     history.push('/login');
-    history.go();
     localStorage.clear();
   }
 

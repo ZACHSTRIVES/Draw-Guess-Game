@@ -4,7 +4,7 @@ import { useEffect, useState } from 'react';
 import useSound from 'use-sound';
 import timeSfx from '../sounds/time.wav';
 
-export default function WordSelectionMask({ isDrawer, words, onSelectWord, socket }) {
+export default function WordSelectionMask({ drawer, isDrawer, words, onSelectWord, socket }) {
   const [time] = useSound(timeSfx);
   const [timer, setTime] = useState(10)
   useEffect(() => {
@@ -27,7 +27,7 @@ export default function WordSelectionMask({ isDrawer, words, onSelectWord, socke
           </div>
         </div> :
         <div className="pop-up-container flex-center-all flex-column rounded-rect glass-rect">
-          <p>Waiting for player to choose a word...</p>
+          <p>Waiting for player {drawer} to choose a word...</p>
         </div>
       }
     </div>

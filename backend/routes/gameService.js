@@ -21,18 +21,18 @@ module.exports = {
 
       if (current_room) {
         if (current_room.host == data.userName) {
-          for(i=0;i<current_room.scoreBoard.length;i++){
-            current_room.scoreBoard[i].score=0,
-            current_room.scoreBoard[i].right=false
+          for (i = 0; i < current_room.scoreBoard.length; i++) {
+            current_room.scoreBoard[i].score = 0,
+              current_room.scoreBoard[i].right = false
           }
 
-          current_room.game.round=0;
-          current_room.num_of_right=0;
-          current_room.word=null;
-          current_room.canvas=null;
+          current_room.game.round = 0;
+          current_room.num_of_right = 0;
+          current_room.word = null;
+          current_room.canvas = null;
           console.log(current_room)
 
-          
+
           console.log("Room", current_room.roomID, "Start the game")
           current_room.globalStatus = "playing";
           current_room.game.status = "ChoosingWord";
@@ -173,6 +173,11 @@ module.exports = {
               }
               current_room.game.status = "finished"
               current_room.game.num_of_right = 0
+              const message = {
+                type: "info",
+                content:"The correct answer is: "+current_room.game.word
+              }
+              current_room.messages.push(message)
               all_room_info[current_index] = current_room
               io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
               io.sockets.emit("updateRoomInfo", all_room_info);
@@ -199,6 +204,11 @@ module.exports = {
             }
             current_room.game.status = "finished"
             current_room.game.num_of_right = 0
+            const message = {
+              type: "info",
+              content:"The correct answer is: " + current_room.game.word
+            }
+            current_room.messages.push(message)
             all_room_info[current_index] = current_room
             io.to(socket.PLAYER_INFO.roomID).emit("updateCurrentRoomInfo", current_room);
             io.sockets.emit("updateRoomInfo", all_room_info);

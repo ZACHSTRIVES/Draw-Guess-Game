@@ -17,10 +17,17 @@ export default function ChatWindow({ messagesList }) {
       <div className="messages">
         {Array.isArray(messagesList) &&
           messagesList.map((message, index) => {
-            if (message.type === "in") {
+            if (message.type === "info") {
               return (
                 <p key={index} className="info-in msg-margin">
-                  {message.user} has enter the room
+                  {message.content}
+                </p>
+              );
+            }
+            else if (message.type === "in") {
+              return (
+                <p key={index} className="info-in msg-margin">
+                  {message.user} has entered the room
                 </p>
               );
             } else if (message.type === "out") {
@@ -32,7 +39,7 @@ export default function ChatWindow({ messagesList }) {
             } else if (message.type === "ans") {
               return (
                 <p key={index} className="answer msg-margin">
-                  {message.user} got right answer!
+                  {message.user} got the right answer!
                 </p>
               );
             } else {
